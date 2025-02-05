@@ -30,6 +30,7 @@ in
     enable = mkBoolOpt false "Whether or not to enable kitty.";
     settings = mkOpt attrs defaultSettings "Settings to apply to the profile.";
     font = mkOpt attrs defaultFont "Customize default font settings.";
+    plasma.enable = mkBoolOpt false "Whether to enable plasma configs for kitty.";
   };
 
   config = mkIf cfg.enable {
@@ -37,6 +38,15 @@ in
       enable = true;
       themeFile = "Dracula";
       inherit (cfg) font settings;
+    };
+
+    programs.plasma = mkIf cfg.plasma.enable {
+      enable = true;
+      hotkeys.commands."launch-kitty" = {
+        name = "Launch kitty";
+        key = "Meta+Return";
+        command = "kitty";
+      };
     };
   };
 

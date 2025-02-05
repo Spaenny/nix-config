@@ -1,4 +1,12 @@
-{ pkgs, config, lib, modulesPath, inputs, namespace, ... }:
+{
+  pkgs,
+  config,
+  lib,
+  modulesPath,
+  inputs,
+  namespace,
+  ...
+}:
 with lib;
 with lib.${namespace};
 {
@@ -14,14 +22,28 @@ with lib.${namespace};
 
   networking.hostName = "blarm"; # Define your hostname.
   networking.networkmanager.enable = true;
-  networking.interfaces.end0.ipv4.addresses = [ { address = "192.168.1.202"; prefixLength = 32; }  ];
-  networking.interfaces.end0.ipv6.addresses = [ 
-    { address = "fd00:192:168:1::202"; prefixLength = 64; } 
-    { address = "fd00:192:168:1::251"; prefixLength = 64; }  
+  networking.interfaces.end0.ipv4.addresses = [
+    {
+      address = "192.168.1.202";
+      prefixLength = 32;
+    }
+  ];
+  networking.interfaces.end0.ipv6.addresses = [
+    {
+      address = "fd00:192:168:1::202";
+      prefixLength = 64;
+    }
+    {
+      address = "fd00:192:168:1::251";
+      prefixLength = 64;
+    }
   ];
   networking.firewall.enable = false;
 
-  nix.settings.experimental-features = [ "nix-command" "flakes" ];
+  nix.settings.experimental-features = [
+    "nix-command"
+    "flakes"
+  ];
 
   # Set your time zone.
   time.timeZone = "Europe/Berlin";
@@ -32,12 +54,14 @@ with lib.${namespace};
   users.users.philipp = {
     isNormalUser = true;
     description = "Philipp Boehm";
-    extraGroups = [ "wheel" "caddy" ];
-    openssh.authorizedKeys.keys = 
-      [ 
-        "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIDwUGxdwTgjc61VNh7QNfrrZwz5yHkJ6AGsRsgoDV3a4 philipp-mobile" 
-	"ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIJqbT8AdnS++ZoL7TYg2skQUvfWx29Iq+mEYv2Ok2QHb arbeit"
-      ];
+    extraGroups = [
+      "wheel"
+      "caddy"
+    ];
+    openssh.authorizedKeys.keys = [
+      "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIDwUGxdwTgjc61VNh7QNfrrZwz5yHkJ6AGsRsgoDV3a4 philipp-mobile"
+      "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIJqbT8AdnS++ZoL7TYg2skQUvfWx29Iq+mEYv2Ok2QHb arbeit"
+    ];
   };
 
   environment.systemPackages = with pkgs; [
@@ -54,4 +78,3 @@ with lib.${namespace};
   system.stateVersion = "24.11"; # Did you read the comment?
 
 }
-

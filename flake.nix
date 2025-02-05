@@ -20,6 +20,12 @@
     };
 
     nvf.url = "github:notashelf/nvf";
+
+    plasma-manager = {
+      url = "github:nix-community/plasma-manager";
+      inputs.nixpkgs.follows = "nixpkgs";
+      inputs.home-manager.follows = "home-manager";
+    };
   };
 
   outputs =
@@ -42,15 +48,15 @@
     in
     lib.mkFlake {
       channels-config.allowUnfree = true;
-      home-manager.backupFileExtension = "hm-bk";
+
       systems.modules.nixos = with inputs; [
-        home-manager.nixosModules.home-manager
+        home-manager.nixosModules.home-manager { 
+          home-manager.sharedModules = [ inputs.plasma-manager.homeManagerModules.plasma-manager ]; 
+          home-manager.backupFileExtension = "bk-hm";
+        }
         nvf.nixosModules.default
       ];
 
       outputs-builder = channels: { formatter = channels.nixpkgs.nixfmt-rfc-style; };
-    }
-    // {
-      self = inputs.self;
     };
 }
