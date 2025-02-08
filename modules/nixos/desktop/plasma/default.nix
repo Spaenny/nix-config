@@ -1,5 +1,4 @@
 {
-  options,
   config,
   lib,
   pkgs,
@@ -48,9 +47,12 @@ in
       with pkgs.kdePackages;
       [ ] ++ excludePackages ++ cfg.extraExcludePackages;
 
+    networking.networkmanager.enable = true;
+
     environment.systemPackages = with pkgs; [
       pinentry-qt
       kdiskmark
+      networkmanager
       kdePackages.networkmanager-qt
     ];
   };

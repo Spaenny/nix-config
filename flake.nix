@@ -50,8 +50,9 @@
       channels-config.allowUnfree = true;
 
       systems.modules.nixos = with inputs; [
-        home-manager.nixosModules.home-manager { 
-          home-manager.sharedModules = [ inputs.plasma-manager.homeManagerModules.plasma-manager ]; 
+        home-manager.nixosModules.home-manager
+        {
+          home-manager.sharedModules = [ inputs.plasma-manager.homeManagerModules.plasma-manager ];
           home-manager.backupFileExtension = "bk-hm";
         }
         nvf.nixosModules.default

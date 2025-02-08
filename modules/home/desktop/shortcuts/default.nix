@@ -11,14 +11,17 @@ let
 in
 {
   options.${namespace}.desktop.hotkeys = with types; {
-    enable = mkBoolOpt false "Whether or not to enable kitty.";
+    enable = mkBoolOpt false "Whether or not to enable custom shortcuts.";
   };
 
   config = mkIf cfg.enable {
     programs.plasma = {
       enable = true;
       shortcuts.kwin = {
-        "Window Close" = [ "Meta+Shift+Q" "Alt+F4" ];
+        "Window Close" = [
+          "Meta+Shift+Q"
+          "Alt+F4"
+        ];
       };
     };
   };

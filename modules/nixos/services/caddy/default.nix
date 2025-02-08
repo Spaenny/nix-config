@@ -38,6 +38,7 @@ in
               not path /config.json
 
               not path /manifest.json
+              not path /sw.js
 
               not path /pdf.worker.min.js
               not path /olm.wasm

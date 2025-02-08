@@ -1,9 +1,4 @@
 {
-  inputs,
-  outputs,
-  lib,
-  config,
-  pkgs,
   ...
 }:
 {
@@ -14,6 +9,7 @@
   boot.loader.systemd-boot.enable = true;
   boot.loader.systemd-boot.consoleMode = "max";
   boot.loader.efi.canTouchEfiVariables = true;
+  boot.binfmt.emulatedSystems = [ "aarch64-linux" ];
 
   nixpkgs.config.allowUnfree = true;
 
@@ -35,17 +31,23 @@
   awesome-flake = {
     cli = {
       neovim.enable = true;
+      eza.enable = true;
     };
+
     apps = {
       steam.enable = true;
     };
+
     desktop.plasma.enable = true;
     hardware.audio.enable = true;
+
     services = {
       btrfs.enable = true;
     };
+
     system.fonts.enable = true;
     system.fonts.emoji = true;
+    system.gnupg.enable = true;
   };
 
   # Set your time zone

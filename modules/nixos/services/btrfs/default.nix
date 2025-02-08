@@ -12,7 +12,7 @@ let
 in
 {
   options.${namespace}.services.btrfs = {
-    enable = mkBoolOpt true "BTRFS";
+    enable = mkBoolOpt false "BTRFS";
   };
 
   config = mkIf cfg.enable {

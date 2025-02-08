@@ -1,14 +1,8 @@
 {
-  pkgs,
-  config,
-  lib,
   modulesPath,
   inputs,
-  namespace,
   ...
 }:
-with lib;
-with lib.${namespace};
 {
   imports = with inputs.nixos-hardware.nixosModules; [
     (modulesPath + "/installer/scan/not-detected.nix")
@@ -53,7 +47,7 @@ with lib.${namespace};
 
   users.users.philipp = {
     isNormalUser = true;
-    description = "Philipp Boehm";
+    description = "Philipp Böhm";
     extraGroups = [
       "wheel"
       "caddy"
@@ -64,17 +58,12 @@ with lib.${namespace};
     ];
   };
 
-  environment.systemPackages = with pkgs; [
-    neovim
-    wget
-  ];
-
   # Enable the OpenSSH daemon.
   services.openssh.enable = true;
 
   awesome-flake.services.caddy.enable = true;
   awesome-flake.container.technitium.enable = true;
 
-  system.stateVersion = "24.11"; # Did you read the comment?
+  system.stateVersion = "24.11";
 
 }
