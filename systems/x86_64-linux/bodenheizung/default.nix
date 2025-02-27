@@ -1,6 +1,9 @@
 {
+  lib,
+  namespace,
   ...
 }:
+with lib.${namespace};
 {
   imports = [
     ./hardware-configuration.nix
@@ -32,24 +35,28 @@
 
   awesome-flake = {
     cli = {
-      neovim.enable = true;
-      eza.enable = true;
+      neovim = enabled;
+      eza = enabled;
     };
 
     apps = {
-      steam.enable = true;
+      steam = enabled;
     };
 
-    desktop.plasma.enable = true;
-    hardware.audio.enable = true;
+    desktop.plasma = enabled;
+    hardware.audio = enabled;
 
     services = {
-      btrfs.enable = true;
+      btrfs = enabled;
     };
 
-    system.fonts.enable = true;
-    system.fonts.emoji = true;
-    system.gnupg.enable = true;
+    system = {
+      fonts = {
+        enable = true;
+        emoji = true;
+      };
+      gnupg = enabled;
+    };
   };
 
   # Set your time zone

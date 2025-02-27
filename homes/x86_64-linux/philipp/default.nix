@@ -1,6 +1,7 @@
 {
-  lib, ...
+  lib, namespace, ...
 }:
+with lib.${namespace};
 {
   home.activation.removeBrowserBackups = lib.hm.dag.entryAfter ["checkLinkTargets"] ''  
     if [ -d "/home/philipp/.librewolf/philipp" ]; then
@@ -9,33 +10,33 @@
   '';
   awesome-flake = {
     cli-apps = {
-      fish.enable = true;
-      home-manager.enable = true;
-      lazygit.enable = true;
+      fish = enabled;
+      home-manager = enabled;
+      lazygit = enabled;
     };
 
     tools = {
-      git.enable = true;
+      git = enabled;
     };
 
     apps = {
-      librewolf.enable = true;
-      thunderbird.enable = true;
-      chatterino.enable = true;
-      mpv.enable = true;
+      librewolf = enabled;
+      thunderbird = enabled;
+      chatterino = enabled;
+      mpv = enabled;
       kitty = {
         enable = true;
-        plasma.enable = true;
+        plasma = enabled;
       };
     };
 
     games = {
-      runelite.enable = true;
+      runelite = enabled;
     };
 
     desktop = {
-      hotkeys.enable = true;
-      panel.enable = true;
+      hotkeys = enabled;
+      panel = enabled;
     };
   };
 }

@@ -1,10 +1,12 @@
 {
+  lib,
+  namespaces,
   modulesPath,
-  inputs,
   ...
 }:
+with lib.${namespaces};
 {
-  imports = with inputs.nixos-hardware.nixosModules; [
+  imports = [
     (modulesPath + "/installer/scan/not-detected.nix")
     (modulesPath + "/installer/sd-card/sd-image-aarch64.nix")
   ];
@@ -61,12 +63,12 @@
   };
 
   # Enable the OpenSSH daemon.
-  services.openssh.enable = true;
+  services.openssh = enabled;
 
-  awesome-flake.services.caddy.enable = true;
-  awesome-flake.container.technitium.enable = true;
-  awesome-flake.container.invidious.enable = true;
-  awesome-flake.cli.neovim.enable = true;
+  awesome-flake.services.caddy = enabled;
+  awesome-flake.container.technitium = enabled;
+  awesome-flake.container.invidious = enabled;
+  awesome-flake.cli.neovim = enabled;
 
   system.stateVersion = "24.11";
 
