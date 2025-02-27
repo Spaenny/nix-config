@@ -11,6 +11,8 @@
   boot.loader.efi.canTouchEfiVariables = true;
   boot.binfmt.emulatedSystems = [ "aarch64-linux" ];
 
+  virtualisation.libvirtd.enable = true;
+
   nixpkgs.config.allowUnfree = true;
 
   nix.settings.experimental-features = [

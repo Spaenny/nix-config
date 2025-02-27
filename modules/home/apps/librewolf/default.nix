@@ -60,7 +60,9 @@ in
     extraConfig = mkOpt str "" "Extra configuration for the user profile JS file.";
     userChrome = mkOpt str "" "Extra configuration for the user chrome CSS file.";
     settings = mkOpt attrs defaultSettings "Settings to apply to the profile.";
-    extensions = mkOpt (listOf package) defaultExtensions "Extra Librewolf extensions to install.";
+    extensions.packages =
+      mkOpt (listOf package) defaultExtensions
+        "Extra Librewolf extensions to install.";
     search = mkOpt attrs defaultSearch "Extra search engines to define.";
   };
 
@@ -81,6 +83,7 @@ in
         name = "Philipp";
         isDefault = true;
       };
+
     };
   };
 

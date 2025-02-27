@@ -28,7 +28,7 @@ in
 
     };
 
-    hardware.pulseaudio.enable = mkForce false;
+    services.pulseaudio.enable = false;
 
     environment.systemPackages =
       with pkgs;

@@ -16,6 +16,8 @@
 
   networking.hostName = "blarm"; # Define your hostname.
   networking.networkmanager.enable = true;
+  networking.defaultGateway.address = "192.168.1.1";
+  networking.defaultGateway.interface = "end0";
   networking.interfaces.end0.ipv4.addresses = [
     {
       address = "192.168.1.202";
@@ -63,6 +65,8 @@
 
   awesome-flake.services.caddy.enable = true;
   awesome-flake.container.technitium.enable = true;
+  awesome-flake.container.invidious.enable = true;
+  awesome-flake.cli.neovim.enable = true;
 
   system.stateVersion = "24.11";
 

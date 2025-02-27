@@ -11,7 +11,6 @@ let
   cfg = config.${namespace}.desktop.plasma;
 
   excludePackages = with pkgs.kdePackages; [
-    konsole
     elisa
     krdp
   ];

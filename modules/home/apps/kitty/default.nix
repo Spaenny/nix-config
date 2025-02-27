@@ -20,8 +20,8 @@ let
     cursor_shape = "Beam";
   };
   defaultFont = {
-    name = "Hack Nerd Font Mono";
-    package = pkgs.nerdfonts;
+    name = "Hack";
+    package = pkgs.nerd-fonts.hack;
     size = 12;
   };
 in
