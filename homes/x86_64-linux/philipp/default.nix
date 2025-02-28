@@ -26,6 +26,7 @@ with lib.${namespace};
       thunderbird = enabled;
       chatterino = enabled;
       mpv = enabled;
+      cinny = enabled;
       kitty = {
         enable = true;
         plasma = enabled;
