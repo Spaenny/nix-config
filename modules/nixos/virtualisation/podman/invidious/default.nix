@@ -1,6 +1,5 @@
 {
   lib,
-  pkgs,
   config,
   namespace,
   ...
@@ -16,6 +15,18 @@ in
   };
 
   config = mkIf cfg.enable {
+    sops.secrets.invidious-db = {
+      format = "dotenv";
+      sopsFile = ../../../../../secrets/invidious-db.env;
+      key = "";
+    };
+
+    sops.secrets.invidious-config = {
+      format = "yaml";
+      sopsFile = ../../../../../secrets/invidious-config.yaml;
+      key = "";
+    };
+
     security.unprivilegedUsernsClone = true;
 
     virtualisation = {
@@ -36,9 +47,7 @@ in
       invidious = {
         image = "quay.io/invidious/invidious:latest-arm64";
         hostname = "invidious";
-        volumes = [
-          "/home/philipp/nix-config/modules/nixos/virtualisation/podman/invidious/config/config.yml:/invidious/config/config.yml"
-        ];
+        volumes = [ "/run/secrets/invidious-config:/invidious/config/config.yml" ];
         ports = [
           "192.168.1.202:3000:3000"
           "[fd00:192:168:1::202]:3000:3000"
@@ -61,9 +70,7 @@ in
           "/home/philipp/nix-config/modules/nixos/virtualisation/podman/invidious/config/sql:/config/sql"
           "/home/philipp/nix-config/modules/nixos/virtualisation/podman/invidious/init-invidious-db.sh:/docker-entrypoint-initdb.d/init-invidious-db.sh"
         ];
-        environmentFiles = [
-          /home/philipp/nix-config/modules/nixos/virtualisation/podman/invidious/config/db.env
-        ];
+        environmentFiles = [ /run/secrets/invidious-db ];
       };
     };
   };

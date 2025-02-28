@@ -1,0 +1,15 @@
+keys:
+  - &primary age132m0pg4utk3cjve2lgcjffvz7cevl0fq5krufu9sgud7wu2wgurqk49kgl
+creation_rules:
+  - path_regex: secrets/invidious-db.env
+    key_groups:
+      - age:
+        - *primary
+  - path_regex: secrets/invidious-config.yaml
+    key_groups:
+      - age:
+        - *primary
+  - path_regex: secrets/blarm-restic.yaml
+    key_groups:
+      - age:
+        - *primary

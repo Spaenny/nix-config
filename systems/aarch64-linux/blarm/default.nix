@@ -1,10 +1,11 @@
 {
   lib,
-  namespaces,
+  pkgs,
+  namespace,
   modulesPath,
   ...
 }:
-with lib.${namespaces};
+with lib.${namespace};
 {
   imports = [
     (modulesPath + "/installer/scan/not-detected.nix")
@@ -20,12 +21,15 @@ with lib.${namespaces};
   networking.networkmanager.enable = true;
   networking.defaultGateway.address = "192.168.1.1";
   networking.defaultGateway.interface = "end0";
-  networking.interfaces.end0.ipv4.addresses = [
-    {
-      address = "192.168.1.202";
-      prefixLength = 32;
-    }
-  ];
+  networking.interfaces.end0 = {
+    useDHCP = true;
+    ipv4.addresses = [
+      {
+        address = "192.168.1.202";
+        prefixLength = 32;
+      }
+    ];
+  };
   networking.interfaces.end0.ipv6.addresses = [
     {
       address = "fd00:192:168:1::202";
@@ -49,6 +53,14 @@ with lib.${namespaces};
   # Select internationalisation properties.
   i18n.defaultLocale = "en_US.UTF-8";
 
+  snowfallorg.users.philipp = {
+    create = true;
+    admin = true;
+    home = {
+      enable = true;
+    };
+  };
+
   users.users.philipp = {
     isNormalUser = true;
     description = "Philipp Böhm";
@@ -69,6 +81,12 @@ with lib.${namespaces};
   awesome-flake.container.technitium = enabled;
   awesome-flake.container.invidious = enabled;
   awesome-flake.cli.neovim = enabled;
+  awesome-flake.services.restic = enabled;
+  awesome-flake.system.sops = enabled;
+
+  environment.systemPackages = with pkgs; [
+    git
+  ];
 
   system.stateVersion = "24.11";
 

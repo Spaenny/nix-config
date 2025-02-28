@@ -12,7 +12,7 @@ let
 in
 {
   options.${namespace}.system.gnupg = with types; {
-    enable = mkBoolOpt false "Whether or not to manage fonts.";
+    enable = mkBoolOpt false "Whether or not to enable gnupg.";
   };
 
   config = mkIf cfg.enable {
