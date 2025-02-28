@@ -22,6 +22,7 @@ in
     };
 
     sops.secrets.invidious-config = {
+      mode = "666";
       format = "yaml";
       sopsFile = ../../../../../secrets/invidious-config.yaml;
       key = "";
