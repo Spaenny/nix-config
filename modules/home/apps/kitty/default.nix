@@ -20,8 +20,7 @@ let
     cursor_shape = "Beam";
   };
   defaultFont = {
-    name = "Hack";
-    package = pkgs.nerd-fonts.hack;
+    name = "Hack Nerd Font";
     size = 12;
   };
 in
@@ -34,9 +33,10 @@ in
   };
 
   config = mkIf cfg.enable {
+    home.packages = [ pkgs.kitty-themes ];
     programs.kitty = {
       enable = true;
-      themeFile = "Dracula";
+      themeFile = "tokyo_night_night";
       inherit (cfg) font settings;
     };
 
