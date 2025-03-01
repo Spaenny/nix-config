@@ -47,6 +47,9 @@ with lib.${namespace};
     "flakes"
   ];
 
+  # Disable detailed ddocumentation
+  documentation.nixos.enable = false;
+
   # Set your time zone.
   time.timeZone = "Europe/Berlin";
 

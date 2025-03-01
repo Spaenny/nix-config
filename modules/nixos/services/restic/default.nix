@@ -31,7 +31,7 @@ in
         initialize = true;
         exclude = [ "/home/*/.cache" ];
         passwordFile = "/run/secrets/restic_password";
-        repository = "$(cat /run/secrets/restic_url)";
+        repositoryFile = "/run/secrets/restic_url";
         paths = [
           "/home"
           "/var/lib/"
