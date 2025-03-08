@@ -37,6 +37,7 @@ with lib.${namespace};
     cli = {
       neovim = enabled;
       eza = enabled;
+      nh = enabled;
     };
 
     apps = {

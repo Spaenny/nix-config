@@ -12,7 +12,7 @@ let
 in
 {
   options.${namespace}.cli.eza = with types; {
-    enable = mkBoolOpt false "Whether or not to use Plasma as the desktop environment.";
+    enable = mkBoolOpt false "Whether or not to use eza.";
   };
 
   config = mkIf cfg.enable {
