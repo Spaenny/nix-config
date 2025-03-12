@@ -17,30 +17,36 @@ with lib.${namespace};
   # Enables the generation of /boot/extlinux/extlinux.conf
   boot.loader.generic-extlinux-compatible.enable = true;
 
-  networking.hostName = "blarm"; # Define your hostname.
-  networking.networkmanager.enable = true;
-  networking.defaultGateway.address = "192.168.1.1";
-  networking.defaultGateway.interface = "end0";
-  networking.interfaces.end0 = {
-    useDHCP = true;
-    ipv4.addresses = [
-      {
-        address = "192.168.1.202";
-        prefixLength = 32;
-      }
-    ];
+  networking = {
+    hostName = "blarm";
+    firewall.enable = false;
+    networkmanager.enable = false;
+    dhcpcd.enable = true;
+    defaultGateway.address = "192.168.1.1";
+    interfaces.end0 = {
+      useDHCP = true;
+      ipv4.addresses = [
+        {
+          address = "192.168.1.251";
+          prefixLength = 32;
+        }
+        {
+          address = "192.168.1.202";
+          prefixLength = 32;
+        }
+      ];
+      ipv6.addresses = [
+        {
+          address = "fd00:192:168:1::202";
+          prefixLength = 64;
+        }
+        {
+          address = "fd00:192:168:1::251";
+          prefixLength = 64;
+        }
+      ];
+    };
   };
-  networking.interfaces.end0.ipv6.addresses = [
-    {
-      address = "fd00:192:168:1::202";
-      prefixLength = 64;
-    }
-    {
-      address = "fd00:192:168:1::251";
-      prefixLength = 64;
-    }
-  ];
-  networking.firewall.enable = false;
 
   nix.settings.experimental-features = [
     "nix-command"
