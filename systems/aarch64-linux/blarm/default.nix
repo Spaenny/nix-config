@@ -10,43 +10,13 @@ with lib.${namespace};
   imports = [
     (modulesPath + "/installer/scan/not-detected.nix")
     (modulesPath + "/installer/sd-card/sd-image-aarch64.nix")
+    ./networking.nix
   ];
 
   # Use the extlinux boot loader. (NixOS wants to enable GRUB by default)
   boot.loader.grub.enable = false;
   # Enables the generation of /boot/extlinux/extlinux.conf
   boot.loader.generic-extlinux-compatible.enable = true;
-
-  networking = {
-    hostName = "blarm";
-    firewall.enable = false;
-    networkmanager.enable = false;
-    dhcpcd.enable = true;
-    defaultGateway.address = "192.168.1.1";
-    interfaces.end0 = {
-      useDHCP = true;
-      ipv4.addresses = [
-        {
-          address = "192.168.1.251";
-          prefixLength = 32;
-        }
-        {
-          address = "192.168.1.202";
-          prefixLength = 32;
-        }
-      ];
-      ipv6.addresses = [
-        {
-          address = "fd00:192:168:1::202";
-          prefixLength = 64;
-        }
-        {
-          address = "fd00:192:168:1::251";
-          prefixLength = 64;
-        }
-      ];
-    };
-  };
 
   nix.settings.experimental-features = [
     "nix-command"
@@ -83,15 +53,22 @@ with lib.${namespace};
     ];
   };
 
-  # Enable the OpenSSH daemon.
-  services.openssh = enabled;
 
-  awesome-flake.services.caddy = enabled;
-  awesome-flake.container.technitium = enabled;
-  awesome-flake.container.invidious = enabled;
-  awesome-flake.cli.neovim = enabled;
-  awesome-flake.services.restic = enabled;
-  awesome-flake.system.sops = enabled;
+  awesome-flake = {
+    services = {
+      ssh = enabled;
+      caddy = enabled;
+      restic = enabled;
+    };
+
+    container = {
+      technitium = enabled;
+      invidious = enabled;
+    };
+
+    system.sops = enabled;
+    cli.neovim = enabled;
+  };
 
   environment.systemPackages = with pkgs; [
     git

@@ -11,7 +11,7 @@ let
 in
 {
   options.${namespace}.apps.thunderbird = with types; {
-    enable = mkBoolOpt false "Whether or not to enable Firefox.";
+    enable = mkBoolOpt false "Whether or not to enable Thunderbird.";
   };
 
   config = mkIf cfg.enable {
