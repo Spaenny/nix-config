@@ -27,6 +27,7 @@ with lib.${namespace};
       chatterino = enabled;
       mpv = enabled;
       cinny = enabled;
+      obs = enabled;
       kitty = {
         enable = true;
         plasma = enabled;
