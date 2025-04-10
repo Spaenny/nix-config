@@ -14,9 +14,6 @@ let
     elisa
     krdp
   ];
-
-  default-attrs = mapAttrs (key: mkDefault);
-  nested-default-attrs = mapAttrs (key: default-attrs);
 in
 {
   options.${namespace}.desktop.plasma = with types; {
@@ -42,9 +39,7 @@ in
       };
     };
 
-    environment.plasma6.excludePackages =
-      with pkgs.kdePackages;
-      [ ] ++ excludePackages ++ cfg.extraExcludePackages;
+    environment.plasma6.excludePackages = [ ] ++ excludePackages ++ cfg.extraExcludePackages;
 
     networking.networkmanager.enable = true;
 

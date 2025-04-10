@@ -1,15 +1,19 @@
 {
   lib,
+  pkgs,
   namespace,
   ...
 }:
 with lib.${namespace};
 {
-  home.activation.removeBrowserBackups = lib.hm.dag.entryAfter [ "checkLinkTargets" ] ''
-    if [ -d "/home/philipp/.librewolf/philipp" ]; then
-      rm -f /home/philipp/.librewolf/philipp/search.json.mozlz4.backup
-    fi 
-  '';
+  home.pointerCursor = {
+    gtk.enable = true;
+    x11.enable = true;
+    package = pkgs.rose-pine-cursor;
+    name = "BreezeX-RosePine-Linux";
+    size = 32;
+  };
+
   awesome-flake = {
     cli-apps = {
       fish = enabled;
@@ -27,6 +31,7 @@ with lib.${namespace};
       chatterino = enabled;
       mpv = enabled;
       cinny = enabled;
+      spotify = enabled;
       obs = enabled;
       kitty = {
         enable = true;
@@ -41,6 +46,7 @@ with lib.${namespace};
     desktop = {
       hotkeys = enabled;
       panel = enabled;
+      spectacle = enabled;
     };
   };
 }

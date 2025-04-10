@@ -22,6 +22,9 @@ in
 
     hardware.steam-hardware.enable = true;
 
-    environment.systemPackages = with pkgs; [ steam ];
+    environment.systemPackages = with pkgs; [
+      steamtinkerlaunch
+      steam
+    ];
   };
 }

@@ -9,10 +9,16 @@ with lib.${namespace};
     ./hardware-configuration.nix
   ];
 
-  boot.loader.systemd-boot.enable = true;
-  boot.loader.systemd-boot.consoleMode = "max";
-  boot.loader.efi.canTouchEfiVariables = true;
-  boot.binfmt.emulatedSystems = [ "aarch64-linux" ];
+  boot = {
+    binfmt.emulatedSystems = [ "aarch64-linux" ];
+    loader = {
+      efi.canTouchEfiVariables = true;
+      systemd-boot = {
+        enable = true;
+        consoleMode = "max";
+      };
+    };
+  };
 
   virtualisation.libvirtd.enable = true;
 
@@ -24,6 +30,15 @@ with lib.${namespace};
   ];
 
   networking.hostName = "bodenheizung";
+
+  users.users.philipp = {
+    isNormalUser = true;
+    description = "Philipp Böhm";
+    extraGroups = [
+      "wheel"
+      "caddy"
+    ];
+  };
 
   snowfallorg.users.philipp = {
     create = true;
@@ -38,6 +53,7 @@ with lib.${namespace};
       neovim = enabled;
       eza = enabled;
       nh = enabled;
+      wireguard = enabled;
     };
 
     apps = {
@@ -49,6 +65,7 @@ with lib.${namespace};
 
     services = {
       btrfs = enabled;
+      gns3 = enabled;
     };
 
     system = {
@@ -56,6 +73,7 @@ with lib.${namespace};
         enable = true;
         emoji = true;
       };
+      gstreamer = enabled;
       gnupg = enabled;
     };
   };

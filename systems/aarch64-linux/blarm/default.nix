@@ -14,9 +14,10 @@ with lib.${namespace};
   ];
 
   # Use the extlinux boot loader. (NixOS wants to enable GRUB by default)
-  boot.loader.grub.enable = false;
-  # Enables the generation of /boot/extlinux/extlinux.conf
-  boot.loader.generic-extlinux-compatible.enable = true;
+  boot.loader = {
+    grub.enable = false;
+    generic-extlinux-compatible.enable = true;
+  };
 
   nix.settings.experimental-features = [
     "nix-command"
@@ -32,14 +33,6 @@ with lib.${namespace};
   # Select internationalisation properties.
   i18n.defaultLocale = "en_US.UTF-8";
 
-  snowfallorg.users.philipp = {
-    create = true;
-    admin = true;
-    home = {
-      enable = true;
-    };
-  };
-
   users.users.philipp = {
     isNormalUser = true;
     description = "Philipp Böhm";
@@ -47,12 +40,15 @@ with lib.${namespace};
       "wheel"
       "caddy"
     ];
-    openssh.authorizedKeys.keys = [
-      "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIDwUGxdwTgjc61VNh7QNfrrZwz5yHkJ6AGsRsgoDV3a4 philipp-mobile"
-      "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIJqbT8AdnS++ZoL7TYg2skQUvfWx29Iq+mEYv2Ok2QHb arbeit"
-    ];
   };
 
+  snowfallorg.users.philipp = {
+    create = true;
+    admin = true;
+    home = {
+      enable = true;
+    };
+  };
 
   awesome-flake = {
     services = {

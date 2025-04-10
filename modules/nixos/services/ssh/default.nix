@@ -1,8 +1,8 @@
 {
-lib,
-config,
-namespace,
-...
+  lib,
+  config,
+  namespace,
+  ...
 }:
 with lib;
 with lib.${namespace};
@@ -13,7 +13,7 @@ let
     "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIJqbT8AdnS++ZoL7TYg2skQUvfWx29Iq+mEYv2Ok2QHb arbeit"
   ];
 in
-  {
+{
   options.${namespace}.services.ssh = {
     enable = mkBoolOpt false "OpenSSH";
     keys = mkOption {
@@ -27,9 +27,10 @@ in
     # Enable the OpenSSH daemon.
     services.openssh = enabled;
 
-    users.users.philipp.openssh.authorizedKeys = { 
+    users.users.philipp.openssh.authorizedKeys = {
       inherit (cfg)
-      keys;
+        keys
+        ;
     };
   };
 

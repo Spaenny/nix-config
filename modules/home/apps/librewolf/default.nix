@@ -35,7 +35,7 @@ let
     engines = {
       "SearXNG" = {
         urls = [ { template = "https://search.monapona.dev/search?q={searchTerms}"; } ];
-        iconUpdateURL = "https://search.monapona.dev/static/themes/simple/img/favicon.png";
+        icon = "https://search.monapona.dev/static/themes/simple/img/favicon.png";
         definedAliases = [ "@s" ];
       };
 
@@ -47,7 +47,7 @@ let
 
       "NixOS Wiki" = {
         urls = [ { template = "https://wiki.nixos.org/index.php?search={searchTerms}"; } ];
-        iconUpdateURL = "https://wiki.nixos.org/favicon.ico";
+        icon = "https://wiki.nixos.org/favicon.ico";
         updateInterval = 24 * 60 * 60 * 1000;
         definedAliases = [ "@nw" ];
       };
