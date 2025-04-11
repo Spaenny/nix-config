@@ -1,7 +1,6 @@
 {
   lib,
   config,
-  pkgs,
   namespace,
   ...
 }:
@@ -23,6 +22,11 @@ in
           extraConfig = ''
             root * /var/lib/caddy/ente
             file_server
+          '';
+        };
+        ":1339" = {
+          extraConfig = ''
+            reverse_proxy 192.168.1.241:3080
           '';
         };
         ":8686" = {

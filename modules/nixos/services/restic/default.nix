@@ -29,12 +29,14 @@ in
     services.restic.backups = {
       borgbase = {
         initialize = true;
-        exclude = [ "/home/*/.cache" ];
+        exclude = [
+          "/home/*/.cache"
+        ];
         passwordFile = "/run/secrets/restic_password";
         repositoryFile = "/run/secrets/restic_url";
         paths = [
           "/home"
-          "/var/lib/"
+          "/var/lib/caddy"
         ];
         timerConfig = {
           OnCalendar = "00:10";
