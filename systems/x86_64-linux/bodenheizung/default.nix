@@ -37,6 +37,7 @@ with lib.${namespace};
     extraGroups = [
       "wheel"
       "caddy"
+      "audio"
     ];
   };
 
