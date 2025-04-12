@@ -57,7 +57,6 @@
         }
         nvf.nixosModules.default
       ];
-
       outputs-builder = channels: { formatter = channels.nixpkgs.nixfmt-rfc-style; };
     };
 }
