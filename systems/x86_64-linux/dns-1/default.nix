@@ -1,19 +1,14 @@
 {
   lib,
-  pkgs,
+  modulesPath,
   namespace,
   ...
 }:
 with lib.${namespace};
 {
-  imports = [
-    ./hardware-configuration.nix
-    ./networking.nix
-  ];
+  imports = [ (modulesPath + "/virtualisation/proxmox-lxc.nix") ];
 
-  boot.loader = {
-    grub.enable = false;
-  };
+  documentation.man.generateCaches = false;
 
   nix.settings.experimental-features = [
     "nix-command"

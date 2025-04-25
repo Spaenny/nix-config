@@ -44,6 +44,8 @@ in
       type = with types; listOf int;
       default = [
         53
+        80
+        443
         5380 # web interface HTTP
         53443 # web interface HTTPS
       ];
@@ -103,5 +105,5 @@ in
     };
   };
 
-  meta.maintainers = with lib.maintainers; [ fabianrig ];
+  meta.maintainers = with lib.maintainers; [ fabianrig Spaenny ];
 }
