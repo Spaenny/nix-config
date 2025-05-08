@@ -15,6 +15,11 @@ in
   };
 
   config = mkIf cfg.enable {
+    networking.firewall.allowedTCPPorts = [
+      1338
+      8686
+    ];
+
     services.caddy = {
       enable = true;
       virtualHosts = {
@@ -22,11 +27,6 @@ in
           extraConfig = ''
             root * /var/lib/caddy/ente
             file_server
-          '';
-        };
-        ":1339" = {
-          extraConfig = ''
-            reverse_proxy 192.168.1.241:3080
           '';
         };
         ":8686" = {

@@ -15,6 +15,10 @@ in
   };
 
   config = mkIf cfg.enable {
+    networking.firewall.allowedTCPPorts = [
+      3000
+    ];
+
     sops.secrets.invidious-db = {
       format = "dotenv";
       sopsFile = ../../../../../secrets/invidious-db.env;
@@ -46,12 +50,12 @@ in
 
     virtualisation.oci-containers.containers = {
       invidious = {
-        image = "quay.io/invidious/invidious:latest-arm64";
+        image = "quay.io/invidious/invidious:latest";
         hostname = "invidious";
         volumes = [ "/run/secrets/invidious-config:/invidious/config/config.yml" ];
         ports = [
-          "192.168.1.202:3000:3000"
-          "[fd00:192:168:1::202]:3000:3000"
+          "192.168.10.3:3000:3000"
+          "[fd00:192:168:10::3]:3000:3000"
         ];
         dependsOn = [ "invidious-db" ];
       };
