@@ -53,7 +53,8 @@ with lib.${namespace};
   awesome-flake = {
     services = {
       ssh = enabled;
-      caddy = enabled;
+      cinny = enabled;
+      ente-auth = enabled;
       restic = enabled;
     };
 
