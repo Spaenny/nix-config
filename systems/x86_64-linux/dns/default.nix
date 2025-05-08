@@ -10,11 +10,13 @@ with lib.${namespace};
 
   documentation.man.generateCaches = false;
 
-  nix.settings.experimental-features = [
-    "nix-command"
-    "flakes"
-  ];
-
+  nix.settings = {
+    trusted-users = [ "philipp" ];
+    experimental-features = [
+      "nix-command"
+      "flakes"
+    ];
+  };
   users.users.philipp = {
     isNormalUser = true;
     description = "Philipp Böhm";

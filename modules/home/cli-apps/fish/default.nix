@@ -19,8 +19,7 @@ in
     programs.fish = {
       enable = true;
       shellAliases = {
-        hm-update = "home-manager switch --flake ~/Documents/nix-config/ -b bk &| nom";
-        nix-update = "sudo sh -c 'nixos-rebuild --log-format internal-json -v switch --flake /home/philipp/Documents/nix-config/ |& nom --json'";
+        nix-dns = "nixos-rebuild switch --flake .#dns --target-host dns-1 --use-remote-sudo && nixos-rebuild switch --flake .#dns --target-host dns-2 --use-remote-sudo";
         cd = "z";
       };
       plugins = [

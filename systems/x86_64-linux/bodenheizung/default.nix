@@ -23,6 +23,7 @@ with lib.${namespace};
   virtualisation.libvirtd.enable = true;
 
   nixpkgs.config.allowUnfree = true;
+  nixpkgs.config.allowBroken = false;
 
   nix.settings.experimental-features = [
     "nix-command"
@@ -66,7 +67,6 @@ with lib.${namespace};
 
     services = {
       btrfs = enabled;
-      gns3 = enabled;
     };
 
     system = {

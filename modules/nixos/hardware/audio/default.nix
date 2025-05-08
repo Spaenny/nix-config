@@ -25,6 +25,9 @@ in
       wireplumber.enable = true;
     };
 
+    services.udev.extraRules = ''
+      ACTION=="add", SUBSYSTEM=="usb", ATTR{idVendor}=="1235", ATTR{idProduct}=="8202", TEST=="power/control", ATTR{power/control}="on"
+    '';
     services.pulseaudio.enable = false;
 
     environment.systemPackages =
