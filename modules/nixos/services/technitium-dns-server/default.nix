@@ -105,5 +105,8 @@ in
     };
   };
 
-  meta.maintainers = with lib.maintainers; [ fabianrig Spaenny ];
+  meta.maintainers = with lib.maintainers; [
+    fabianrig
+    Spaenny
+  ];
 }

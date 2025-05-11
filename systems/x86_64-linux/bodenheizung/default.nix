@@ -16,7 +16,8 @@ with lib.${namespace};
       systemd-boot = {
         enable = true;
         consoleMode = "max";
-      }; };
+      };
+    };
   };
 
   virtualisation.libvirtd.enable = true;
