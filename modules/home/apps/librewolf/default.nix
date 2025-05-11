@@ -20,6 +20,7 @@ let
     "signon.rememberSignons" = true;
     "signon.storeWhenAutocompleteOff" = true;
     "sidebar.verticalTabs" = true;
+    "general.useragent.compatMode.firefox" = true;
   };
   defaultExtensions = with inputs.firefox-addons.packages."x86_64-linux"; [
     bitwarden
@@ -30,6 +31,7 @@ let
     seventv
   ];
   defaultSearch = {
+    force = true; # We need this, else the build fails
     privateDefault = "SearXNG";
     default = "SearXNG";
     engines = {
@@ -42,7 +44,7 @@ let
       "My Nixos Packages" = {
         urls = [ { template = "https://mynixos.com/search?q={searchTerms}"; } ];
         icon = "${pkgs.nixos-icons}/share/icons/hicolor/scalable/apps/nix-snowflake.svg";
-        definedAliases = [ "@np" ];
+        definedAliases = [ "@mnp" ];
       };
 
       "NixOS Wiki" = {
@@ -50,6 +52,20 @@ let
         icon = "https://wiki.nixos.org/favicon.ico";
         updateInterval = 24 * 60 * 60 * 1000;
         definedAliases = [ "@nw" ];
+      };
+
+      "NixOS Packages" = {
+        url = [ { template = "https://search.nixos.org/packages?query={searchTerms}"; } ];
+        icon = "https://wiki.nixos.org/favicon.ico";
+        updateInterval = 24 * 60 * 60 * 1000;
+        definedAliases = [ "@np" ];
+      };
+
+      "NixOS Options" = {
+        url = [ { template = "https://search.nixos.org/options?query={searchTerms}"; } ];
+        icon = "https://wiki.nixos.org/favicon.ico";
+        updateInterval = 24 * 60 * 60 * 1000;
+        definedAliases = [ "@no" ];
       };
     };
   };
