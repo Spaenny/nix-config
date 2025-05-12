@@ -59,6 +59,7 @@ in
       serviceConfig.ExecStart = ''
         ${pkgs.bash}/bin/bash -c "mkdir -p /var/lib/forgejo/custom/public/assets/css /var/lib/forgejo/custom/public/assets/img && \
           cp -r ${pkgs.awesome-flake.codeberg-themes}/var/lib/forgejo/custom/public/assets/css/* /var/lib/forgejo/custom/public/assets/css/ && \
+          cp ${pkgs.awesome-flake.codeberg-themes}/var/lib/forgejo/custom/public/assets/img/*logo.svg /var/lib/forgejo/custom/public/assets/img/logo.svg && \
           chown -R forgejo:forgejo /var/lib/forgejo/custom"
       '';
     };
