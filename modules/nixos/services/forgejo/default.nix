@@ -26,12 +26,6 @@ in
       default = 3001;
     };
 
-    ssh_user = mkOption {
-      description = "The ssh user to use Forgejo as.";
-      type = types.nullOr types.str;
-      default = "forgejo";
-    };
-
     domain = mkOption {
       description = "The domain to serve Forgejo on.";
       type = types.nullOr types.str;
@@ -56,16 +50,33 @@ in
       cfg.port
     ];
 
+    systemd.services.codeberg-themes = {
+      description = "Codeberg Themes Setup";
+      wantedBy = [ "multi-user.target" ];
+
+      environment.PATH = lib.mkDefault "${pkgs.coreutils}/bin:${pkgs.bash}/bin";
+
+      serviceConfig.ExecStart = ''
+        ${pkgs.bash}/bin/bash -c "mkdir -p /var/lib/forgejo/custom/public/assets/css /var/lib/forgejo/custom/public/assets/img && \
+          cp -r ${pkgs.awesome-flake.codeberg-themes}/var/lib/forgejo/custom/public/assets/css/* /var/lib/forgejo/custom/public/assets/css/ && \
+          chown -R forgejo:forgejo /var/lib/forgejo/custom"
+      '';
+    };
+
     services.forgejo = {
       enable = true;
       package = cfg.package;
       database.type = "postgres";
-      settings.server = {
-        DOMAIN = cfg.domain;
-        HTTP_PORT = cfg.port;
-        ROOT_URL = "https://git.monapona.dev";
-        SSH_DOMAIN = cfg.ssh_domain;
-        BUILTIN_SSH_SERVER_USER = cfg.ssh_user;
+      settings = {
+        server = {
+          DOMAIN = cfg.domain;
+          HTTP_PORT = cfg.port;
+          ROOT_URL = "https://git.monapona.dev";
+          SSH_DOMAIN = cfg.ssh_domain;
+        };
+        ui = {
+          THEMES = "gitea,dark-arc,codeberg-dark";
+        };
       };
     };
   };
