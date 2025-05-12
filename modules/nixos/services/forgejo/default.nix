@@ -41,7 +41,7 @@ in
     user = mkOption {
       description = "The user to run Forgejo as.";
       type = types.nullOr types.str;
-      default = "git";
+      default = "forgejo";
     };
 
   };
@@ -60,14 +60,20 @@ in
         ${pkgs.bash}/bin/bash -c "mkdir -p /var/lib/forgejo/custom/public/assets/css /var/lib/forgejo/custom/public/assets/img && \
           cp -r ${pkgs.awesome-flake.codeberg-themes}/var/lib/forgejo/custom/public/assets/css/* /var/lib/forgejo/custom/public/assets/css/ && \
           cp ${pkgs.awesome-flake.codeberg-themes}/var/lib/forgejo/custom/public/assets/img/*logo.svg /var/lib/forgejo/custom/public/assets/img/logo.svg && \
-          chown -R forgejo:forgejo /var/lib/forgejo/custom"
+          chown -R ${cfg.user}:${cfg.user} /var/lib/forgejo/custom"
       '';
     };
 
     services.forgejo = {
+      user = cfg.user;
       enable = true;
       package = cfg.package;
-      database.type = "postgres";
+
+      database = {
+        user = cfg.user;
+        type = "postgres";
+      };
+
       settings = {
         server = {
           DOMAIN = cfg.domain;
@@ -76,7 +82,8 @@ in
           SSH_DOMAIN = cfg.ssh_domain;
         };
         ui = {
-          THEMES = "gitea,dark-arc,codeberg-dark";
+          DEFAULT_THEME = "codeberg-dark";
+          THEMES = "codeberg-dark";
         };
       };
     };
