@@ -48,6 +48,7 @@ in
       kdiskmark
       networkmanager
       kdePackages.networkmanager-qt
+      kdePackages.wallpaper-engine-plugin
     ];
   };
 
