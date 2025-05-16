@@ -53,6 +53,7 @@ in
         check = it: lib.isString it && lib.types.path.check it;
       };
       example = "/run/secrets/linkwarden";
+      default = "/run/secrets/linkwarden";
       description = ''
         Path of a file with extra environment variables to be loaded from disk.
         This file is not added to the nix store, so it can be used to pass secrets to linkwarden.
