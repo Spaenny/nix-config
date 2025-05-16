@@ -20,7 +20,8 @@ let
     cursor_shape = "Beam";
   };
   defaultFont = {
-    name = "Hack Nerd Font";
+    name = "Hack Nerd Font Mono";
+    package = pkgs.nerd-fonts.hack;
     size = 12;
   };
 in
@@ -33,7 +34,10 @@ in
   };
 
   config = mkIf cfg.enable {
-    home.packages = [ pkgs.kitty-themes ];
+    home.packages = [
+      pkgs.kitty-themes
+      defaultFont.package
+    ]; # fc-cache -fv clear fontconfig when error
     programs.kitty = {
       enable = true;
       themeFile = "tokyo_night_night";
