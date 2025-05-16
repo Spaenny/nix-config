@@ -71,6 +71,7 @@ with lib.${namespace};
     };
 
     system = {
+      tmpfs = enabled;
       fonts = {
         enable = true;
         emoji = true;

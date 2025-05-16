@@ -39,7 +39,13 @@ with lib.${namespace};
       eza = enabled;
       nh = enabled;
     };
+
+    system.tmpfs = true;
   };
+
+  environment.systemPackages = with pkgs; [
+    git
+  ];
 
   # Set your time zone
   time.timeZone = "Europe/Berlin";

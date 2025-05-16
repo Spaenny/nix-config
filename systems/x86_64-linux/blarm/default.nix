@@ -56,16 +56,17 @@ with lib.${namespace};
       cinny = enabled;
       ente-auth = enabled;
       restic = enabled;
-      linkwarden = {
-        enable = true;
-        secretsFile = "/run/secrets/linkwarden";
-      };
+      linkwarden = enabled;
       forgejo = enabled;
     };
 
     #container.invidious = enabled;
 
-    system.sops = enabled;
+    system = {
+      sops = enabled;
+      tmpfs = enabled;
+    };
+
     cli.neovim = enabled;
   };
 
