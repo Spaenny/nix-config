@@ -40,7 +40,7 @@ with lib.${namespace};
       nh = enabled;
     };
 
-    system.tmpfs = true;
+    system.tmpfs = enabled;
   };
 
   environment.systemPackages = with pkgs; [
