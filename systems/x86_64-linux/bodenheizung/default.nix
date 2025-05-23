@@ -38,7 +38,6 @@ with lib.${namespace};
     description = "Philipp Böhm";
     extraGroups = [
       "wheel"
-      "caddy"
       "audio"
     ];
   };
@@ -68,6 +67,7 @@ with lib.${namespace};
 
     services = {
       btrfs = enabled;
+      ssh = enabled;
     };
 
     system = {
