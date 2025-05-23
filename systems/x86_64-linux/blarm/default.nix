@@ -58,6 +58,7 @@ with lib.${namespace};
       restic = enabled;
       linkwarden = enabled;
       forgejo = enabled;
+      searxng = enabled;
     };
 
     #container.invidious = enabled;
