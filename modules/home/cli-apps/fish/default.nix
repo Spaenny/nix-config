@@ -22,6 +22,8 @@ in
         nix-dns = "nixos-rebuild switch --flake .#dns --target-host dns-1 --use-remote-sudo && nixos-rebuild switch --flake .#dns --target-host dns-2 --use-remote-sudo";
         nix-blarm = "nixos-rebuild switch --flake .#blarm --target-host blarm --use-remote-sudo";
         cd = "z";
+        ls = "exa";
+        l = "exa --icons";
       };
       plugins = [
         {
@@ -44,6 +46,11 @@ in
     };
 
     programs.zoxide = {
+      enable = true;
+      enableFishIntegration = true;
+    };
+
+    programs.eza = {
       enable = true;
       enableFishIntegration = true;
     };
