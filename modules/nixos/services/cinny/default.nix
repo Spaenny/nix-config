@@ -13,6 +13,13 @@ in
 {
   options.${namespace}.services.cinny = {
     enable = mkEnableOption "Cinny";
+    nginx = {
+      enable = mkEnableOption {
+        description = "Enable nginx for this service.";
+        type = types.bool;
+        default = true;
+      };
+    };
 
     package = mkOption {
       description = "The package of Cinny to use.";
@@ -20,45 +27,44 @@ in
       default = pkgs.cinny-unwrapped;
     };
 
-    port = mkOption {
-      description = "The port to serve Cinny on.";
-      type = types.nullOr types.int;
-      default = 8686;
+    domain = mkOption {
+      description = "The domain to serve Cinny on.";
+      type = types.nullOr types.str;
+      default = "cinny.stahl.sh";
     };
 
   };
   config = mkIf cfg.enable {
     networking.firewall.allowedTCPPorts = [
-      cfg.port
+      80
+      443
     ];
 
-    services.caddy = {
+    awesome-flake.services.acme.enable = mkIf cfg.nginx.enable true;
+
+    services.nginx = mkIf cfg.nginx.enable {
       enable = true;
-      virtualHosts.":${builtins.toString cfg.port}" = {
-        extraConfig = ''
-          root * ${cfg.package}
-          file_server
 
-          @index {
-            not path /index.html
-            not path /public/*
-            not path /assets/*
+      virtualHosts."${cfg.domain}" = {
+        forceSSL = true;
+        useACMEHost = "stahl.sh";
+        locations."/" = {
+          root = "${cfg.package}";
+          extraConfig = ''
+            rewrite ^/config.json$ /config.json break;
+            rewrite ^/manifest.json$ /manifest.json break;
 
-            not path /config.json
+            rewrite ^/sw.js$ /sw.js break;
+            rewrite ^/pdf.worker.min.js$ /pdf.worker.min.js break;
 
-            not path /manifest.json
-            not path /sw.js
+            rewrite ^/public/(.*)$ /public/$1 break;
+            rewrite ^/assets/(.*)$ /assets/$1 break;
 
-            not path /pdf.worker.min.js
-            not path /olm.wasm
-
-            path /*
-          }
-
-          rewrite /*/olm.wasm /olm.wasm
-          rewrite @index /index.html
-        '';
+            rewrite ^(.+)$ /index.html break;
+          '';
+        };
       };
     };
   };
+
 }

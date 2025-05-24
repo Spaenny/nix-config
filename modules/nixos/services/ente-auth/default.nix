@@ -20,28 +20,41 @@ in
       default = pkgs.awesome-flake.ente-web-auth;
     };
 
-    port = mkOption {
-      description = "The port to serve Ente-Auth on.";
-      type = types.nullOr types.int;
-      default = 1338;
+    domain = mkOption {
+      description = "The domain to serve ente-auth on.";
+      type = types.nullOr types.str;
+      default = "ente.stahl.sh";
     };
+
+    nginx = {
+      enable = mkEnableOption {
+        description = "Enable nginx for this service.";
+        type = types.bool;
+        default = true;
+      };
+    };
+
   };
 
   config = mkIf cfg.enable {
-    networking.firewall.allowedTCPPorts = [
-      cfg.port
+    networking.firewall.allowedTCPPorts = mkIf cfg.nginx.enable [
+      80
+      443
     ];
 
-    services.caddy = {
+    awesome-flake.services.acme.enable = mkIf cfg.nginx.enable true;
+
+    services.nginx = mkIf cfg.nginx.enable {
       enable = true;
-      virtualHosts = {
-        ":${builtins.toString cfg.port}" = {
-          extraConfig = ''
-            root * ${cfg.package}
-            file_server
-          '';
+
+      virtualHosts."${cfg.domain}" = {
+        forceSSL = true;
+        useACMEHost = "stahl.sh";
+        locations."/" = {
+          root = "${cfg.package}";
         };
       };
     };
   };
+
 }

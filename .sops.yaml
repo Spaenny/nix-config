@@ -21,3 +21,7 @@ creation_rules:
     key_groups:
       - age:
         - *primary
+  - path_regex: secrets/blarm-acme.env
+    key_groups:
+      - age:
+        - *primary

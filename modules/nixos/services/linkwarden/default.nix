@@ -21,6 +21,19 @@ in
   options.${namespace}.services.linkwarden = {
     enable = mkEnableOption "Linkwarden";
     package = lib.mkPackageOption pkgs.awesome-flake "linkwarden" { };
+    nginx = {
+      enable = mkEnableOption {
+        description = "Enable nginx for this service.";
+        type = types.bool;
+        default = true;
+      };
+    };
+
+    domain = mkOption {
+      description = "The domain to serve linkwarden on.";
+      type = types.nullOr types.str;
+      default = "link.stahl.sh";
+    };
 
     storageLocation = mkOption {
       type = types.path;
@@ -69,24 +82,22 @@ in
 
     host = mkOption {
       type = types.str;
-      default = "0.0.0.0";
+      default = "127.0.0.1";
       description = "The host that Linkwarden will listen on.";
     };
+
     port = mkOption {
       type = types.port;
       default = 3000;
       description = "The port that Linkwarden will listen on.";
     };
-    openFirewall = mkOption {
-      type = types.bool;
-      default = true;
-      description = "Whether to open the Linkwarden port in the firewall";
-    };
+
     user = mkOption {
       type = types.str;
       default = "linkwarden";
       description = "The user Linkwarden should run as.";
     };
+
     group = mkOption {
       type = types.str;
       default = "linkwarden";
@@ -99,25 +110,30 @@ in
         // {
           default = true;
         };
+
       createDB = mkEnableOption "the automatic creation of the database for Linkwarden." // {
         default = true;
       };
+
       name = mkOption {
         type = types.str;
         default = "linkwarden";
         description = "The name of the Linkwarden database.";
       };
+
       host = mkOption {
         type = types.str;
         default = "/run/postgresql";
         example = "127.0.0.1";
         description = "Hostname or address of the postgresql server. If an absolute path is given here, it will be interpreted as a unix socket path.";
       };
+
       port = mkOption {
         type = types.port;
         default = 5432;
         description = "Port of the postgresql server.";
       };
+
       user = mkOption {
         type = types.str;
         default = "linkwarden";
@@ -146,19 +162,25 @@ in
       ];
     };
 
-    networking.firewall.allowedTCPPorts = mkIf cfg.openFirewall [ cfg.port ];
+    networking.firewall.allowedTCPPorts = [
+      80
+      443
+    ];
 
-    ${namespace}.services.linkwarden.environment = {
-      LINKWARDEN_HOST = cfg.host;
-      LINKWARDEN_PORT = toString cfg.port;
-      LINKWARDEN_CACHE_DIR = cfg.cacheLocation;
-      STORAGE_FOLDER = cfg.storageLocation;
-      NEXT_PUBLIC_DISABLE_REGISTRATION = mkIf (!cfg.enableRegistration) "true";
-      DATABASE_URL = mkIf isPostgresUnixSocket "postgresql://${lib.strings.escapeURL cfg.database.user}@localhost/${lib.strings.escapeURL cfg.database.name}?host=${cfg.database.host}";
-      DATABASE_PORT = toString cfg.database.port;
-      DATABASE_HOST = mkIf (!isPostgresUnixSocket) cfg.database.host;
-      DATABASE_NAME = cfg.database.name;
-      DATABASE_USER = cfg.database.user;
+    ${namespace}.services = {
+      acme.enable = mkIf cfg.nginx.enable true;
+      linkwarden.environment = {
+        LINKWARDEN_HOST = cfg.host;
+        LINKWARDEN_PORT = toString cfg.port;
+        LINKWARDEN_CACHE_DIR = cfg.cacheLocation;
+        STORAGE_FOLDER = cfg.storageLocation;
+        NEXT_PUBLIC_DISABLE_REGISTRATION = mkIf (!cfg.enableRegistration) "true";
+        DATABASE_URL = mkIf isPostgresUnixSocket "postgresql://${lib.strings.escapeURL cfg.database.user}@localhost/${lib.strings.escapeURL cfg.database.name}?host=${cfg.database.host}";
+        DATABASE_PORT = toString cfg.database.port;
+        DATABASE_HOST = mkIf (!isPostgresUnixSocket) cfg.database.host;
+        DATABASE_NAME = cfg.database.name;
+        DATABASE_USER = cfg.database.user;
+      };
     };
 
     systemd.services.linkwarden = {
@@ -220,6 +242,16 @@ in
       };
     };
     users.groups = mkIf (cfg.group == "linkwarden") { linkwarden = { }; };
+
+    services.nginx = mkIf cfg.nginx.enable {
+      enable = true;
+
+      virtualHosts."${cfg.domain}" = {
+        forceSSL = true;
+        useACMEHost = "stahl.sh";
+        locations."/".proxyPass = "http://:${cfg.host}" + builtins.toString cfg.port;
+      };
+    };
 
     sops.secrets.linkwarden = {
       format = "dotenv";

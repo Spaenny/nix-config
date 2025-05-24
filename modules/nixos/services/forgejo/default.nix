@@ -13,6 +13,13 @@ in
 {
   options.${namespace}.services.forgejo = {
     enable = mkEnableOption "Forgejo";
+    nginx = {
+      enable = mkEnableOption {
+        description = "Enable nginx for this service.";
+        type = types.bool;
+        default = true;
+      };
+    };
 
     package = mkOption {
       description = "The package of Forgejo to use.";
@@ -29,13 +36,13 @@ in
     domain = mkOption {
       description = "The domain to serve Forgejo on.";
       type = types.nullOr types.str;
-      default = "git.monapona.dev";
+      default = "git.stahl.sh";
     };
 
     ssh_domain = mkOption {
       description = "The domain to serve Forgejo on.";
       type = types.nullOr types.str;
-      default = "monapona.dev";
+      default = "stahl.sh";
     };
 
     user = mkOption {
@@ -47,7 +54,8 @@ in
   };
   config = mkIf cfg.enable {
     networking.firewall.allowedTCPPorts = [
-      cfg.port
+      80
+      443
     ];
 
     systemd.services.codeberg-themes = {
@@ -78,13 +86,25 @@ in
         server = {
           DOMAIN = cfg.domain;
           HTTP_PORT = cfg.port;
-          ROOT_URL = "https://git.monapona.dev";
+          ROOT_URL = "https://" + cfg.domain;
           SSH_DOMAIN = cfg.ssh_domain;
         };
         ui = {
           DEFAULT_THEME = "codeberg-dark";
           THEMES = "codeberg-dark";
         };
+      };
+    };
+
+    awesome-flake.services.acme.enable = mkIf cfg.nginx.enable true;
+
+    services.nginx = mkIf cfg.nginx.enable {
+      enable = true;
+
+      virtualHosts."${cfg.domain}" = {
+        forceSSL = true;
+        useACMEHost = "stahl.sh";
+        locations."/".proxyPass = "http://127.0.0.1:${builtins.toString cfg.port}";
       };
     };
   };
