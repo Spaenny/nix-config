@@ -22,10 +22,9 @@ in
     enable = mkEnableOption "Linkwarden";
     package = lib.mkPackageOption pkgs.awesome-flake "linkwarden" { };
     nginx = {
-      enable = mkEnableOption {
-        description = "Enable nginx for this service.";
-        type = types.bool;
-        default = true;
+      enable = mkEnableOption "Enable nginx for this service."
+      // {
+          default = true;
       };
     };
 
@@ -249,7 +248,7 @@ in
       virtualHosts."${cfg.domain}" = {
         forceSSL = true;
         useACMEHost = "stahl.sh";
-        locations."/".proxyPass = "http://:${cfg.host}" + builtins.toString cfg.port;
+        locations."/".proxyPass = "http://${cfg.host}:${builtins.toString cfg.port}";
       };
     };
 

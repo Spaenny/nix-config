@@ -14,10 +14,9 @@ in
   options.${namespace}.services.forgejo = {
     enable = mkEnableOption "Forgejo";
     nginx = {
-      enable = mkEnableOption {
-        description = "Enable nginx for this service.";
-        type = types.bool;
-        default = true;
+      enable = mkEnableOption "Enable nginx for this service."
+      // {
+          default = true;
       };
     };
 

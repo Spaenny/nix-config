@@ -20,17 +20,15 @@ in
     };
 
     nginx = {
-      enable = mkEnableOption {
-        description = "Enable nginx for this service.";
-        type = types.bool;
-        default = true;
+      enable = mkEnableOption "Enable nginx for this service."
+      // {
+          default = true;
       };
     };
-
+    
     redlib = {
-      enable = mkEnableOption {
-        description = "Whether or not to enable redlib.";
-        type = type.bool;
+      enable = mkEnableOption "Whether or not to enable redlib." 
+      // {
         default = true;
       };
 
