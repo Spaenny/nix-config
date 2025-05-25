@@ -13,9 +13,8 @@
   monolith,
   nodejs,
   openssl,
-  #playwright-driver,
-  prisma,
-  prisma-engines,
+  playwright-driver,
+  prisma, prisma-engines,
 }:
 
 let
@@ -120,6 +119,7 @@ stdenvNoCC.mkDerivation rec {
       --set-default PRISMA_QUERY_ENGINE_LIBRARY "${prisma-engines}/lib/libquery_engine.node" \
       --set-default PRISMA_QUERY_ENGINE_BINARY "${prisma-engines}/bin/query-engine" \
       --set-default PRISMA_SCHEMA_ENGINE_BINARY "${prisma-engines}/bin/schema-engine" \
+      --set-default PLAYWRIGHT_LAUNCH_OPTIONS_EXECUTABLE_PATH ${playwright-driver.browsers-chromium}/chromium-*/chrome-linux/chrome \
       --set-default LINKWARDEN_CACHE_DIR /var/cache/linkwarden \
       --set-default LINKWARDEN_HOST localhost \
       --set-default LINKWARDEN_PORT 3000 \
@@ -128,7 +128,6 @@ stdenvNoCC.mkDerivation rec {
     runHook postInstall
   '';
 
-  #--set-default PLAYWRIGHT_LAUNCH_OPTIONS_EXECUTABLE_PATH ${playwright-driver.browsers-chromium}/chromium-*/chrome-linux/chrome \
 
   passthru.tests = {
     inherit (nixosTests) linkwarden;
