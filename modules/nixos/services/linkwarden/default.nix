@@ -22,9 +22,8 @@ in
     enable = mkEnableOption "Linkwarden";
     package = lib.mkPackageOption pkgs.awesome-flake "linkwarden" { };
     nginx = {
-      enable = mkEnableOption "Enable nginx for this service."
-      // {
-          default = true;
+      enable = mkEnableOption "Enable nginx for this service." // {
+        default = true;
       };
     };
 

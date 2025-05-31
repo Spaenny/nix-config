@@ -14,8 +14,7 @@ in
   options.${namespace}.services.cinny = {
     enable = mkEnableOption "Cinny";
     nginx = {
-      enable = mkEnableOption "Enable nginx for this service." 
-      // {
+      enable = mkEnableOption "Enable nginx for this service." // {
         default = true;
       };
     };
