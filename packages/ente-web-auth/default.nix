@@ -39,7 +39,6 @@ stdenv.mkDerivation (finalAttrs: {
   env = extraBuildEnv;
 
   buildPhase = ''
-    export NEXT_PUBLIC_ENTE_ENDPOINT=https://ente-api.monapona.dev
     yarn build:auth
   '';
 
