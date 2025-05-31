@@ -6,14 +6,6 @@
 }:
 with lib.${namespace};
 {
-  home.pointerCursor = {
-    gtk.enable = true;
-    x11.enable = true;
-    package = pkgs.rose-pine-cursor;
-    name = "BreezeX-RosePine-Linux";
-    size = 32;
-  };
-
   awesome-flake = {
     cli-apps = {
       fish = enabled;
@@ -47,6 +39,7 @@ with lib.${namespace};
       hotkeys = enabled;
       panel = enabled;
       spectacle = enabled;
+      cursor = enabled;
     };
   };
 }
