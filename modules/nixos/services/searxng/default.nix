@@ -36,7 +36,7 @@ in
         default = "reddit.stahl.sh";
       };
     };
-};
+  };
 
   config = mkIf cfg.enable {
     networking.firewall.allowedTCPPorts = mkIf cfg.nginx.enable [

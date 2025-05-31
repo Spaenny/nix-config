@@ -10,13 +10,12 @@ with lib.${namespace};
 let
   cfg = config.${namespace}.services.ente-auth;
 
-  enteApp = 
-    cfg.package.override {
-      extraBuildEnv = {
-        NEXT_PUBLIC_ENTE_ENDPOINT = "https://ente-api.monapona.dev";
-        NEXT_TELEMETRY_DISABLED = "1";
-      };
+  enteApp = cfg.package.override {
+    extraBuildEnv = {
+      NEXT_PUBLIC_ENTE_ENDPOINT = "https://ente-api.monapona.dev";
+      NEXT_TELEMETRY_DISABLED = "1";
     };
+  };
 in
 {
   options.${namespace}.services.ente-auth = {
