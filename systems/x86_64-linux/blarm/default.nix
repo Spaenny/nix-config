@@ -59,6 +59,7 @@ with lib.${namespace};
       linkwarden = enabled;
       forgejo = enabled;
       searxng = enabled;
+      immich = enabled;
     };
 
     #container.invidious = enabled;
