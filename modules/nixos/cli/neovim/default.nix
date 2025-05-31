@@ -14,6 +14,7 @@ in
     enable = mkBoolOpt false "Whether or not to enable neovim.";
   };
   config = mkIf cfg.enable {
+    environment.variables.EDITOR = "nvim";
     programs.nvf = {
       enable = true;
       settings = {

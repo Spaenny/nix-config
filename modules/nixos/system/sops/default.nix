@@ -18,7 +18,7 @@ in
   };
 
   config = mkIf cfg.enable {
-    sops.age.keyFile = "/home/philipp/.config/sops/age/keys.txt";
+    sops.age.keyFile = "${config.users.users.philipp.home}/.config/sops/age/keys.txt";
   };
 
 }
