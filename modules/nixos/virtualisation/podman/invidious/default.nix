@@ -72,8 +72,8 @@ in
         hostname = "invidious-db";
         volumes = [
           "postgresdata:/var/lib/postgresql/data"
-          "/home/philipp/nix-config/modules/nixos/virtualisation/podman/invidious/config/sql:/config/sql"
-          "/home/philipp/nix-config/modules/nixos/virtualisation/podman/invidious/init-invidious-db.sh:/docker-entrypoint-initdb.d/init-invidious-db.sh"
+          "${config.flakeRoot}/modules/nixos/virtualisation/podman/invidious/config/sql:/config/sql"
+          "${config.flakeRoot}/modules/nixos/virtualisation/podman/invidious/init-invidious-db.sh:/docker-entrypoint-initdb.d/init-invidious-db.sh"
         ];
         environmentFiles = [ /run/secrets/invidious-db ];
       };
