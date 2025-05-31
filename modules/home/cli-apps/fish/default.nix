@@ -9,6 +9,7 @@ let
   inherit (lib) mkEnableOption mkIf;
 
   cfg = config.${namespace}.cli-apps.fish;
+  flakeRoot = "/home/philipp/Documents/nix-config";
 in
 {
   options.${namespace}.cli-apps.fish = {
@@ -19,11 +20,11 @@ in
     programs.fish = {
       enable = true;
       shellAliases = {
-        nix-dns = "nixos-rebuild switch --flake .#dns --target-host dns-1 --use-remote-sudo && nixos-rebuild switch --flake .#dns --target-host dns-2 --use-remote-sudo";
-        nix-blarm = "nixos-rebuild switch --flake .#blarm --target-host blarm --use-remote-sudo";
+        nix-dns = "nixos-rebuild switch --flake ${flakeRoot}/.#dns --target-host dns-1 --use-remote-sudo && nixos-rebuild switch --flake ${flakeRoot}/.#dns --target-host dns-2 --use-remote-sudo";
+        nix-blarm = "nixos-rebuild switch --flake ${flakeRoot}/.#blarm --target-host blarm --use-remote-sudo";
         cd = "z";
-        ls = "exa";
-        l = "exa --icons";
+        ls = "exa --icons";
+        l = "exa";
       };
       plugins = [
         {
