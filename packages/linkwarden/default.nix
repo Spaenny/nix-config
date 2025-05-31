@@ -14,7 +14,8 @@
   nodejs,
   openssl,
   playwright-driver,
-  prisma, prisma-engines,
+  prisma,
+  prisma-engines,
 }:
 
 let
@@ -127,7 +128,6 @@ stdenvNoCC.mkDerivation rec {
 
     runHook postInstall
   '';
-
 
   passthru.tests = {
     inherit (nixosTests) linkwarden;

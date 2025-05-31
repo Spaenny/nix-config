@@ -27,9 +27,8 @@ in
     };
 
     nginx = {
-      enable = mkEnableOption "Enable nginx for this service."
-      // {
-          default = true;
+      enable = mkEnableOption "Enable nginx for this service." // {
+        default = true;
       };
     };
 
