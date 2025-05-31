@@ -11,7 +11,7 @@ with lib.${namespace};
 let
   cfg = config.${namespace}.apps.librewolf;
   defaultSettings = {
-    "browser.startup.homepage" = "https://search.monapona.dev";
+    "browser.startup.homepage" = "https://search.stahl.sh";
     "browser.startup.page" = 3;
     "privacy.resistFingerprinting" = false;
     "privacy.fingerprintingProtection" = true;
@@ -36,8 +36,8 @@ let
     default = "SearXNG";
     engines = {
       "SearXNG" = {
-        urls = [ { template = "https://search.monapona.dev/search?q={searchTerms}"; } ];
-        icon = "https://search.monapona.dev/static/themes/simple/img/favicon.png";
+        urls = [ { template = "https://search.stahl.sh/search?q={searchTerms}"; } ];
+        icon = "https://search.stahl.sh/static/themes/simple/img/favicon.png";
         definedAliases = [ "@s" ];
       };
 
