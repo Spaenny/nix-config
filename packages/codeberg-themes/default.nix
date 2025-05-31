@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
     owner = "Codeberg-Infrastructure";
     repo = "forgejo";
     rev = "codeberg-11";
-    sha256 = "sha256-payu77z2yLVd9T6btehuNitS22lJfgIYG1PkE3DgILA=";
+    sha256 = "sha256-Mud0GpnuGOL9Ys4dpL/xVmEHBMQrcuQgSu4NwEaNelE=";
   };
 
   unpackPhase = ''
