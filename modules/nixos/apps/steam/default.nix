@@ -17,16 +17,28 @@ in
   };
 
   config = mkIf cfg.enable {
-    programs.steam.enable = true;
-    programs.steam.remotePlay.openFirewall = true;
+    programs.steam = {
+      enable = true;
+      gamescopeSession.enable = true;
+      protontricks.enable = true;
+      remotePlay.openFirewall = true;
+
+      extraPackages = with pkgs; [
+        steamtinkerlaunch
+      ];
+    };
+
+    programs.gamemode = {
+      enable = true;
+      settings = {
+        general.renice = 10;
+        custom = {
+          start = "${pkgs.libnotify}/bin/notify-send 'GameMode started.'";
+          end = "${pkgs.libnotify}/bin/notify-send 'GameMode ended.'";
+        };
+      };
+    };
 
     hardware.steam-hardware.enable = true;
-
-    environment.systemPackages = with pkgs; [
-      steamtinkerlaunch
-      steam
-      gamescope
-      gamemode
-    ];
   };
 }
