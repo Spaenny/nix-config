@@ -55,14 +55,14 @@ let
       };
 
       "NixOS Packages" = {
-        url = [ { template = "https://search.nixos.org/packages?query={searchTerms}"; } ];
+        urls = [ { template = "https://search.nixos.org/packages?query={searchTerms}"; } ];
         icon = "https://wiki.nixos.org/favicon.ico";
         updateInterval = 24 * 60 * 60 * 1000;
         definedAliases = [ "@np" ];
       };
 
       "NixOS Options" = {
-        url = [ { template = "https://search.nixos.org/options?query={searchTerms}"; } ];
+        urls = [ { template = "https://search.nixos.org/options?query={searchTerms}"; } ];
         icon = "https://wiki.nixos.org/favicon.ico";
         updateInterval = 24 * 60 * 60 * 1000;
         definedAliases = [ "@no" ];
