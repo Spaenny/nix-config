@@ -25,6 +25,7 @@ with lib.${namespace};
       cinny = enabled;
       spotify = enabled;
       obs = enabled;
+      discord = enabled;
       kitty = {
         enable = true;
         plasma = enabled;
