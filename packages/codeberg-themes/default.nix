@@ -11,8 +11,8 @@ stdenv.mkDerivation rec {
     domain = "codeberg.org";
     owner = "Codeberg-Infrastructure";
     repo = "forgejo";
-    rev = "codeberg-11";
-    sha256 = "sha256-Mud0GpnuGOL9Ys4dpL/xVmEHBMQrcuQgSu4NwEaNelE=";
+    rev = "8fbdf40e3224598b1e724b21e62b2e2f32910113";
+    sha256 = "sha256-at+edBFcNr81kQWkH44Fih1IBrCJC72QDE+Spi+kxpc=";
   };
 
   unpackPhase = ''
