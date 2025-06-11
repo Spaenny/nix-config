@@ -21,6 +21,8 @@ let
     "signon.storeWhenAutocompleteOff" = true;
     "sidebar.verticalTabs" = true;
     "general.useragent.compatMode.firefox" = true;
+    "browser.search.suggest.enabled" = true;
+    "browser.urlbar.suggest.searches" = true;
   };
   defaultExtensions = with inputs.firefox-addons.packages."x86_64-linux"; [
     bitwarden
@@ -36,7 +38,13 @@ let
     default = "SearXNG";
     engines = {
       "SearXNG" = {
-        urls = [ { template = "https://search.stahl.sh/search?q={searchTerms}"; } ];
+        urls = [
+          { template = "https://search.stahl.sh/search?q={searchTerms}"; }
+          {
+            template = "https://search.stahl.sh/autocompleter?q={searchTerms}";
+            type = "application/x-suggestions+json";
+          }
+        ];
         icon = "https://search.stahl.sh/static/themes/simple/img/favicon.png";
         definedAliases = [ "@s" ];
       };
