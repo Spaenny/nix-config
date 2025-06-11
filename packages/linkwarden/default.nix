@@ -41,7 +41,7 @@ let
 in
 stdenvNoCC.mkDerivation rec {
   pname = "linkwarden";
-  version = "2.10.2";
+  version = "2.10.0";
 
   src = fetchFromGitHub {
     owner = "linkwarden";
