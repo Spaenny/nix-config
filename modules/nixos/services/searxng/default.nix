@@ -47,11 +47,17 @@ in
     services.searx = {
       enable = true;
       environmentFile = "/run/secrets/searxng";
-      settings.server = {
-        port = "1340";
-        bind_address = "127.0.0.1";
-        use_default_settings = true;
-        secret_key = "@secret_key@";
+      settings = {
+        server = {
+          port = "1340";
+          bind_address = "127.0.0.1";
+          use_default_settings = true;
+          secret_key = "@secret_key@";
+        };
+        search = {
+          safe_search = 0;
+          autocomplete = "google";
+        };
       };
     };
 
@@ -79,12 +85,12 @@ in
         "${cfg.domain}" = {
           forceSSL = true;
           useACMEHost = "stahl.sh";
-          locations."/".proxyPass = "http://127.0.01:1340";
+          locations."/".proxyPass = "http://127.0.0.1:1340";
         };
         "${cfg.redlib.domain}" = mkIf cfg.redlib.enable {
           forceSSL = true;
           useACMEHost = "stahl.sh";
-          locations."/".proxyPass = "http://127.0.01:1341";
+          locations."/".proxyPass = "http://127.0.0.1:1341";
         };
       };
     };
