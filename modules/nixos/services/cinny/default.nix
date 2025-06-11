@@ -22,7 +22,7 @@ in
     package = mkOption {
       description = "The package of Cinny to use.";
       type = types.package;
-      default = pkgs.cinny-unwrapped;
+      default = pkgs.awesome-flake.cinny;
     };
 
     domain = mkOption {
@@ -57,6 +57,8 @@ in
 
             rewrite ^/public/(.*)$ /public/$1 break;
             rewrite ^/assets/(.*)$ /assets/$1 break;
+
+            rewrite ^/element-call/dist/(.*)$ /element-call/dist/$1 break;
 
             rewrite ^(.+)$ /index.html break;
           '';
