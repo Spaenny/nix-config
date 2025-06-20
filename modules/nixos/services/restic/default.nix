@@ -36,7 +36,8 @@ in
         repositoryFile = "/run/secrets/restic_url";
         paths = [
           "/home"
-          "/var/lib/caddy"
+          "/var/lib"
+          "/data"
         ];
         timerConfig = {
           OnCalendar = "00:10";

@@ -59,7 +59,8 @@ with lib.${namespace};
       linkwarden = enabled;
       forgejo = enabled;
       searxng = enabled;
-      immich = enabled;
+      #immich = enabled; # We wait for the proper version to be in nixpkgs
+      paperless = enabled;
     };
 
     #container.invidious = enabled;
