@@ -25,6 +25,7 @@ in
 
       extraPackages = with pkgs; [
         steamtinkerlaunch
+        proton-ge-bin
       ];
     };
 
