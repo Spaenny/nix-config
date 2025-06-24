@@ -20,8 +20,8 @@ in
     programs.fish = {
       enable = true;
       shellAliases = {
-        nix-dns = "nixos-rebuild switch --flake ${flakeRoot}/.#dns --target-host dns-1 --use-remote-sudo && nixos-rebuild switch --flake ${flakeRoot}/.#dns --target-host dns-2 --use-remote-sudo";
-        nix-blarm = "nixos-rebuild switch --flake ${flakeRoot}/.#blarm --target-host blarm --use-remote-sudo";
+        nix-dns = "nixos-rebuild switch --flake ${flakeRoot}/.#dns --target-host dns-1 --sudo --ask-sudo-password && nixos-rebuild switch --flake ${flakeRoot}/.#dns --target-host dns-2 --sudo --ask-sudo-password";
+        nix-blarm = "nixos-rebuild switch --flake ${flakeRoot}/.#blarm --target-host blarm --sudo --ask-sudo-password";
         cd = "z";
         ls = "exa --icons";
         l = "exa";
