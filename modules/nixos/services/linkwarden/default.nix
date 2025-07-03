@@ -5,7 +5,6 @@
   namespace,
   ...
 }:
-
 let
   cfg = config.${namespace}.services.linkwarden;
   isPostgresUnixSocket = lib.hasPrefix "/" cfg.database.host;
@@ -44,8 +43,6 @@ in
       description = "Directory used as cache. If it is not the default, the directory has to be created manually such that the linkwarden user is able to read and write to it.";
     };
 
-    enableRegistration = mkEnableOption "registration for new users";
-
     environment = mkOption {
       type = types.attrsOf types.str;
       default = { };
@@ -80,7 +77,7 @@ in
 
     host = mkOption {
       type = types.str;
-      default = "127.0.0.1";
+      default = "0.0.0.0";
       description = "The host that Linkwarden will listen on.";
     };
 
@@ -161,6 +158,7 @@ in
     };
 
     networking.firewall.allowedTCPPorts = [
+      cfg.port
       80
       443
     ];
@@ -172,7 +170,9 @@ in
         LINKWARDEN_PORT = toString cfg.port;
         LINKWARDEN_CACHE_DIR = cfg.cacheLocation;
         STORAGE_FOLDER = cfg.storageLocation;
-        NEXT_PUBLIC_DISABLE_REGISTRATION = mkIf (!cfg.enableRegistration) "true";
+        NEXT_PUBLIC_DISABLE_REGISTRATION = "true";
+        NEXTAUTH_URL = "https://link.boehm.sh";
+        NEXTAUTH_INTERNAL_URL = "https://link.boehm.sh";
         DATABASE_URL = mkIf isPostgresUnixSocket "postgresql://${lib.strings.escapeURL cfg.database.user}@localhost/${lib.strings.escapeURL cfg.database.name}?host=${cfg.database.host}";
         DATABASE_PORT = toString cfg.database.port;
         DATABASE_HOST = mkIf (!isPostgresUnixSocket) cfg.database.host;
