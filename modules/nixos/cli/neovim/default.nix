@@ -16,6 +16,7 @@ in
   config = mkIf cfg.enable {
     environment.variables.EDITOR = "nvim";
     programs.nvf = {
+      defaultEditor = true;
       enable = true;
       settings = {
         vim = {
