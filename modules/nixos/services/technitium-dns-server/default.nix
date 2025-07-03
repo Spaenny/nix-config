@@ -1,26 +1,24 @@
 {
-  config,
   lib,
   pkgs,
+  config,
   namespace,
   ...
 }:
-
+with lib;
+with lib.${namespace};
 let
   cfg = config.${namespace}.services.technitium-dns-server;
-  inherit (lib)
-    mkEnableOption
-    mkPackageOption
-    mkOption
-    mkIf
-    types
-    ;
 in
 {
   options.${namespace}.services.technitium-dns-server = {
     enable = mkEnableOption "Technitium DNS Server";
 
-    package = mkPackageOption pkgs "technitium-dns-server" { };
+    package = mkOption {
+      description = "The package of Technitium to use.";
+      type = types.package;
+      default = pkgs.awesome-flake.technitium-dns-server;
+    };
 
     openFirewall = mkOption {
       type = types.bool;
