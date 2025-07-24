@@ -61,6 +61,7 @@ with lib.${namespace};
       searxng = enabled;
       #immich = enabled; # We wait for the proper version to be in nixpkgs
       paperless = enabled;
+      syncthing = enabled;
     };
 
     #container.invidious = enabled;
