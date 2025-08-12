@@ -19,7 +19,7 @@ in
     services.pcscd.enable = true;
     programs.gnupg.agent = {
       enable = true;
-      enableSSHSupport = true;
+      enableSSHSupport = false;
       pinentryPackage = pkgs.pinentry;
     };
   };
