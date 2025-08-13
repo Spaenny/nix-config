@@ -19,6 +19,7 @@ with lib.${namespace};
 
     apps = {
       librewolf = enabled;
+      libreoffice = enabled;
       thunderbird = enabled;
       chatterino = enabled;
       mpv = enabled;
