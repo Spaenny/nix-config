@@ -8,16 +8,17 @@ final: prev: {
   awesome-flake = (prev.awesome-flake or { }) // {
     cinny = prev.cinny-unwrapped.overrideAttrs (_old: rec {
       pname = "cinny-unwrapped";
-      version = "65475050d76d6e8da8c3402528215b1425e8ed4e";
+      version = "76ac4e298733e67dbfcd3f0c3a4bae169cd521dd";
 
       src = final.fetchFromGitHub {
-        owner = "GigiaJ";
+        #owner = "GigiaJ";
+        owner = "cinnyapp";
         repo = "cinny";
         rev = version;
-        hash = "sha256-kJZDc53mcJrGIw3Dl4ANq+1O5O2p0tcO2btQGNGRg4A=";
+        hash = "sha256-tvBaONJwfkCK77aHmWJ/UAAZHq2WIc7geNT2tEFKuZ0=";
       };
 
-      npmDepsHash = "sha256-GkD+CrblXBv7yPVrTBVIGkz7Wu5llWzlluNq7rmm3CE=";
+      npmDepsHash = "sha256-9faffTlXEI1lMrVrkSyso/tfjs/4W+TVzmiv+bZAv18=";
       npmDeps = final.fetchNpmDeps {
         inherit src;
         name = "${pname}-${version}-npm-deps";

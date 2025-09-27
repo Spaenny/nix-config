@@ -22,6 +22,7 @@ in
       shellAliases = {
         nix-dns = "nixos-rebuild switch --flake ${flakeRoot}/.#dns --target-host dns-1 --sudo --ask-sudo-password && nixos-rebuild switch --flake ${flakeRoot}/.#dns --target-host dns-2 --sudo --ask-sudo-password";
         nix-blarm = "nixos-rebuild switch --flake ${flakeRoot}/.#blarm --target-host blarm --sudo --ask-sudo-password";
+        nix-aquarius = "nixos-rebuild switch --flake ${flakeRoot}/.#aquarius --target-host aquarius --sudo --ask-sudo-password";
         cd = "z";
         ls = "exa --icons";
         l = "exa";

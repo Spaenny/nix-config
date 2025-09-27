@@ -29,3 +29,7 @@ creation_rules:
     key_groups:
       - age:
         - *primary
+  - path_regex: secrets/aquarius-wg.yaml
+    key_groups:
+      - age:
+        - *primary

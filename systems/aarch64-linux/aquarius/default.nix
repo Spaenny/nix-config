@@ -19,13 +19,17 @@ with lib.${namespace};
     generic-extlinux-compatible.enable = true;
   };
 
-  nix.settings.experimental-features = [
-    "nix-command"
-    "flakes"
-  ];
+  nix.settings = {
+    trusted-users = [ "philipp" ];
+    experimental-features = [
+      "nix-command"
+      "flakes"
+    ];
+  };
 
   # Disable detailed ddocumentation
   documentation.nixos.enable = false;
+  documentation.man.generateCaches = false;
 
   # Set your time zone.
   time.timeZone = "Europe/Berlin";
@@ -38,7 +42,6 @@ with lib.${namespace};
     description = "Philipp Böhm";
     extraGroups = [
       "wheel"
-      "caddy"
     ];
   };
 
@@ -50,16 +53,15 @@ with lib.${namespace};
     };
   };
 
+  services.openssh.settings.PasswordAuthentication = false;
+  services.openssh.settings.PermitRootLogin = "no";
+
+  services.cron = enabled;
+
   awesome-flake = {
     services = {
       ssh = enabled;
-      caddy = enabled;
-      restic = enabled;
-    };
-
-    container = {
-      technitium = enabled;
-      invidious = enabled;
+      technitium-dns-server = enabled;
     };
 
     system.sops = enabled;

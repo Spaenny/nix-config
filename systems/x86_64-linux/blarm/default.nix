@@ -7,9 +7,7 @@
 }:
 with lib.${namespace};
 {
-  imports = [
-    (modulesPath + "/virtualisation/proxmox-lxc.nix")
-  ];
+  imports = [ (modulesPath + "/virtualisation/proxmox-lxc.nix") ];
 
   nix.settings = {
     trusted-users = [ "philipp" ];
