@@ -31,6 +31,7 @@ let
     sponsorblock
     ublock-origin
     seventv
+    floccus
   ];
   defaultSearch = {
     force = true; # We need this, else the build fails
