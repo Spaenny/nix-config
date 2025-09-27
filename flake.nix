@@ -52,7 +52,7 @@
       systems.modules.nixos = with inputs; [
         home-manager.nixosModules.home-manager
         {
-          home-manager.sharedModules = [ inputs.plasma-manager.homeManagerModules.plasma-manager ];
+          home-manager.sharedModules = [ inputs.plasma-manager.homeModules.plasma-manager ];
           home-manager.backupFileExtension = "bk-hm";
         }
         nvf.nixosModules.default
