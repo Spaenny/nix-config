@@ -1,5 +1,4 @@
 {
-  pkgs,
   lib,
   namespace,
   ...
@@ -50,6 +49,8 @@ with lib.${namespace};
     };
   };
 
+  services.teamviewer.enable = true;
+
   awesome-flake = {
     cli = {
       neovim = enabled;
@@ -68,6 +69,7 @@ with lib.${namespace};
     services = {
       btrfs = enabled;
       ssh = enabled;
+      printer = enabled;
     };
 
     system = {
