@@ -48,7 +48,7 @@ in
       kdiskmark
       networkmanager
       kdePackages.networkmanager-qt
-      kdePackages.wallpaper-engine-plugin
+      #kdePackages.wallpaper-engine-plugin Currently crashes plasma
     ];
   };
 
