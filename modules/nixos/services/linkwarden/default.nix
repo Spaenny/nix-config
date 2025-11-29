@@ -185,10 +185,12 @@ in
       description = "Linkwarden (Self-hosted collaborative bookmark manager to collect, organize, and preserve webpages, articles, and more...)";
       requires = [
         "network-online.target"
-      ] ++ lib.optionals cfg.database.enable [ "postgresql.service" ];
+      ]
+      ++ lib.optionals cfg.database.enable [ "postgresql.service" ];
       after = [
         "network-online.target"
-      ] ++ lib.optionals cfg.database.enable [ "postgresql.service" ];
+      ]
+      ++ lib.optionals cfg.database.enable [ "postgresql.service" ];
       wantedBy = [ "multi-user.target" ];
       environment = cfg.environment // {
         # Required, otherwise chrome dumps core

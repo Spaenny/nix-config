@@ -14,7 +14,10 @@
     wireguard = {
       enable = true;
       interfaces."wg0" = {
-        ips = [ "192.168.100.10/24" "fd00:100::10/64" ];
+        ips = [
+          "192.168.100.10/24"
+          "fd00:100::10/64"
+        ];
         listenPort = 51820;
         mtu = 1400;
         privateKeyFile = "/run/secrets/privateKey";
@@ -22,7 +25,10 @@
           {
             publicKey = "ylsjhpKiq3B6Kv4q2uiHXUJpyxY2b1DOAlGc/FWdflQ=";
             presharedKeyFile = "/run/secrets/presharedKey";
-            allowedIPs = [ "192.168.100.1/32" "fd00:100::1/128" ];
+            allowedIPs = [
+              "192.168.100.1/32"
+              "fd00:100::1/128"
+            ];
             endpoint = "neuruppin.boehm.sh:51820";
             persistentKeepalive = 25;
           }
