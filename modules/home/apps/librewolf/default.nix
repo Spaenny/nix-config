@@ -94,7 +94,7 @@ in
   config = mkIf cfg.enable {
     programs.librewolf = {
       enable = true;
-      package = pkgs.librewolf-wayland;
+      package = pkgs.librewolf;
 
       profiles."philipp" = {
         inherit (cfg)
