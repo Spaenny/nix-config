@@ -17,7 +17,7 @@ in
     package = mkOption {
       description = "The package of Technitium to use.";
       type = types.package;
-      default = pkgs.awesome-flake.technitium-dns-server;
+      default = pkgs.technitium-dns-server;
     };
 
     openFirewall = mkOption {
