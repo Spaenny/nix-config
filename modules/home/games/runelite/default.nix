@@ -16,8 +16,8 @@ in
   };
 
   config = mkIf cfg.enable {
-    home.packages = with pkgs; [ 
-      runelite 
+    home.packages = with pkgs; [
+      runelite
       bolt-launcher
     ];
   };
