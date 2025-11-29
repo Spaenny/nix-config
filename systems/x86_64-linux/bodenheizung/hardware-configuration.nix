@@ -21,8 +21,13 @@
     "sd_mod"
   ];
   boot.initrd.kernelModules = [ ];
-  boot.kernelModules = [ "kvm-amd" ];
-  boot.extraModulePackages = [ ];
+  boot.kernelModules = [
+    "kvm-amd"
+    "v4l2loopback"
+  ];
+  boot.extraModulePackages = with config.boot.kernelPackages; [
+    v4l2loopback
+  ];
 
   boot.initrd.luks.devices."root".device = "/dev/disk/by-uuid/1616e34a-a8c6-4e18-882c-d955b4f8ffeb";
 
