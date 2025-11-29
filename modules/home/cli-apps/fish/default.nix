@@ -20,9 +20,9 @@ in
     programs.fish = {
       enable = true;
       shellAliases = {
-        nix-dns = "nixos-rebuild switch --flake ${flakeRoot}/.#dns --target-host dns-1 --sudo --ask-sudo-password && nixos-rebuild switch --flake ${flakeRoot}/.#dns --target-host dns-2 --sudo --ask-sudo-password";
-        nix-blarm = "nixos-rebuild switch --flake ${flakeRoot}/.#blarm --target-host blarm --sudo --ask-sudo-password";
-        nix-aquarius = "nixos-rebuild switch --flake ${flakeRoot}/.#aquarius --target-host aquarius --sudo --ask-sudo-password";
+        nix-dns = "nh os switch -H dns --target-host dns-1 && nh os switch -H dns --target-host dns-2";
+        nix-blarm = "nh os switch -H blarm --target-host blarm";
+        nix-aquarius = "nh os switch -H aquarius --target-host aquarius";
         cd = "z";
         ls = "exa --icons";
         l = "exa";
