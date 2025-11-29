@@ -35,6 +35,7 @@ in
       [
         pulsemixer
         pavucontrol
+        twitch-hls-client
       ]
       ++ cfg.extra-packages;
 

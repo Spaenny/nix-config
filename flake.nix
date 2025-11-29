@@ -26,6 +26,8 @@
       inputs.nixpkgs.follows = "nixpkgs";
       inputs.home-manager.follows = "home-manager";
     };
+
+    twitch-hls-client.url = "github:2bc4/twitch-hls-client";
   };
 
   outputs =
