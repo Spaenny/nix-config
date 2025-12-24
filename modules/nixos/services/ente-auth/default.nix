@@ -58,6 +58,9 @@ in
         useACMEHost = "stahl.sh";
         locations."/" = {
           root = enteApp;
+          extraConfig = ''
+            try_files $uri $uri/ /index.html;
+          '';
         };
       };
     };
