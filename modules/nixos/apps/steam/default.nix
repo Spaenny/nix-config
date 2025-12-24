@@ -26,7 +26,6 @@ in
       extraPackages = with pkgs; [
         steamtinkerlaunch
         proton-ge-bin
-        awesome-flake.proton-ge-bin-9
       ];
     };
 
