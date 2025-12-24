@@ -4,7 +4,7 @@
     languages = {
       enableTreesitter = true;
       nix.enable = true;
-      nix.format.type = "nixfmt";
+      nix.format.type = [ "nixfmt" ];
       bash.enable = true;
       go.enable = true;
       rust.enable = true;
