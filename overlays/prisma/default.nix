@@ -5,5 +5,5 @@
 }:
 
 final: prev: {
-  inherit (channels.stable) prisma;
+  inherit (channels.unstable) prisma;
 }
