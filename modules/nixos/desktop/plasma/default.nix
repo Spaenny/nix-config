@@ -41,7 +41,12 @@ in
 
     environment.plasma6.excludePackages = [ ] ++ excludePackages ++ cfg.extraExcludePackages;
 
-    networking.networkmanager.enable = true;
+    networking.networkmanager = {
+      enable = true;
+      plugins = with pkgs; [
+        networkmanager-openvpn
+      ];
+    };
 
     environment.systemPackages = with pkgs; [
       pinentry-qt
