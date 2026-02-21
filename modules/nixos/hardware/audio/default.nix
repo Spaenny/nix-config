@@ -25,6 +25,15 @@ in
       wireplumber.enable = true;
     };
 
+    xdg.portal = {
+      enable = true;
+      config.common = {
+        default = "kde";
+        "org.freedesktop.impl.portal.desktop" = "kde";
+      };
+      extraPortals = with pkgs; [ kdePackages.xdg-desktop-portal-kde ];
+    };
+
     services.udev.extraRules = ''
       ACTION=="add", SUBSYSTEM=="usb", ATTR{idVendor}=="1235", ATTR{idProduct}=="8202", TEST=="power/control", ATTR{power/control}="on"
     '';
