@@ -18,12 +18,20 @@ with lib.${namespace};
       "flakes"
     ];
   };
+
   users.users.philipp = {
     isNormalUser = true;
     description = "Philipp Böhm";
     extraGroups = [
       "wheel"
     ];
+  };
+
+  services.resolved = {
+    enable = true;
+    extraConfig = ''
+      			DNSStubListener=no
+      		'';
   };
 
   awesome-flake = {
