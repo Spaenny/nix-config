@@ -38,6 +38,7 @@ with lib.${namespace};
     extraGroups = [
       "wheel"
       "audio"
+      "dialout"
     ];
   };
 
@@ -50,6 +51,7 @@ with lib.${namespace};
   };
 
   services.teamviewer.enable = true;
+  services.flatpak.enable = true;
 
   awesome-flake = {
     cli = {
