@@ -62,6 +62,7 @@ with lib.${namespace};
     services = {
       ssh = enabled;
       technitium-dns-server = enabled;
+      newt = enabled;
     };
 
     system.sops = enabled;

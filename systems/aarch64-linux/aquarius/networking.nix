@@ -1,51 +1,37 @@
 {
   networking = {
     hostName = "aquarius";
+
     networkmanager.enable = false;
-    dhcpcd.enable = true;
+    dhcpcd.enable = false;
 
-    interfaces.end0.useDHCP = true;
+    firewall.enable = true;
+  };
 
-    firewall = {
-      enable = true;
-      allowedUDPPorts = [ 51820 ];
+  systemd.network.enable = true;
+  services.resolved.enable = true;
+
+  systemd.network.networks."99-ignore-wg" = {
+    matchConfig.Name = "wg*";
+    networkConfig = {
+      ConfigureWithoutCarrier = true;
     };
-
-    wireguard = {
-      enable = true;
-      interfaces."wg0" = {
-        ips = [
-          "192.168.100.10/24"
-          "fd00:100::10/64"
-        ];
-        listenPort = 51820;
-        mtu = 1400;
-        privateKeyFile = "/run/secrets/privateKey";
-        peers = [
-          {
-            publicKey = "ylsjhpKiq3B6Kv4q2uiHXUJpyxY2b1DOAlGc/FWdflQ=";
-            presharedKeyFile = "/run/secrets/presharedKey";
-            allowedIPs = [
-              "192.168.100.1/32"
-              "fd00:100::1/128"
-            ];
-            endpoint = "neuruppin.boehm.sh:51820";
-            persistentKeepalive = 25;
-          }
-        ];
-      };
+    linkConfig = {
+      Unmanaged = "yes";
     };
   };
 
-  sops.secrets = {
-    privateKey = {
-      sopsFile = ../../../secrets/aquarius-wg.yaml;
-      key = "privateKey";
+  systemd.network.networks."10-end0" = {
+    matchConfig.Name = "end0";
+    networkConfig.DHCP = "yes";
+
+    dhcpV4Config = {
+      UseDNS = true;
+      UseRoutes = true;
     };
 
-    presharedKey = {
-      sopsFile = ../../../secrets/aquarius-wg.yaml;
-      key = "presharedKey";
+    dhcpV6Config = {
+      UseDNS = true;
     };
   };
 
