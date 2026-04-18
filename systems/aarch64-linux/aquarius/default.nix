@@ -28,10 +28,10 @@ with lib.${namespace};
   };
 
   # Disable detailed documentation
-	documentation = {
-		nixos.enable = false;
-		man.cache.enable = false;
-	};
+  documentation = {
+    nixos.enable = false;
+    man.cache.enable = false;
+  };
 
   # Set your time zone.
   time.timeZone = "Europe/Berlin";

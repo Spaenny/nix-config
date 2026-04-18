@@ -4,6 +4,7 @@
 
     networkmanager.enable = false;
     dhcpcd.enable = false;
+		useDHCP = false;
 
     firewall.enable = true;
   };
