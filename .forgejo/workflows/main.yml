@@ -27,8 +27,3 @@ jobs:
         run: |
           . /nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh
           nix flake check
-
-      - name: Build outputs
-        run: |
-          . /nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh
-          nix build .# --print-build-logs
