@@ -1,7 +1,6 @@
 {
   lib,
   config,
-  pkgs,
   namespace,
   ...
 }:
@@ -30,6 +29,7 @@ in
       enable = true;
       lfs = enabled;
       signing = {
+        format = "openpgp";
         key = cfg.signingKey;
         inherit (cfg) signByDefault;
       };
