@@ -9,7 +9,7 @@ with lib.${namespace};
 {
   imports = [ (modulesPath + "/virtualisation/proxmox-lxc.nix") ];
 
-  documentation.man.generateCaches = false;
+  documentation.man.cache.enable = false;
 
   nix.settings = {
     trusted-users = [ "philipp" ];
@@ -29,9 +29,6 @@ with lib.${namespace};
 
   services.resolved = {
     enable = true;
-    extraConfig = ''
-      			DNSStubListener=no
-      		'';
   };
 
   awesome-flake = {

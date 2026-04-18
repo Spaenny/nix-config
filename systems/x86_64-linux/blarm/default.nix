@@ -22,7 +22,7 @@ with lib.${namespace};
   # Disable documentation
   documentation = {
     nixos.enable = false;
-    man.generateCaches = false;
+    man.cache.enable = false;
   };
 
   # Set your time zone.

@@ -27,9 +27,11 @@ with lib.${namespace};
     ];
   };
 
-  # Disable detailed ddocumentation
-  documentation.nixos.enable = false;
-  documentation.man.generateCaches = false;
+  # Disable detailed documentation
+	documentation = {
+		nixos.enable = false;
+		man.cache.enable = false;
+	};
 
   # Set your time zone.
   time.timeZone = "Europe/Berlin";
