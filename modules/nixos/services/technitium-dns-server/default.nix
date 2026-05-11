@@ -32,7 +32,11 @@ in
 
     firewallUDPPorts = mkOption {
       type = with types; listOf int;
-      default = [ 53 ];
+      default = [
+        53
+        67
+        68
+      ];
       description = ''
         List of UDP ports to open in firewall.
       '';
@@ -44,6 +48,7 @@ in
         53
         80
         443
+        853
         5380 # web interface HTTP
         53443 # web interface HTTPS
       ];
