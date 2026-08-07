@@ -18,6 +18,7 @@ with lib.${namespace};
     grub.enable = false;
     generic-extlinux-compatible.enable = true;
   };
+  boot.zfs.forceImportRoot = false;
 
   nix.settings = {
     trusted-users = [ "philipp" ];
