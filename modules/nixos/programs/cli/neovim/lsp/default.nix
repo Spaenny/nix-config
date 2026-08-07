@@ -24,7 +24,7 @@
         listImplementations = "gI";
         listReferences = "gr";
         hover = "K";
-        signatureHelp = "<C-k>";
+        signatureHelp = "<leader>cs";
         renameSymbol = "<leader>rn";
         codeAction = "<leader>ca";
         format = "<leader>cf";
