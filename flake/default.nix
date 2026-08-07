@@ -4,6 +4,9 @@
 }:
 let
   namespace = "awesome-flake";
+  inventory = import ./inventory.nix;
+  inherit (inventory) flakeRoot;
+
   lib = inputs.nixpkgs.lib.extend (
     _final: _prev: {
       ${namespace} = import ../lib/module/default.nix { lib = inputs.nixpkgs.lib; };
@@ -39,6 +42,7 @@ let
     linkwarden = pkgs.callPackage ../packages/linkwarden { };
     redlib = pkgs.callPackage ../packages/redlib { };
   };
+  packageNames = builtins.attrNames (packageSet null);
 
   packageOverlay = final: prev: {
     ${namespace} = (prev.${namespace} or { }) // packageSet final;
@@ -49,15 +53,18 @@ let
     };
   };
 
+  packageOverlays = builtins.listToAttrs (
+    map (name: {
+      name = "package/${name}";
+      value = packageOverlayFor name;
+    }) packageNames
+  );
+
   overlays = rec {
     cinny = import ../overlays/cinny;
     redlib-fixed = import ../overlays/redlib-fixed;
     technitium-dns-server = import ../overlays/technitium-dns-server;
     packages = packageOverlay;
-    "package/codeberg-themes" = packageOverlayFor "codeberg-themes";
-    "package/ente-web-auth" = packageOverlayFor "ente-web-auth";
-    "package/linkwarden" = packageOverlayFor "linkwarden";
-    "package/redlib" = packageOverlayFor "redlib";
     default =
       final: prev:
       lib.composeManyExtensions [
@@ -66,7 +73,8 @@ let
         redlib-fixed
         technitium-dns-server
       ] final prev;
-  };
+  }
+  // packageOverlays;
 
   pkgsFor =
     system:
@@ -80,7 +88,7 @@ let
   homeManagerModules = importTree ../modules/home;
 
   commonSpecialArgs = {
-    inherit inputs namespace;
+    inherit inputs flakeRoot namespace;
     lib = lib;
   };
   commonHomeSpecialArgs = commonSpecialArgs // {
@@ -150,6 +158,7 @@ in
   _module.args = {
     inherit
       deployNode
+      inventory
       homeManagerModules
       mkHomeConfiguration
       mkNixosConfiguration

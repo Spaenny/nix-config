@@ -1,16 +1,15 @@
 {
   config,
   deployNode,
+  inventory,
   inputs,
+  lib,
   ...
 }:
 {
-  flake.deploy.nodes = {
-    aquarius = deployNode config.flake.nixosConfigurations.aquarius "aquarius";
-    blarm = deployNode config.flake.nixosConfigurations.blarm "blarm";
-    dns-1 = deployNode config.flake.nixosConfigurations.dns "dns-1";
-    dns-2 = deployNode config.flake.nixosConfigurations.dns "dns-2";
-  };
+  flake.deploy.nodes = lib.mapAttrs (
+    _name: node: deployNode config.flake.nixosConfigurations.${node.configuration} node.hostname
+  ) inventory.deployNodes;
 
   perSystem =
     { system, ... }:

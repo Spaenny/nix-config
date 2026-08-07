@@ -6,7 +6,5 @@
 {
   flake = {
     inherit nixosModules homeManagerModules;
-
-    homeModules = homeManagerModules;
   };
 }

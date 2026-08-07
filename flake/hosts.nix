@@ -1,27 +1,18 @@
 {
+  lib,
+  inventory,
   mkHomeConfiguration,
   mkNixosConfiguration,
   ...
 }:
-let
-  homeRoot = ../homes/x86_64-linux;
-in
 {
   flake = {
-    nixosConfigurations = {
-      aquarius = mkNixosConfiguration "aarch64-linux" [ ../systems/aarch64-linux/aquarius ];
-      blarm = mkNixosConfiguration "x86_64-linux" [ ../systems/x86_64-linux/blarm ];
-      bodenheizung = mkNixosConfiguration "x86_64-linux" [
-        ../systems/x86_64-linux/bodenheizung
-        { home-manager.users.philipp = import (homeRoot + "/philipp@bodenheizung"); }
-      ];
-      dns = mkNixosConfiguration "x86_64-linux" [ ../systems/x86_64-linux/dns ];
-    };
+    nixosConfigurations = lib.mapAttrs (
+      _name: host: mkNixosConfiguration host.system host.modules
+    ) inventory.nixosConfigurations;
 
-    homeConfigurations = {
-      "philipp@bodenheizung" = mkHomeConfiguration "x86_64-linux" [
-        (homeRoot + "/philipp@bodenheizung")
-      ];
-    };
+    homeConfigurations = lib.mapAttrs (
+      _name: home: mkHomeConfiguration home.system home.modules
+    ) inventory.homeConfigurations;
   };
 }
