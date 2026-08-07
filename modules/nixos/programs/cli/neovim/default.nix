@@ -61,7 +61,6 @@ in
           clipboard = {
             enable = true;
             registers = "unnamedplus";
-            providers.wl-copy.enable = true;
           };
 
           undoFile.enable = true;

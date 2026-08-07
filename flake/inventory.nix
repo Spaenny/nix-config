@@ -4,7 +4,7 @@ let
   mkDeployNode = configuration: hostname: { inherit configuration hostname; };
 in
 {
-  flakeRoot = "/home/philipp/Documents/nixos-config";
+  flakeRoot = "/home/philipp/Documents/nix-config";
 
   nixosConfigurations = {
     aquarius = mkHost "aarch64-linux" [ ../systems/aarch64-linux/aquarius ];
