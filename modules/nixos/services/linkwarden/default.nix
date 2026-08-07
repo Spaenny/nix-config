@@ -7,7 +7,6 @@
 }:
 let
   cfg = config.${namespace}.services.linkwarden;
-  isPostgresUnixSocket = lib.hasPrefix "/" cfg.database.host;
 
   inherit (lib)
     types

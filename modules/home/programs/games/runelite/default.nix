@@ -8,7 +8,7 @@
 with lib;
 with lib.${namespace};
 let
-  cfg = config.${namespace}.desktop.panel;
+  cfg = config.${namespace}.games.runelite;
 in
 {
   options.${namespace}.games.runelite = with types; {

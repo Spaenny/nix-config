@@ -8,10 +8,10 @@ let
   inherit (lib) mkEnableOption mkIf;
   inherit (lib.${namespace}) enabled;
 
-  cfg = config.${namespace}.cli-apps.home-manager;
+  cfg = config.${namespace}.cli.home-manager;
 in
 {
-  options.${namespace}.cli-apps.home-manager = {
+  options.${namespace}.cli.home-manager = {
     enable = mkEnableOption "home-manager";
   };
 

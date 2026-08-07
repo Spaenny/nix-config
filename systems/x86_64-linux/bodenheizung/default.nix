@@ -58,10 +58,11 @@ with lib.${namespace};
       neovim = enabled;
       eza = enabled;
       nh = enabled;
-      wireguard = enabled;
     };
 
-    apps = {
+    networking.wireguard = enabled;
+
+    games = {
       steam = enabled;
     };
 

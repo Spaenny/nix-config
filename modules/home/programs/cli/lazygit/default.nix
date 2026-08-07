@@ -7,10 +7,10 @@
 with lib;
 with lib.${namespace};
 let
-  cfg = config.${namespace}.cli-apps.lazygit;
+  cfg = config.${namespace}.cli.lazygit;
 in
 {
-  options.${namespace}.cli-apps.lazygit = with types; {
+  options.${namespace}.cli.lazygit = with types; {
     enable = mkBoolOpt false "Whether or not to enable lazygit.";
   };
 

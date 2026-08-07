@@ -7,11 +7,11 @@
 with lib;
 with lib.${namespace};
 let
-  cfg = config.${namespace}.cli.wireguard;
+  cfg = config.${namespace}.networking.wireguard;
 in
 {
-  options.${namespace}.cli.wireguard = with types; {
-    enable = mkBoolOpt false "Whether or not to use wiguard-tools.";
+  options.${namespace}.networking.wireguard = with types; {
+    enable = mkBoolOpt false "Whether or not to use wireguard-tools.";
   };
 
   config = mkIf cfg.enable {

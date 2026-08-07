@@ -8,10 +8,10 @@
 let
   inherit (lib) mkEnableOption mkIf;
 
-  cfg = config.${namespace}.tools.neovim;
+  cfg = config.${namespace}.cli.neovim;
 in
 {
-  options.${namespace}.tools.neovim = {
+  options.${namespace}.cli.neovim = {
     enable = mkEnableOption "Neovim";
   };
 

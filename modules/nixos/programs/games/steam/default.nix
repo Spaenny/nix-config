@@ -9,10 +9,10 @@
 with lib;
 with lib.${namespace};
 let
-  cfg = config.${namespace}.apps.steam;
+  cfg = config.${namespace}.games.steam;
 in
 {
-  options.${namespace}.apps.steam = with types; {
+  options.${namespace}.games.steam = with types; {
     enable = mkBoolOpt false "Whether or not to enable support for Steam.";
   };
 

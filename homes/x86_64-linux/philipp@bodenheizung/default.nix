@@ -7,14 +7,11 @@
 with lib.${namespace};
 {
   awesome-flake = {
-    cli-apps = {
+    cli = {
       fish = enabled;
+      git = enabled;
       home-manager = enabled;
       lazygit = enabled;
-    };
-
-    tools = {
-      git = enabled;
     };
 
     apps = {

@@ -12,7 +12,7 @@ let
 in
 {
   options.${namespace}.apps.chatterino = with types; {
-    enable = mkBoolOpt false "Whether or not to enable kitty.";
+    enable = mkBoolOpt false "Whether or not to enable Chatterino.";
   };
 
   config = mkIf cfg.enable {

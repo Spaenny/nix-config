@@ -8,12 +8,12 @@ let
   inherit (lib) types mkEnableOption mkIf;
   inherit (lib.${namespace}) mkOpt enabled;
 
-  cfg = config.${namespace}.tools.git;
+  cfg = config.${namespace}.cli.git;
   user = config.${namespace}.user;
 in
 {
   options.${namespace} = {
-    tools.git = {
+    cli.git = {
       enable = mkEnableOption "Git";
       signingKey = mkOpt types.str "0F21E3C3" "The key ID to sign commits with.";
       signByDefault = mkOpt types.bool true "Whether to sign commits by default.";

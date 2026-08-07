@@ -1,5 +1,5 @@
 {
-  config,
+  flakeRoot,
   lib,
   namespace,
   ...
@@ -12,5 +12,5 @@ with lib.${namespace};
     description = "Path to the flake root directory.";
   };
 
-  config.flakeRoot = "${config.users.users.philipp.home}/Documents/nix-config";
+  config.flakeRoot = flakeRoot;
 }

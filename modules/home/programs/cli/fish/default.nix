@@ -1,6 +1,7 @@
 {
   lib,
   config,
+  flakeRoot,
   inputs,
   pkgs,
   namespace,
@@ -9,11 +10,10 @@
 let
   inherit (lib) mkEnableOption mkIf;
 
-  cfg = config.${namespace}.cli-apps.fish;
-  flakeRoot = "/home/philipp/Documents/nixos-config";
+  cfg = config.${namespace}.cli.fish;
 in
 {
-  options.${namespace}.cli-apps.fish = {
+  options.${namespace}.cli.fish = {
     enable = mkEnableOption "fish";
   };
 
