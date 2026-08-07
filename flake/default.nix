@@ -123,6 +123,7 @@ let
 
   deployNode = nixosConfiguration: hostname: {
     inherit hostname;
+    interactiveSudo = true;
     sshUser = "philipp";
     profiles.system = {
       user = "root";
