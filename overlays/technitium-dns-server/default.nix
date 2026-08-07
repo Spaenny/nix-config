@@ -1,9 +1,3 @@
-{
-  channels,
-  inputs,
-  ...
-}:
-
 final: prev: {
   awesome-flake = (prev.awesome-flake or { }) // {
     technitium-dns-server = prev.technitium-dns-server.overrideAttrs (_old: rec {

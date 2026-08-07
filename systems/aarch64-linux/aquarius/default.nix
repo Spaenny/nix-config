@@ -47,14 +47,6 @@ with lib.${namespace};
     ];
   };
 
-  snowfallorg.users.philipp = {
-    create = true;
-    admin = true;
-    home = {
-      enable = true;
-    };
-  };
-
   services.openssh.settings.PasswordAuthentication = false;
   services.openssh.settings.PermitRootLogin = "no";
 

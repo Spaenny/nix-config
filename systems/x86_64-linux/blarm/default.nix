@@ -40,14 +40,6 @@ with lib.${namespace};
     ];
   };
 
-  snowfallorg.users.philipp = {
-    create = true;
-    admin = true;
-    home = {
-      enable = true;
-    };
-  };
-
   awesome-flake = {
     services = {
       ssh = enabled;

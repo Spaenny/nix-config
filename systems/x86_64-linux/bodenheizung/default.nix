@@ -42,14 +42,6 @@ with lib.${namespace};
     ];
   };
 
-  snowfallorg.users.philipp = {
-    create = true;
-    admin = true;
-    home = {
-      enable = true;
-    };
-  };
-
   services.teamviewer.enable = true;
   services.flatpak.enable = true;
 

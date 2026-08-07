@@ -20,9 +20,6 @@ in
     programs.fish = {
       enable = true;
       shellAliases = {
-        nix-dns = "nh os switch -H dns --target-host dns-1 && nh os switch -H dns --target-host dns-2";
-        nix-blarm = "nh os switch -H blarm --target-host blarm";
-        nix-aquarius = "nh os switch -H aquarius --target-host aquarius";
         cd = "z";
         ls = "exa --icons";
         l = "exa";
