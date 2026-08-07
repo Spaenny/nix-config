@@ -1,5 +1,6 @@
 {
   lib,
+  pkgs,
   config,
   namespace,
   ...
@@ -62,6 +63,7 @@ in
     };
 
     services.redlib = mkIf cfg.redlib.enable {
+      package = pkgs.redlib;
       enable = true;
       address = "127.0.0.1";
       port = 1341;

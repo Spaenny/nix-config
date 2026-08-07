@@ -19,6 +19,9 @@ in
     programs = {
       mpv.enable = true;
     };
+
+    # Install wrapper for mpv
+    home.packages = [ pkgs.haruna ];
   };
 
 }

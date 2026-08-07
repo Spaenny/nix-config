@@ -1,5 +1,6 @@
 {
   lib,
+  pkgs,
   namespace,
   ...
 }:
@@ -20,7 +21,13 @@ with lib.${namespace};
     };
   };
 
-  virtualisation.libvirtd.enable = true;
+  virtualisation.libvirtd = {
+    enable = true;
+    qemu = {
+      runAsRoot = true;
+      swtpm.enable = true;
+    };
+  };
 
   nixpkgs.config.allowUnfree = true;
   nixpkgs.config.allowBroken = false;
@@ -39,6 +46,7 @@ with lib.${namespace};
       "wheel"
       "audio"
       "dialout"
+      "libvirtd"
     ];
   };
 

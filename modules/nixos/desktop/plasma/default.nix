@@ -49,10 +49,14 @@ in
     };
 
     environment.systemPackages = with pkgs; [
+      davfs2
       pinentry-qt
       kdiskmark
       networkmanager
       kdePackages.networkmanager-qt
+      kdePackages.kio
+      kdePackages.kio-fuse
+      kdePackages.kio-extras
       #kdePackages.wallpaper-engine-plugin Currently crashes plasma
     ];
   };

@@ -22,7 +22,7 @@ in
     package = mkOption {
       description = "The package of Forgejo to use.";
       type = types.package;
-      default = pkgs.forgejo-lts;
+      default = pkgs.forgejo;
     };
 
     port = mkOption {
@@ -93,6 +93,8 @@ in
         };
       };
     };
+
+    virtualisation.docker.enable = true;
 
     awesome-flake.services.acme.enable = mkIf cfg.nginx.enable true;
 

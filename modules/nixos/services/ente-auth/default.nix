@@ -12,7 +12,7 @@ let
 
   enteApp = cfg.package.override {
     extraBuildEnv = {
-      NEXT_PUBLIC_ENTE_ENDPOINT = "https://ente.monapona.de/api";
+      NEXT_PUBLIC_ENTE_ENDPOINT = "https://ente.monapona.de";
       NEXT_TELEMETRY_DISABLED = "1";
     };
   };
@@ -53,7 +53,6 @@ in
       enable = true;
 
       virtualHosts."${cfg.domain}" = {
-        serverAliases = [ "ente.monpona.de" ];
         forceSSL = true;
         useACMEHost = "stahl.sh";
         locations."/" = {

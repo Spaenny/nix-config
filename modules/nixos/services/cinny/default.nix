@@ -22,7 +22,8 @@ in
     package = mkOption {
       description = "The package of Cinny to use.";
       type = types.package;
-      default = pkgs.awesome-flake.cinny;
+      #default = pkgs.awesome-flake.cinny;
+      default = pkgs.cinny-unwrapped;
     };
 
     domain = mkOption {
