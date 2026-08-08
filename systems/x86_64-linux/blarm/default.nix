@@ -40,7 +40,7 @@ with lib.${namespace};
     ];
   };
 
-  awesome-flake = {
+  ${namespace} = {
     services = {
       ssh = enabled;
       cinny = enabled;

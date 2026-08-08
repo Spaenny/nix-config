@@ -68,7 +68,6 @@ in
           noto-fonts-cjk-serif
           noto-fonts-color-emoji
           nerd-fonts.hack
-          #(pkgs.awesome-flake.ttf-ms-win11.override { acceptEula = true; })
         ]
         ++ cfg.fonts;
     };

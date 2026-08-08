@@ -61,9 +61,9 @@ let
   );
 
   overlays = rec {
-    cinny = import ../overlays/cinny;
+    cinny = import ../overlays/cinny { inherit namespace; };
     redlib-fixed = import ../overlays/redlib-fixed;
-    technitium-dns-server = import ../overlays/technitium-dns-server;
+    technitium-dns-server = import ../overlays/technitium-dns-server { inherit namespace; };
     packages = packageOverlay;
     default =
       final: prev:
@@ -89,7 +89,7 @@ let
 
   commonSpecialArgs = {
     inherit inputs flakeRoot namespace;
-    lib = lib;
+    inherit lib;
   };
   commonHomeSpecialArgs = commonSpecialArgs // {
     lib = homeLib;
@@ -106,10 +106,12 @@ let
       nixpkgs.overlays = [ overlays.default ];
       nixpkgs.config.allowUnfree = true;
 
-      home-manager.useGlobalPkgs = true;
-      home-manager.backupFileExtension = "bk-hm";
-      home-manager.sharedModules = commonHomeModules;
-      home-manager.extraSpecialArgs = commonHomeSpecialArgs;
+      home-manager = {
+        useGlobalPkgs = true;
+        backupFileExtension = "bk-hm";
+        sharedModules = commonHomeModules;
+        extraSpecialArgs = commonHomeSpecialArgs;
+      };
     }
   ];
 

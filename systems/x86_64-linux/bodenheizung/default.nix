@@ -1,6 +1,5 @@
 {
   lib,
-  pkgs,
   namespace,
   ...
 }:
@@ -12,6 +11,9 @@ with lib.${namespace};
 
   boot = {
     binfmt.emulatedSystems = [ "aarch64-linux" ];
+    initrd.kernelModules = [ "amdgpu" ];
+    kernelParams = [ "amd_pstate=active" ];
+    kernel.sysctl."vm.max_map_count" = 2147483642;
     loader = {
       efi.canTouchEfiVariables = true;
       systemd-boot = {
@@ -53,7 +55,14 @@ with lib.${namespace};
   services.teamviewer.enable = true;
   services.flatpak.enable = true;
 
-  awesome-flake = {
+  zramSwap = {
+    enable = true;
+    algorithm = "zstd";
+    memoryPercent = 50;
+    priority = 100;
+  };
+
+  ${namespace} = {
     cli = {
       neovim = enabled;
       eza = enabled;

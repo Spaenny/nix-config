@@ -48,12 +48,16 @@ with lib.${namespace};
     ];
   };
 
-  services.openssh.settings.PasswordAuthentication = false;
-  services.openssh.settings.PermitRootLogin = "no";
+  services = {
+    openssh.settings = {
+      PasswordAuthentication = false;
+      PermitRootLogin = "no";
+    };
 
-  services.cron = enabled;
+    cron = enabled;
+  };
 
-  awesome-flake = {
+  ${namespace} = {
     services = {
       ssh = enabled;
       technitium-dns-server = enabled;

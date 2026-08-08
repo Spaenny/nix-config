@@ -39,7 +39,7 @@ in
       };
     };
 
-    environment.plasma6.excludePackages = [ ] ++ excludePackages ++ cfg.extraExcludePackages;
+    environment.plasma6.excludePackages = excludePackages ++ cfg.extraExcludePackages;
 
     networking.networkmanager = {
       enable = true;

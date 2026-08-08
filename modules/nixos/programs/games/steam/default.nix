@@ -1,5 +1,4 @@
 {
-  options,
   config,
   lib,
   pkgs,
@@ -17,26 +16,37 @@ in
   };
 
   config = mkIf cfg.enable {
-    programs.steam = {
-      enable = true;
-      gamescopeSession.enable = true;
-      protontricks.enable = true;
-      remotePlay.openFirewall = true;
+    programs = {
+      steam = {
+        enable = true;
+        extest.enable = true;
+        gamescopeSession.enable = true;
+        protontricks.enable = true;
+        remotePlay.openFirewall = true;
 
-      extraPackages = with pkgs; [
-        steamtinkerlaunch
-        proton-ge-bin
-        mangohud
-      ];
-    };
+        extraCompatPackages = with pkgs; [
+          proton-ge-bin
+          steamtinkerlaunch
+        ];
 
-    programs.gamemode = {
-      enable = true;
-      settings = {
-        general.renice = 10;
-        custom = {
-          start = "${pkgs.libnotify}/bin/notify-send 'GameMode started.'";
-          end = "${pkgs.libnotify}/bin/notify-send 'GameMode ended.'";
+        extraPackages = with pkgs; [
+          mangohud
+        ];
+      };
+
+      gamescope = {
+        capSysNice = true;
+        enableWsi = true;
+      };
+
+      gamemode = {
+        enable = true;
+        settings = {
+          general.renice = 10;
+          custom = {
+            start = "${pkgs.libnotify}/bin/notify-send 'GameMode started.'";
+            end = "${pkgs.libnotify}/bin/notify-send 'GameMode ended.'";
+          };
         };
       };
     };

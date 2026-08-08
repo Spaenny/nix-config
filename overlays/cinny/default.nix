@@ -1,5 +1,6 @@
+{ namespace }:
 final: prev: {
-  awesome-flake = (prev.awesome-flake or { }) // {
+  ${namespace} = (prev.${namespace} or { }) // {
     cinny = prev.cinny-unwrapped.overrideAttrs (_old: rec {
       pname = "cinny-unwrapped";
       version = "dev";

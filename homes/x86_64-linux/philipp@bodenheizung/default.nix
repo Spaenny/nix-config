@@ -1,12 +1,11 @@
 {
   lib,
-  pkgs,
   namespace,
   ...
 }:
 with lib.${namespace};
 {
-  awesome-flake = {
+  ${namespace} = {
     cli = {
       fish = enabled;
       git = enabled;

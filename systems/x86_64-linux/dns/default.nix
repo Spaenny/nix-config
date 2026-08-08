@@ -31,7 +31,7 @@ with lib.${namespace};
     enable = true;
   };
 
-  awesome-flake = {
+  ${namespace} = {
     services = {
       ssh = enabled;
       technitium-dns-server = {

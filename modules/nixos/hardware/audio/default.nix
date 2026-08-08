@@ -17,12 +17,66 @@ in
   };
 
   config = mkIf cfg.enable {
-    services.pipewire = {
-      enable = true;
-      alsa.enable = true;
-      pulse.enable = true;
-      jack.enable = true;
-      wireplumber.enable = true;
+    services = {
+      pipewire = {
+        enable = true;
+        alsa.enable = true;
+        pulse.enable = true;
+        jack.enable = true;
+        wireplumber.enable = true;
+
+        extraConfig.pipewire = {
+          "90-nullsink" = {
+            "context.object" = [
+              {
+                factory = "adapter";
+                args = {
+                  "factory.name" = "support.null-audio-sink";
+                  "node.name" = "Null Sink";
+                  "media.class" = "Audio/Sink";
+                  "audio.position" = "[ FL FR ]";
+                  "monitor.channel-volumes" = "true";
+                  "monitor.passthrough" = "true";
+                  "adapter.auto-port-config" = {
+                    "mode" = "dsp";
+                    "monitor" = "true";
+                    "position" = "preserve";
+                  };
+                };
+              }
+            ];
+          };
+          "90-loopback" = {
+            "context.modules" = [
+              {
+                name = "libpipewire-module-loopback";
+                args = {
+                  "node.description" = "Scarlett 2i2 Loopback";
+                  "capture.props" = {
+                    "node.name" = "Scarlett_2i2_Loopback";
+                    "media.class" = "Audio/Sink";
+                    "audio.position" = "[ FL FR ]";
+                  };
+                  "playback.props" = {
+                    "node.name" = "playback.Scarlett_2i2_Loopback";
+                    "audio.position" = "[ AUX0 AUX1 ]";
+                    "target.object" = "alsa_output.usb-Focusrite_Scarlett_2i2_USB-00.pro-output-0";
+                    "stream.dont-reconnect" = "true";
+                    "node.dont-reconnect" = "false";
+                    "node.passive" = "true";
+                  };
+                };
+              }
+            ];
+          };
+        };
+      };
+
+      udev.extraRules = ''
+        ACTION=="add", SUBSYSTEM=="usb", ATTR{idVendor}=="1235", ATTR{idProduct}=="8202", TEST=="power/control", ATTR{power/control}="on"
+      '';
+
+      pulseaudio.enable = false;
     };
 
     xdg.portal = {
@@ -34,11 +88,6 @@ in
       extraPortals = with pkgs; [ kdePackages.xdg-desktop-portal-kde ];
     };
 
-    services.udev.extraRules = ''
-      ACTION=="add", SUBSYSTEM=="usb", ATTR{idVendor}=="1235", ATTR{idProduct}=="8202", TEST=="power/control", ATTR{power/control}="on"
-    '';
-    services.pulseaudio.enable = false;
-
     environment.systemPackages =
       with pkgs;
       [
@@ -47,52 +96,6 @@ in
         twitch-hls-client
       ]
       ++ cfg.extra-packages;
-
-    services.pipewire.extraConfig.pipewire = {
-      "90-nullsink" = {
-        "context.object" = [
-          {
-            factory = "adapter";
-            args = {
-              "factory.name" = "support.null-audio-sink";
-              "node.name" = "Null Sink";
-              "media.class" = "Audio/Sink";
-              "audio.position" = "[ FL FR ]";
-              "monitor.channel-volumes" = "true";
-              "monitor.passthrough" = "true";
-              "adapter.auto-port-config" = {
-                "mode" = "dsp";
-                "monitor" = "true";
-                "position" = "preserve";
-              };
-            };
-          }
-        ];
-      };
-      "90-loopback" = {
-        "context.modules" = [
-          {
-            name = "libpipewire-module-loopback";
-            args = {
-              "node.description" = "Scarlett 2i2 Loopback";
-              "capture.props" = {
-                "node.name" = "Scarlett_2i2_Loopback";
-                "media.class" = "Audio/Sink";
-                "audio.position" = "[ FL FR ]";
-              };
-              "playback.props" = {
-                "node.name" = "playback.Scarlett_2i2_Loopback";
-                "audio.position" = "[ AUX0 AUX1 ]";
-                "target.object" = "alsa_output.usb-Focusrite_Scarlett_2i2_USB-00.pro-output-0";
-                "stream.dont-reconnect" = "true";
-                "node.dont-reconnect" = "false";
-                "node.passive" = "true";
-              };
-            };
-          }
-        ];
-      };
-    };
   };
 
 }
