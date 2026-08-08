@@ -1,6 +1,5 @@
 {
   lib,
-  pkgs,
   config,
   namespace,
   ...
@@ -16,13 +15,13 @@ in
 
     port = mkOption {
       description = "The port to serve Syncthing on.";
-      type = types.nullOr types.int;
+      type = types.port;
       default = 8384;
     };
 
     ip = mkOption {
       description = "The ip to serve Syncthing on.";
-      type = types.nullOr types.str;
+      type = types.str;
       default = "192.168.10.3";
     };
 
@@ -37,7 +36,7 @@ in
     services.syncthing = {
       enable = true;
       guiAddress = "${cfg.ip}:${toString cfg.port}";
-      openDefaultPorts = mkIf cfg.openDefaultPorts true;
+      inherit (cfg) openDefaultPorts;
       dataDir = "/data/syncthing";
     };
   };

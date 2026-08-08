@@ -9,14 +9,13 @@ with lib;
 with lib.${namespace};
 let
   cfg = config.${namespace}.services.forgejo;
+  codebergThemes = pkgs.${namespace}.codeberg-themes;
 in
 {
   options.${namespace}.services.forgejo = {
     enable = mkEnableOption "Forgejo";
     nginx = {
-      enable = mkEnableOption "Enable nginx for this service." // {
-        default = true;
-      };
+      enable = mkEnabledOption "Enable nginx for this service.";
     };
 
     package = mkOption {
@@ -27,56 +26,69 @@ in
 
     port = mkOption {
       description = "The port to serve Forgejo on.";
-      type = types.nullOr types.int;
+      type = types.port;
       default = 3001;
     };
 
     domain = mkOption {
       description = "The domain to serve Forgejo on.";
-      type = types.nullOr types.str;
+      type = types.str;
       default = "git.stahl.sh";
     };
 
     ssh_domain = mkOption {
       description = "The domain to serve Forgejo on.";
-      type = types.nullOr types.str;
+      type = types.str;
       default = "stahl.sh";
     };
 
     user = mkOption {
       description = "The user to run Forgejo as.";
-      type = types.nullOr types.str;
+      type = types.str;
       default = "forgejo";
     };
 
   };
   config = mkIf cfg.enable {
-    networking.firewall.allowedTCPPorts = [
+    networking.firewall.allowedTCPPorts = mkIf cfg.nginx.enable [
       80
       443
     ];
 
     systemd.services.codeberg-themes = {
       description = "Codeberg Themes Setup";
-      wantedBy = [ "multi-user.target" ];
+      wantedBy = [ "forgejo.service" ];
+      before = [ "forgejo.service" ];
+      path = [ pkgs.coreutils ];
 
-      environment.PATH = lib.mkDefault "${pkgs.coreutils}/bin:${pkgs.bash}/bin";
+      serviceConfig = {
+        Type = "oneshot";
+        ExecStart = pkgs.writeShellScript "setup-codeberg-themes" ''
+          set -euo pipefail
 
-      serviceConfig.ExecStart = ''
-        ${pkgs.bash}/bin/bash -c "mkdir -p /var/lib/forgejo/custom/public/assets/css /var/lib/forgejo/custom/public/assets/img && \
-          cp -r ${pkgs.awesome-flake.codeberg-themes}/var/lib/forgejo/custom/public/assets/css/* /var/lib/forgejo/custom/public/assets/css/ && \
-          cp ${pkgs.awesome-flake.codeberg-themes}/var/lib/forgejo/custom/public/assets/img/*logo.svg /var/lib/forgejo/custom/public/assets/img/logo.svg && \
-          chown -R ${cfg.user}:${cfg.user} /var/lib/forgejo/custom"
-      '';
+          install -d -o ${cfg.user} -g ${cfg.user} \
+            /var/lib/forgejo/custom/public/assets/css \
+            /var/lib/forgejo/custom/public/assets/img
+
+          cp -r ${codebergThemes}/var/lib/forgejo/custom/public/assets/css/* \
+            /var/lib/forgejo/custom/public/assets/css/
+          cp ${codebergThemes}/var/lib/forgejo/custom/public/assets/img/*logo.svg \
+            /var/lib/forgejo/custom/public/assets/img/logo.svg
+
+          chown -R ${cfg.user}:${cfg.user} /var/lib/forgejo/custom
+        '';
+      };
     };
 
     services.forgejo = {
-      user = cfg.user;
       enable = true;
-      package = cfg.package;
+      inherit (cfg)
+        package
+        user
+        ;
 
       database = {
-        user = cfg.user;
+        inherit (cfg) user;
         type = "postgres";
       };
 
@@ -96,15 +108,13 @@ in
 
     virtualisation.docker.enable = true;
 
-    awesome-flake.services.acme.enable = mkIf cfg.nginx.enable true;
+    ${namespace}.services.acme.enable = mkIf cfg.nginx.enable true;
 
     services.nginx = mkIf cfg.nginx.enable {
       enable = true;
 
-      virtualHosts."${cfg.domain}" = {
-        forceSSL = true;
-        useACMEHost = "stahl.sh";
-        locations."/".proxyPass = "http://127.0.0.1:${builtins.toString cfg.port}";
+      virtualHosts."${cfg.domain}" = mkNginxProxyHost {
+        proxyPass = "http://127.0.0.1:${builtins.toString cfg.port}";
       };
     };
   };

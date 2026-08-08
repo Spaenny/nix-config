@@ -14,41 +14,36 @@ in
   options.${namespace}.services.cinny = {
     enable = mkEnableOption "Cinny";
     nginx = {
-      enable = mkEnableOption "Enable nginx for this service." // {
-        default = true;
-      };
+      enable = mkEnabledOption "Enable nginx for this service.";
     };
 
     package = mkOption {
       description = "The package of Cinny to use.";
       type = types.package;
-      #default = pkgs.awesome-flake.cinny;
       default = pkgs.cinny-unwrapped;
     };
 
     domain = mkOption {
       description = "The domain to serve Cinny on.";
-      type = types.nullOr types.str;
+      type = types.str;
       default = "cinny.stahl.sh";
     };
 
   };
   config = mkIf cfg.enable {
-    networking.firewall.allowedTCPPorts = [
+    networking.firewall.allowedTCPPorts = mkIf cfg.nginx.enable [
       80
       443
     ];
 
-    awesome-flake.services.acme.enable = mkIf cfg.nginx.enable true;
+    ${namespace}.services.acme.enable = mkIf cfg.nginx.enable true;
 
     services.nginx = mkIf cfg.nginx.enable {
       enable = true;
 
-      virtualHosts."${cfg.domain}" = {
-        forceSSL = true;
-        useACMEHost = "stahl.sh";
-        locations."/" = {
-          root = "${cfg.package}";
+      virtualHosts."${cfg.domain}" = mkNginxStaticHost {
+        root = "${cfg.package}";
+        location = {
           extraConfig = ''
             rewrite ^/config.json$ /config.json break;
             rewrite ^/manifest.json$ /manifest.json break;

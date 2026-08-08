@@ -1,6 +1,5 @@
 {
   lib,
-  pkgs,
   config,
   namespace,
   ...
@@ -9,6 +8,7 @@ with lib;
 with lib.${namespace};
 let
   cfg = config.${namespace}.services.newt;
+  sopsCfg = config.${namespace}.system.sops;
 in
 {
   options.${namespace}.services.newt = {
@@ -16,15 +16,14 @@ in
   };
 
   config = mkIf cfg.enable {
+    ${namespace}.system.sops = enabled;
+
     services.newt = {
       enable = true;
-      environmentFile = "/run/secrets/aquarius-newt.env";
+      environmentFile = config.sops.secrets."aquarius-newt.env".path;
     };
 
-    sops.secrets."aquarius-newt.env" = {
-      format = "dotenv";
-      sopsFile = ../../../../secrets/aquarius-newt.env;
-    };
+    sops.secrets."aquarius-newt.env" = mkSopsDotenvSecret sopsCfg.secretsDir "aquarius-newt.env";
 
   };
 }

@@ -8,6 +8,7 @@ with lib;
 with lib.${namespace};
 let
   cfg = config.${namespace}.services.acme;
+  sopsCfg = config.${namespace}.system.sops;
 in
 {
   options.${namespace}.services.acme = {
@@ -15,6 +16,8 @@ in
   };
 
   config = mkIf cfg.enable {
+    ${namespace}.system.sops = enabled;
+
     security.acme = {
       acceptTerms = true;
       defaults.email = "admin+acme@stahl.sh";
@@ -23,16 +26,13 @@ in
         extraDomainNames = [ "*.stahl.sh" ];
         dnsProvider = "infomaniak";
         dnsPropagationCheck = true;
-        environmentFile = "/run/secrets/acme";
+        environmentFile = config.sops.secrets.acme.path;
       };
     };
 
     users.users.nginx.extraGroups = [ "acme" ];
 
-    sops.secrets.acme = {
-      format = "dotenv";
-      sopsFile = ../../../../secrets/blarm-acme.env;
-    };
+    sops.secrets.acme = mkSopsDotenvSecret sopsCfg.secretsDir "blarm-acme.env";
   };
 
 }

@@ -7,6 +7,7 @@
 }:
 let
   cfg = config.${namespace}.services.linkwarden;
+  sopsCfg = config.${namespace}.system.sops;
 
   inherit (lib)
     types
@@ -14,20 +15,24 @@ let
     mkOption
     mkEnableOption
     ;
+  inherit (lib.${namespace})
+    enabled
+    mkEnabledOption
+    mkNginxProxyHost
+    mkSopsDotenvSecret
+    ;
 in
 {
   options.${namespace}.services.linkwarden = {
     enable = mkEnableOption "Linkwarden";
     package = lib.mkPackageOption pkgs "linkwarden" { };
     nginx = {
-      enable = mkEnableOption "Enable nginx for this service." // {
-        default = true;
-      };
+      enable = mkEnabledOption "Enable nginx for this service.";
     };
 
     domain = mkOption {
       description = "The domain to serve linkwarden on.";
-      type = types.nullOr types.str;
+      type = types.str;
       default = "link.stahl.sh";
     };
 
@@ -46,27 +51,31 @@ in
   };
 
   config = mkIf cfg.enable {
+    ${namespace}.system.sops = enabled;
+
+    networking.firewall.allowedTCPPorts = mkIf cfg.nginx.enable [
+      80
+      443
+    ];
+
     services.linkwarden = {
       enable = true;
-      host = cfg.host;
-      port = cfg.port;
-      environmentFile = "/run/secrets/linkwarden";
+      inherit (cfg)
+        host
+        port
+        ;
+      environmentFile = config.sops.secrets.linkwarden.path;
     };
 
     services.nginx = mkIf cfg.nginx.enable {
       enable = true;
 
-      virtualHosts."${cfg.domain}" = {
-        forceSSL = true;
-        useACMEHost = "stahl.sh";
-        locations."/".proxyPass = "http://${cfg.host}:${builtins.toString cfg.port}";
+      virtualHosts."${cfg.domain}" = mkNginxProxyHost {
+        proxyPass = "http://${cfg.host}:${builtins.toString cfg.port}";
       };
     };
 
-    sops.secrets.linkwarden = {
-      format = "dotenv";
-      sopsFile = ../../../../secrets/blarm-linkwarden.env;
-    };
+    sops.secrets.linkwarden = mkSopsDotenvSecret sopsCfg.secretsDir "blarm-linkwarden.env";
 
     meta.maintainers = with lib.maintainers; [ jvanbruegge ];
   };

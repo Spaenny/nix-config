@@ -16,9 +16,11 @@ in
   };
 
   config = mkIf cfg.enable {
-    services.gns3-server.enable = true;
-    services.gns3-server.ubridge.enable = true;
-    services.gns3-server.dynamips.enable = true;
+    services.gns3-server = {
+      enable = true;
+      ubridge.enable = true;
+      dynamips.enable = true;
+    };
 
     environment.systemPackages = with pkgs; [
       dynamips

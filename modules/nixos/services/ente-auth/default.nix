@@ -24,19 +24,17 @@ in
     package = mkOption {
       description = "The package of Ente-Auth to use.";
       type = types.package;
-      default = pkgs.awesome-flake.ente-web-auth;
+      default = pkgs.${namespace}.ente-web-auth;
     };
 
     domain = mkOption {
       description = "The domain to serve ente-auth on.";
-      type = types.nullOr types.str;
+      type = types.str;
       default = "ente.stahl.sh";
     };
 
     nginx = {
-      enable = mkEnableOption "Enable nginx for this service." // {
-        default = true;
-      };
+      enable = mkEnabledOption "Enable nginx for this service.";
     };
 
   };
@@ -47,16 +45,14 @@ in
       443
     ];
 
-    awesome-flake.services.acme.enable = mkIf cfg.nginx.enable true;
+    ${namespace}.services.acme.enable = mkIf cfg.nginx.enable true;
 
     services.nginx = mkIf cfg.nginx.enable {
       enable = true;
 
-      virtualHosts."${cfg.domain}" = {
-        forceSSL = true;
-        useACMEHost = "stahl.sh";
-        locations."/" = {
-          root = enteApp;
+      virtualHosts."${cfg.domain}" = mkNginxStaticHost {
+        root = enteApp;
+        location = {
           extraConfig = ''
             try_files $uri $uri/ /index.html;
           '';
