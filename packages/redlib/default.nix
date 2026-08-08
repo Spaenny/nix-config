@@ -9,7 +9,7 @@
 
 rustPlatform.buildRustPackage {
   pname = "redlib";
-  version = "main";
+  version = "0.36.0-unstable-2026-04-07";
 
   src = fetchFromGitHub {
     owner = "Silvenga";
@@ -21,7 +21,7 @@ rustPlatform.buildRustPackage {
   cargoHash = "sha256-ageSjIX0BLVYlLAjeojQq5N6/VASOIpwXNR/3msl/p4=";
 
   postInstall = ''
-    install --mode=444 -D contrib/redlib.service $out/lib/systemd/system/redlib.service
+    install -Dm444 contrib/redlib.service $out/lib/systemd/system/redlib.service
     substituteInPlace $out/lib/systemd/system/redlib.service \
       --replace-fail "/usr/bin/redlib" "$out/bin/redlib"
   '';

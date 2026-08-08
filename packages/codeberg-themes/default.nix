@@ -1,12 +1,13 @@
 {
   lib,
-  stdenv,
+  stdenvNoCC,
   fetchFromGitea,
 }:
 
-stdenv.mkDerivation rec {
+stdenvNoCC.mkDerivation {
   pname = "codeberg-themes";
   version = "1.0";
+
   src = fetchFromGitea {
     domain = "codeberg.org";
     owner = "Codeberg-Infrastructure";
@@ -15,26 +16,25 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-at+edBFcNr81kQWkH44Fih1IBrCJC72QDE+Spi+kxpc=";
   };
 
-  unpackPhase = ''
-    # We clone the repo and only extract the folder we need
-    mkdir -p $out
-    cp -r $src/web_src/css/themes $out/themes
-  '';
+  dontUnpack = true;
 
   installPhase = ''
-    # Create the required directories for installation
+    runHook preInstall
+
     mkdir -p $out/var/lib/forgejo/custom/public/assets/css
     mkdir -p $out/var/lib/forgejo/custom/public/assets/img
 
-    # Move theme files
-    cp -r $out/themes/* $out/var/lib/forgejo/custom/public/assets/css/
+    cp -r $src/web_src/css/themes/* $out/var/lib/forgejo/custom/public/assets/css/
+    install -Dm444 ${./logo.svg} $out/var/lib/forgejo/custom/public/assets/img/logo.svg
 
-    # Install logo
-    cp ${./logo.svg} $out/var/lib/forgejo/custom/public/assets/img/
+    runHook postInstall
   '';
 
   meta = with lib; {
     description = "Codeberg themes and logo for Forgejo";
+    homepage = "https://codeberg.org/Codeberg-Infrastructure/forgejo";
+    license = licenses.gpl3Plus;
     maintainers = with maintainers; [ spaenny ];
+    platforms = platforms.all;
   };
 }

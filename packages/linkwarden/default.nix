@@ -5,6 +5,7 @@
   fetchFromGitHub,
   fetchYarnDeps,
   makeWrapper,
+  nix-update-script,
   nixosTests,
   yarnConfigHook,
   fetchpatch,
@@ -86,7 +87,7 @@ stdenvNoCC.mkDerivation rec {
 
   postPatch = ''
     for f in packages/filesystem/*Folder.ts packages/filesystem/*File.ts; do
-      substituteInPlace $f \
+      substituteInPlace "$f" \
         --replace-fail 'process.cwd(),' "" \
         --replace-fail '"../..",' ""
     done
@@ -128,19 +129,24 @@ stdenvNoCC.mkDerivation rec {
     cp -r node_modules $out/share/linkwarden/
     rm -r $out/share/linkwarden/node_modules/mobile-app
 
-    echo "#!${lib.getExe bash} -e
-    export DATABASE_URL=\''${DATABASE_URL-"postgresql://\$DATABASE_USER:\$POSTGRES_PASSWORD@\$DATABASE_HOST:\$DATABASE_PORT/\$DATABASE_NAME"}
-    export npm_config_cache="\$LINKWARDEN_CACHE_DIR/npm"
+    cat > $out/bin/start.sh <<'EOF'
+    #!${lib.getExe bash}
+    set -e
 
-    if [ \"\$1\" == \"worker\" ]; then
+    export DATABASE_URL=''${DATABASE_URL-"postgresql://$DATABASE_USER:$POSTGRES_PASSWORD@$DATABASE_HOST:$DATABASE_PORT/$DATABASE_NAME"}
+    export npm_config_cache="$LINKWARDEN_CACHE_DIR/npm"
+
+    if [ "$1" = "worker" ]; then
       echo "Starting worker"
-      ${lib.getExe' nodejs "npm"} start --prefix $out/share/linkwarden/apps/worker
-    else
-      echo "Starting server"
-      ${lib.getExe prisma} migrate deploy --schema $out/share/linkwarden/packages/prisma/schema.prisma \
-        && ${lib.getExe' nodejs "npm"} start --prefix $out/share/linkwarden/apps/web -- -H \$LINKWARDEN_HOST -p \$LINKWARDEN_PORT
+      exec ${lib.getExe' nodejs "npm"} start --prefix @linkwardenRoot@/apps/worker
     fi
-    " > $out/bin/start.sh
+
+    echo "Starting server"
+    ${lib.getExe prisma} migrate deploy --schema @linkwardenRoot@/packages/prisma/schema.prisma
+    exec ${lib.getExe' nodejs "npm"} start --prefix @linkwardenRoot@/apps/web -- -H "$LINKWARDEN_HOST" -p "$LINKWARDEN_PORT"
+    EOF
+    substituteInPlace $out/bin/start.sh \
+      --replace-fail '@linkwardenRoot@' "$out/share/linkwarden"
     chmod +x $out/bin/start.sh
 
     makeWrapper $out/bin/start.sh $out/bin/linkwarden \
@@ -169,9 +175,12 @@ stdenvNoCC.mkDerivation rec {
     inherit (nixosTests) linkwarden;
   };
 
+  passthru.updateScript = nix-update-script { };
+
   meta = {
     description = "Self-hosted collaborative bookmark manager to collect, organize, and preserve webpages, articles, and more...";
     homepage = "https://linkwarden.app/";
+    changelog = "https://github.com/linkwarden/linkwarden/releases/tag/v${version}";
     license = lib.licenses.agpl3Only;
     maintainers = with lib.maintainers; [ jvanbruegge ];
     platforms = lib.platforms.linux;
