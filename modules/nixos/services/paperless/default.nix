@@ -57,7 +57,7 @@ in
             optimize = 1;
             pdfa_image_compression = "lossless";
           };
-          PAPERLESS_DBHOST = ""; # Ensure sqlite database
+          PAPERLESS_DBENGINE = "sqlite";
           PAPERLESS_URL = "https://${cfg.domain}";
         };
       };
