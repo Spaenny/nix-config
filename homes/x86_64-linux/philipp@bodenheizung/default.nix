@@ -23,6 +23,8 @@ with lib.${namespace};
       spotify = enabled;
       obs = enabled;
       discord = enabled;
+      signal-desktop = enabled;
+      zed-editor = enabled;
       kitty = {
         enable = true;
         plasma = enabled;
