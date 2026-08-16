@@ -54,6 +54,9 @@ with lib.${namespace};
 
   services.teamviewer.enable = true;
   services.flatpak.enable = true;
+  services.udev.extraRules = ''
+    ACTION=="add", SUBSYSTEM=="usb", ATTR{idVendor}=="8087", ATTR{idProduct}=="0029", TEST=="power/control", ATTR{power/control}="on"
+  '';
 
   zramSwap = {
     enable = true;
