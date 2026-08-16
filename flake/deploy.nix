@@ -13,7 +13,15 @@
 
   perSystem =
     { system, ... }:
+    let
+      deployNodes = lib.mapAttrs (name: _node: config.flake.deploy.nodes.${name}) (
+        lib.filterAttrs (
+          _name: node:
+          config.flake.nixosConfigurations.${node.configuration}.pkgs.stdenv.hostPlatform.system == system
+        ) inventory.deployNodes
+      );
+    in
     {
-      checks = inputs.deploy-rs.lib.${system}.deployChecks config.flake.deploy;
+      checks = inputs.deploy-rs.lib.${system}.deployChecks { nodes = deployNodes; };
     };
 }
