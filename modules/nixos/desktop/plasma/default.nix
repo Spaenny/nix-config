@@ -41,6 +41,8 @@ in
 
     environment.plasma6.excludePackages = excludePackages ++ cfg.extraExcludePackages;
 
+    programs.kdeconnect.enable = true;
+
     networking.networkmanager = {
       enable = true;
       plugins = with pkgs; [
