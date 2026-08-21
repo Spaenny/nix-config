@@ -54,8 +54,6 @@ with lib.${namespace};
       syncthing = enabled;
     };
 
-    #container.invidious = enabled;
-
     system = {
       sops = enabled;
       tmpfs = enabled;
