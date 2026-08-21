@@ -14,18 +14,16 @@ in
   options.${namespace}.services.technitium-dns-server = {
     enable = mkEnableOption "Technitium DNS Server";
 
-    package = mkOption {
-      description = "The package of Technitium to use.";
-      type = types.package;
-      default = pkgs.technitium-dns-server;
-    };
+    package = mkPackageOption pkgs "technitium-dns-server" { };
 
     openFirewall = mkOption {
       type = types.bool;
-      default = false;
+      default = true;
       description = ''
         Whether to open ports in the firewall.
-        Standard ports are 53 (UDP and TCP, for DNS), 5380 and 53443 (TCP, HTTP and HTTPS for web interface).
+        Default ports are 53 (UDP and TCP, for DNS),
+        80 and 443 (TCP, HTTP and DNS over HTTPS), 853 (TCP, DNS over TLS),
+        5380 and 53443 (TCP, HTTP and HTTPS for web interface).
         Specify different or additional ports in options firewallUDPPorts and firewallTCPPorts if necessary.
       '';
     };
@@ -34,8 +32,6 @@ in
       type = with types; listOf int;
       default = [
         53
-        67
-        68
       ];
       description = ''
         List of UDP ports to open in firewall.
@@ -71,6 +67,7 @@ in
         DynamicUser = true;
 
         StateDirectory = "technitium-dns-server";
+        LogsDirectory = "technitium";
 
         Restart = "always";
         RestartSec = 10;
