@@ -42,7 +42,13 @@ in
       gamemode = {
         enable = true;
         settings = {
-          general.renice = 10;
+          general = {
+            renice = -10;
+            softrealtime = "auto";
+          };
+          cpu = {
+            desiredgov = "performance";
+          };
           custom = {
             start = "${pkgs.libnotify}/bin/notify-send 'GameMode started.'";
             end = "${pkgs.libnotify}/bin/notify-send 'GameMode ended.'";

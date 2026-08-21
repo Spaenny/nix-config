@@ -1,5 +1,6 @@
 {
   lib,
+  pkgs,
   namespace,
   ...
 }:
@@ -12,7 +13,11 @@ with lib.${namespace};
   boot = {
     binfmt.emulatedSystems = [ "aarch64-linux" ];
     initrd.kernelModules = [ "amdgpu" ];
-    kernelParams = [ "amd_pstate=active" ];
+    kernelPackages = pkgs.linuxPackages_zen;
+    kernelParams = [
+      "amd_pstate=active"
+      "split_lock_detect=off"
+    ];
     kernel.sysctl."vm.max_map_count" = 2147483642;
     loader = {
       efi.canTouchEfiVariables = true;
