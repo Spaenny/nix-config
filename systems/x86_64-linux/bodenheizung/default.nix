@@ -104,6 +104,7 @@ with lib.${namespace};
       };
       gstreamer = enabled;
       gnupg = enabled;
+      nix-ld = enabled;
     };
   };
 
