@@ -17,7 +17,15 @@ with lib.${namespace};
     ];
   };
 
-  networking.hostName = "blarm";
+  networking = {
+    hostName = "blarm";
+    nameservers = [
+      "192.168.5.100"
+      "192.168.5.200"
+      "fdf3:567b:734c:5::100"
+      "fdf3:567b:734c:5::200"
+    ];
+  };
 
   # Disable documentation
   documentation = {
