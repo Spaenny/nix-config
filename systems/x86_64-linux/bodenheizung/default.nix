@@ -83,7 +83,10 @@ with lib.${namespace};
       steam = enabled;
     };
 
-    desktop.plasma = enabled;
+    desktop.plasma = {
+      enable = true;
+      remoteDesktop = enabled;
+    };
     hardware.audio = enabled;
 
     services = {

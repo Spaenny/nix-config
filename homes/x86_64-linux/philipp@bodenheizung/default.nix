@@ -1,10 +1,15 @@
 {
   lib,
+  pkgs,
   namespace,
   ...
 }:
 with lib.${namespace};
 {
+  home.activation.disableKrdpAutostart = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
+    ${pkgs.kdePackages.kconfig}/bin/kwriteconfig6 --file krdpserverrc --group General --key Autostart false
+  '';
+
   ${namespace} = {
     cli = {
       fish = enabled;
