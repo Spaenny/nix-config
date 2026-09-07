@@ -12,7 +12,7 @@ let
 
   enteApp = cfg.package.override {
     extraBuildEnv = {
-      NEXT_PUBLIC_ENTE_ENDPOINT = "https://ente.monapona.de";
+      NEXT_PUBLIC_ENTE_ENDPOINT = cfg.apiEndpoint;
       NEXT_TELEMETRY_DISABLED = "1";
     };
   };
@@ -31,6 +31,12 @@ in
       description = "The domain to serve ente-auth on.";
       type = types.str;
       default = "ente.stahl.sh";
+    };
+
+    apiEndpoint = mkOption {
+      description = "The public Ente API endpoint used by the Auth frontend.";
+      type = types.str;
+      default = "https://ente.stahl.sh/api";
     };
 
     nginx = {

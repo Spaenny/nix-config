@@ -38,6 +38,7 @@ let
 
   packageSet = pkgs: {
     codeberg-themes = pkgs.callPackage ../packages/codeberg-themes { };
+    ente-server = pkgs.callPackage ../packages/ente-server { };
     ente-web-auth = pkgs.callPackage ../packages/ente-web-auth { };
     linkwarden = pkgs.callPackage ../packages/linkwarden { };
     redlib = pkgs.callPackage ../packages/redlib { };
