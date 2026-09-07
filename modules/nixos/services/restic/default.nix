@@ -32,6 +32,9 @@ in
         initialize = true;
         exclude = [
           "/home/*/.cache"
+          "/data/lost+found"
+          "/var/lib/containers"
+          "/var/lib/docker"
         ];
         passwordFile = config.sops.secrets.restic_password.path;
         repositoryFile = config.sops.secrets.restic_url.path;
@@ -39,12 +42,29 @@ in
           "/home"
           "/var/lib"
           "/data"
+          config.services.postgresqlBackup.location
+        ];
+        pruneOpts = [
+          "--keep-daily 7"
+          "--keep-weekly 4"
+          "--keep-monthly 6"
+          "--keep-yearly 2"
+        ];
+        checkOpts = [
+          "--read-data-subset=5%"
         ];
         timerConfig = {
           OnCalendar = "00:10";
           RandomizedDelaySec = "1h";
         };
       };
+    };
+
+    services.postgresqlBackup = {
+      enable = true;
+      backupAll = true;
+      location = "/var/backup/postgresql";
+      startAt = "*-*-* 23:30:00";
     };
 
     environment.systemPackages = with pkgs; [ restic ];
