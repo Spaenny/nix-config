@@ -71,7 +71,7 @@ in
       enable = true;
 
       virtualHosts."${cfg.domain}" = mkNginxProxyHost {
-        proxyPass = "http://${cfg.host}:${builtins.toString cfg.port}";
+        proxyPass = "http://${cfg.host}:${toString cfg.port}";
       };
     };
 
