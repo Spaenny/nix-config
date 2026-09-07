@@ -98,7 +98,6 @@ in
     };
 
     environment.systemPackages = with pkgs; [
-      davfs2
       pinentry-qt
       kdiskmark
       networkmanager
