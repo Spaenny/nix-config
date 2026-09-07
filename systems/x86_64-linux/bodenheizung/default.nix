@@ -44,7 +44,10 @@ with lib.${namespace};
     "flakes"
   ];
 
-  networking.hostName = "bodenheizung";
+  networking = {
+    hostName = "bodenheizung";
+    search = [ "monapona.de" ];
+  };
 
   users.users.philipp = {
     isNormalUser = true;
