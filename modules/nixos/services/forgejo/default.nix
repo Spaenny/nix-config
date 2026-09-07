@@ -12,6 +12,8 @@ let
   codebergThemes = pkgs.${namespace}.codeberg-themes;
 in
 {
+  imports = [ ./kanidm.nix ];
+
   options.${namespace}.services.forgejo = {
     enable = mkEnableOption "Forgejo";
     nginx = {
