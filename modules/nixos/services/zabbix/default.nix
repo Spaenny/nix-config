@@ -2,6 +2,7 @@
   config,
   lib,
   namespace,
+  pkgs,
   ...
 }:
 with lib;
@@ -47,6 +48,8 @@ in
         useACMEHost = "stahl.sh";
       };
     };
+
+    services.phpfpm.pools.zabbix.phpPackage = pkgs.php83;
 
     services.zabbixAgent = {
       enable = true;
