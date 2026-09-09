@@ -32,6 +32,7 @@ in
 
     services.zabbixServer = {
       enable = true;
+      openFirewall = true;
       database = {
         type = "pgsql";
         createLocally = true;
