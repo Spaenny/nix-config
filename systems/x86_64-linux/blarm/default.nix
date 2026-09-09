@@ -59,6 +59,8 @@ with lib.${namespace};
       forgejo = enabled;
       kanidm = enabled;
       opencloud = enabled;
+      samba = enabled;
+      zabbix = enabled;
       searxng = enabled;
       #immich = enabled; # We wait for the proper version to be in nixpkgs
       paperless = enabled;
@@ -73,31 +75,6 @@ with lib.${namespace};
     cli.neovim = enabled;
   };
 
-  services.samba = {
-    enable = true;
-    openFirewall = true;
-    settings = {
-      global = {
-        workgroup = "WORKGROUP";
-        "server string" = "blarm";
-        security = "user";
-        "map to guest" = "Bad User";
-        "hosts allow" = "192.168.1.0/24";
-        "hosts deny" = "0.0.0.0/0";
-      };
-      opencloud = {
-        path = "/data/opencloud/data/storage/users/users/5f2947ff-0cc3-44e5-886a-7ed07d70690b";
-        browseable = "yes";
-        "read only" = "no";
-        "guest ok" = "no";
-        "valid users" = "philipp";
-        "force user" = "opencloud";
-        "force group" = "opencloud";
-        "create mask" = "0660";
-        "directory mask" = "0770";
-      };
-    };
-  };
 
   environment.systemPackages = with pkgs; [
     git
