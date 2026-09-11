@@ -18,6 +18,8 @@ in
   config = mkIf cfg.enable {
     home.packages = with pkgs; [
       bubblewrap
+      go
+      gopls
       nil
       nixd
       zed-editor
