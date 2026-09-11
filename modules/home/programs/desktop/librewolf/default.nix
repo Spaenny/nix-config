@@ -97,6 +97,10 @@ in
       #package = inputs.zen-browser.packages.${pkgs.stdenv.hostPlatform.system}.zen-browser-unwrapped;
       package = pkgs.librewolf;
 
+      # 7TV has its own update URL; keep updates under Nix control to avoid
+      # recurring permission prompts for updates to the store-managed extension.
+      policies.ExtensionSettings."moz-addon-prod@7tv.app".updates_disabled = true;
+
       profiles."philipp" = {
         inherit (cfg)
           extraConfig
