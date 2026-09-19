@@ -1,7 +1,7 @@
 let
   homeRoot = ../homes/x86_64-linux;
   mkHost = system: modules: { inherit system modules; };
-  mkDeployNode = configuration: hostname: { inherit configuration hostname; };
+  mkDeployNode = configuration: hostname: attrs: { inherit configuration hostname; } // attrs;
 in
 {
   flakeRoot = "/home/philipp/Projects/nix-config";
@@ -21,9 +21,9 @@ in
   };
 
   deployNodes = {
-    aquarius = mkDeployNode "aquarius" "aquarius";
-    blarm = mkDeployNode "blarm" "blarm";
-    dns-1 = mkDeployNode "dns" "dns-1";
-    dns-2 = mkDeployNode "dns" "dns-2";
+    aquarius = mkDeployNode "aquarius" "aquarius" { interactiveSudo = false; };
+    blarm = mkDeployNode "blarm" "blarm" { interactiveSudo = false; };
+    dns-1 = mkDeployNode "dns" "dns-1" { interactiveSudo = false; };
+    dns-2 = mkDeployNode "dns" "dns-2" { interactiveSudo = false; };
   };
 }

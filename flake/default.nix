@@ -132,9 +132,9 @@ let
       modules = commonHomeModules ++ modules;
     };
 
-  deployNode = nixosConfiguration: hostname: {
-    inherit hostname;
-    interactiveSudo = true;
+  deployNode = nixosConfiguration: node: {
+    inherit (node) hostname;
+    interactiveSudo = node.interactiveSudo or true;
     sshUser = "philipp";
     profiles.system = {
       user = "root";

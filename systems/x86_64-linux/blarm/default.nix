@@ -50,7 +50,10 @@ with lib.${namespace};
 
   ${namespace} = {
     services = {
-      ssh = enabled;
+      ssh = {
+        enable = true;
+        passwordlessDeploy = true;
+      };
       cinny = enabled;
       ente-auth = enabled;
       ente-server = enabled;

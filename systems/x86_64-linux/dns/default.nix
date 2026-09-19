@@ -33,7 +33,10 @@ with lib.${namespace};
 
   ${namespace} = {
     services = {
-      ssh = enabled;
+      ssh = {
+        enable = true;
+        passwordlessDeploy = true;
+      };
       technitium-dns-server = {
         enable = true;
         openFirewall = true;

@@ -8,7 +8,7 @@
 }:
 {
   flake.deploy.nodes = lib.mapAttrs (
-    _name: node: deployNode config.flake.nixosConfigurations.${node.configuration} node.hostname
+    _name: node: deployNode config.flake.nixosConfigurations.${node.configuration} node
   ) inventory.deployNodes;
 
   perSystem =
