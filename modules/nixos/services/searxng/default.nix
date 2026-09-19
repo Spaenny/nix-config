@@ -61,6 +61,10 @@ in
           search = {
             safe_search = 0;
             autocomplete = "google";
+            formats = [
+              "html"
+              "json"
+            ];
           };
           searx = mkIf cfg.redlib.enable {
             plugins.hostnames.SXNGPlugin.active = true;
