@@ -24,7 +24,7 @@ in
       certs."stahl.sh" = {
         domain = "stahl.sh";
         extraDomainNames = [ "*.stahl.sh" ];
-        dnsProvider = "infomaniak";
+        dnsProvider = "pdns";
         dnsPropagationCheck = true;
         environmentFile = config.sops.secrets.acme.path;
       };
