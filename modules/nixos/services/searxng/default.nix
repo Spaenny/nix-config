@@ -10,6 +10,22 @@ with lib.${namespace};
 let
   cfg = config.${namespace}.services.searxng;
   sopsCfg = config.${namespace}.system.sops;
+  aiAnswersPlugin = pkgs.fetchurl {
+    url = "https://raw.githubusercontent.com/cra88y/ai-answers-searxng/616b5dc93e7e203c1a94d28ca62a963a25451e27/ai_answers.py";
+    hash = "sha256-xJHgbIiZf6IYh+A+uYOK7Gg1vsjxTgc1Gk+UT2X0O1M=";
+  };
+  searxPackage = pkgs.searxng.overrideAttrs (oldAttrs: {
+    postInstall = (oldAttrs.postInstall or "") + ''
+      install -Dm644 ${aiAnswersPlugin} \
+        "$out/${pkgs.python3.sitePackages}/searx/plugins/ai_answers.py"
+    '';
+  });
+  aiAnswersEnvironment =
+    {
+      LLM_PROVIDER = cfg.aiAnswers.provider;
+    }
+    // optionalAttrs (cfg.aiAnswers.model != null) { LLM_MODEL = cfg.aiAnswers.model; }
+    // optionalAttrs (cfg.aiAnswers.url != null) { LLM_URL = cfg.aiAnswers.url; };
 in
 {
   options.${namespace}.services.searxng = with types; {
@@ -34,6 +50,34 @@ in
         default = "reddit.stahl.sh";
       };
     };
+
+    aiAnswers = {
+      enable = mkBoolOpt false "Enable the AI Answers plugin PoC.";
+      provider = mkOption {
+        description = "LLM provider used by the AI Answers plugin.";
+        type = enum [
+          "openrouter"
+          "openai"
+          "ollama"
+          "localai"
+          "lmstudio"
+          "gemini"
+          "azure"
+          "huggingface"
+        ];
+        default = "ollama";
+      };
+      model = mkOption {
+        description = "Optional model identifier passed as LLM_MODEL.";
+        type = nullOr str;
+        default = null;
+      };
+      url = mkOption {
+        description = "Optional provider endpoint passed as LLM_URL.";
+        type = nullOr str;
+        default = null;
+      };
+    };
   };
 
   config = mkIf cfg.enable {
@@ -50,6 +94,7 @@ in
     services = {
       searx = {
         enable = true;
+        package = if cfg.aiAnswers.enable then searxPackage else pkgs.searxng;
         environmentFile = config.sops.secrets.searxng.path;
         settings = {
           server = {
@@ -66,9 +111,13 @@ in
               "json"
             ];
           };
-          searx = mkIf cfg.redlib.enable {
-            plugins.hostnames.SXNGPlugin.active = true;
-          };
+          plugins =
+            optionalAttrs cfg.redlib.enable {
+              "searx.plugins.hostnames.SXNGPlugin".active = true;
+            }
+            // optionalAttrs cfg.aiAnswers.enable {
+              "searx.plugins.ai_answers.SXNGPlugin".active = true;
+            };
           hostnames.replace = mkIf cfg.redlib.enable {
             "(.*\.)?reddit\.com$" = cfg.redlib.domain;
             "(.*\.)?redd\.it$" = cfg.redlib.domain;
@@ -95,6 +144,11 @@ in
           });
         };
       };
+    };
+
+    systemd.services = mkIf cfg.aiAnswers.enable {
+      searx.environment = aiAnswersEnvironment;
+      searx-init.environment = aiAnswersEnvironment;
     };
 
     sops.secrets.searxng = mkSopsDotenvSecret sopsCfg.secretsDir "blarm-searxng.env";

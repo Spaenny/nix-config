@@ -64,7 +64,14 @@ with lib.${namespace};
       opencloud = enabled;
       samba = enabled;
       zabbix = enabled;
-      searxng = enabled;
+      searxng = {
+        enable = true;
+        aiAnswers = {
+          enable = true;
+          provider = "ollama";
+          model = "gemma3:4b";
+        };
+      };
       #immich = enabled; # We wait for the proper version to be in nixpkgs
       paperless = enabled;
       syncthing = enabled;
