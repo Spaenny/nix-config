@@ -72,6 +72,8 @@ in
         NATS_NATS_HOST = "127.0.0.1";
         PROXY_ENABLE_BASIC_AUTH = "false";
         PROXY_TLS = "false";
+        # Keep 9100 free for the Prometheus node exporter.
+        WEB_HTTP_ADDR = "127.0.0.1:9101";
       };
     };
 
