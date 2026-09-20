@@ -17,6 +17,9 @@ with lib.${namespace};
     ];
   };
 
+  # The LXC module forces an empty hostname unless told otherwise; we set it via networking.hostName.
+  proxmoxLXC.manageHostName = true;
+
   networking = {
     hostName = "blarm";
     nameservers = [
@@ -59,6 +62,8 @@ with lib.${namespace};
       ente-server = enabled;
       restic = enabled;
       linkwarden = enabled;
+      monitoring = enabled;
+      nginx = enabled;
       forgejo = enabled;
       kanidm = enabled;
       opencloud = enabled;
