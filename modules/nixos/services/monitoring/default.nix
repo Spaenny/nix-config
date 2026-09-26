@@ -146,6 +146,7 @@ in
           listenAddress = "127.0.0.1";
           port = 9100;
           openFirewall = false;
+          enabledCollectors = [ "systemd" ];
         };
         blackbox = {
           enable = true;
@@ -172,7 +173,12 @@ in
         # VyOS router exporters
         {
           job_name = "vyos-node";
-          static_configs = [ { targets = [ "192.168.10.1:9100" ]; } ];
+          static_configs = [
+            {
+              targets = [ "192.168.10.1:9100" ];
+              labels.instance = "vyos";
+            }
+          ];
         }
         # Blackbox exporter (local)
         {
