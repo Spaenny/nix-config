@@ -17,8 +17,8 @@ let
     "privacy.fingerprintingProtection" = true;
     "privacy.fingerprintingProtection.overrides" = "+AllTargets,-CSSPrefersColorScheme,-JSDateTimeUTC";
     "privacy.clearOnShutdown.history" = false;
-    "signon.rememberSignons" = true;
-    "signon.storeWhenAutocompleteOff" = true;
+    "signon.rememberSignons" = false;
+    "signon.storeWhenAutocompleteOff" = false;
     "sidebar.verticalTabs" = true;
     "general.useragent.compatMode.firefox" = true;
     "browser.search.suggest.enabled" = true;
