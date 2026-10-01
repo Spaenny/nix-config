@@ -1,7 +1,6 @@
 {
   config,
   lib,
-  pkgs,
   namespace,
   ...
 }:
@@ -37,6 +36,7 @@ in
         displayName = "Grafana";
         originUrl = "https://${cfg.statsDomain}/login/generic_oauth";
         originLanding = "https://${cfg.statsDomain}/login";
+        imageFile = ./assets/grafana.svg;
         basicSecretFile = secret.path;
         preferShortUsername = true;
         scopeMaps.grafana_users = [
