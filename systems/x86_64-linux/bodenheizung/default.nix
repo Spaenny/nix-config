@@ -90,7 +90,10 @@ with lib.${namespace};
       enable = true;
       remoteDesktop = enabled;
     };
-    hardware.audio = enabled;
+    hardware = {
+      apple = enabled;
+      audio = enabled;
+    };
 
     services = {
       btrfs = enabled;
