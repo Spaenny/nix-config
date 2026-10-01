@@ -49,6 +49,8 @@ with lib.${namespace};
     search = [ "monapona.de" ];
   };
 
+  services.resolved.enable = true;
+
   users.users.philipp = {
     isNormalUser = true;
     description = "Philipp Böhm";
