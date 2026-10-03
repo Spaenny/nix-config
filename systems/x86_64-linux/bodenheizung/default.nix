@@ -46,10 +46,12 @@ with lib.${namespace};
 
   networking = {
     hostName = "bodenheizung";
-    search = [ "monapona.de" ];
   };
 
-  services.resolved.enable = true;
+  services.resolved = {
+    enable = true;
+    settings.Resolve.FallbackDNS = [ ];
+  };
 
   users.users.philipp = {
     isNormalUser = true;
@@ -64,9 +66,6 @@ with lib.${namespace};
 
   services.teamviewer.enable = true;
   services.flatpak.enable = true;
-  services.udev.extraRules = ''
-    ACTION=="add", SUBSYSTEM=="usb", ATTR{idVendor}=="8087", ATTR{idProduct}=="0029", TEST=="power/control", ATTR{power/control}="on"
-  '';
 
   zramSwap = {
     enable = true;
@@ -101,6 +100,13 @@ with lib.${namespace};
       btrfs = enabled;
       ssh = enabled;
       printer = enabled;
+      ollama = {
+        enable = true;
+        models = [
+          "glm-4.7-flash"
+          "deepseek-r1:14b"
+        ];
+      };
     };
 
     system = {
