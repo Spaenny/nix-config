@@ -41,6 +41,7 @@ let
     ente-server = pkgs.callPackage ../packages/ente-server { };
     ente-web-auth = pkgs.callPackage ../packages/ente-web-auth { };
     linkwarden = pkgs.callPackage ../packages/linkwarden { };
+    photocraft = pkgs.callPackage ../packages/photocraft { };
     redlib = pkgs.callPackage ../packages/redlib { };
   };
   packageNames = builtins.attrNames (packageSet null);
