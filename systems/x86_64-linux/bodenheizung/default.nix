@@ -100,12 +100,20 @@ with lib.${namespace};
       btrfs = enabled;
       ssh = enabled;
       printer = enabled;
-      ollama = {
+      llama-server = {
         enable = true;
-        models = [
-          "glm-4.7-flash"
-          "deepseek-r1:14b"
-        ];
+        hf = "ggml-org/GLM-4.7-Flash-GGUF:Q4_K";
+        alias = "GLM-4.7-flash";
+        contextLength = 16384;
+        gpuLayers = 999;
+        extraSettings = {
+          # MoE: expert weights stay in RAM, attention + KV on the GPU.
+          cpu-moe = true;
+          temp = 1.0;
+          top-p = 0.95;
+          top-k = 20;
+          min-p = 0;
+        };
       };
     };
 
