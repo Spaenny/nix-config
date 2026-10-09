@@ -145,7 +145,7 @@ in
       default = 8080;
     };
 
-    openFirewall = mkBoolOpt false "Open the firewall for the server port.";
+    openFirewall = mkBoolOpt true "Open the firewall for the server port.";
 
     extraSettings = mkOption {
       description = "Additional `llama-server` arguments, keyed by their long option name.";
