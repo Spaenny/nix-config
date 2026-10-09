@@ -103,17 +103,18 @@ with lib.${namespace};
       llama-server = {
         enable = true;
         host = "0.0.0.0";
-        hf = "ggml-org/gpt-oss-20b-GGUF:MXFP4";
-        alias = "gpt-oss-20b";
+        hf = "unsloth/Qwen3.5-9B-GGUF:UD-Q5_K_XL";
+        alias = "qwen3.5-9b";
         contextLength = 65536;
-        # ~11.3 GiB weights + ~0.8 GiB KV fit into the 16 GiB VRAM, so all
-        # layers (incl. the MoE experts) run on the GPU.
+        # ~5.6 GiB weights (+ ~0.9 GiB mmproj for vision) + KV cache fit
+        # easily into the 16 GiB VRAM, so all layers run on the GPU.
         gpuLayers = 999;
-        # f16 KV cache: safest choice for gpt-oss and still fits easily.
+        # f16 KV cache: still fits easily next to the weights.
         cacheTypeK = "f16";
         cacheTypeV = "f16";
         extraSettings = {
-          temp = 1.0;
+          # Recommended sampling for Qwen thinking models.
+          temp = 0.6;
           top-p = 0.95;
           top-k = 20;
           min-p = 0;
@@ -121,6 +122,8 @@ with lib.${namespace};
       };
       lact = {
         enable = true;
+        # vendor:device-subvendor:subdevice-pciaddress, from `lact cli list`
+        gpuId = "1002:7550-1025:187A-0000:28:00.0";
         fanCurve = "1200:65,2000:85,3000:100";
       };
     };
