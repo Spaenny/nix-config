@@ -67,6 +67,11 @@ with lib.${namespace};
   services.teamviewer.enable = true;
   services.flatpak.enable = true;
 
+  # Unlocks the amdgpu overdrive sysfs interface (pp_od_clk_voltage / gpu_od),
+  # required for LACT fan curve and voltage offset control. Takes effect on
+  # reboot.
+  hardware.amdgpu.overdrive.enable = true;
+
   zramSwap = {
     enable = true;
     algorithm = "zstd";
@@ -125,6 +130,8 @@ with lib.${namespace};
         # vendor:device-subvendor:subdevice-pciaddress, from `lact cli list`
         gpuId = "1002:7550-1025:187A-0000:28:00.0";
         fanCurve = "1200:65,2000:85,3000:100";
+        # VDDGFX undervolt in mV; hardware range is -200 to 0.
+        voltageOffset = -100;
       };
     };
 
