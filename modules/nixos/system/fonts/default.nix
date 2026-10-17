@@ -31,41 +31,28 @@ in
           <?xml version="1.0"?>
           <!DOCTYPE fontconfig SYSTEM "fonts.dtd">
           <fontconfig>
-            <alias>
-              <family>emoji</family>
+            <alias binding="weak">
+              <family>monospace</family>
               <prefer>
-                <family>Twitter Color Emoji</family>
-                <family>Noto Color Emoji</family>
+                <family>emoji</family>
               </prefer>
             </alias>
             <alias binding="weak">
-              <family>monospace</family>
-              <append_last>
-                <family>Twitter Color Emoji</family>
-                <family>Noto Color Emoji</family>
-              </append_last>
-            </alias>
-            <alias binding="weak">
               <family>sans-serif</family>
-              <append_last>
-                <family>Twitter Color Emoji</family>
-                <family>Noto Color Emoji</family>
-              </append_last>
+              <prefer>
+                <family>emoji</family>
+              </prefer>
             </alias>
             <alias binding="weak">
               <family>serif</family>
-              <append_last>
-                <family>Twitter Color Emoji</family>
-                <family>Noto Color Emoji</family>
-              </append_last>
+              <prefer>
+                <family>emoji</family>
+              </prefer>
             </alias>
           </fontconfig>
         '';
         defaultFonts = {
-          emoji = [
-            "Twitter Color Emoji"
-            "Noto Color Emoji"
-          ];
+          emoji = [ "Noto Color Emoji" ];
           monospace = [ "FreeMono" ];
           sansSerif = [ "FreeSans" ];
           serif = [ "FreeSerif" ];
