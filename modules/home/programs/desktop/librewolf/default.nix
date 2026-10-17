@@ -24,6 +24,11 @@ let
     "browser.search.suggest.enabled" = true;
     "browser.urlbar.suggest.searches" = true;
   };
+  # "Markdown Viewer" is not in rycee's firefox-addons collection, so it is
+  # packaged locally (see ./markdown-viewer.nix).
+  markdown-viewer = pkgs.callPackage ./markdown-viewer.nix {
+    buildFirefoxXpiAddon = inputs.firefox-addons.lib."x86_64-linux".buildFirefoxXpiAddon;
+  };
   defaultExtensions = with inputs.firefox-addons.packages."x86_64-linux"; [
     bitwarden
     redirector
@@ -31,7 +36,7 @@ let
     sponsorblock
     ublock-origin
     seventv
-    floccus
+    markdown-viewer
   ];
   defaultSearch = {
     force = true; # We need this, else the build fails
