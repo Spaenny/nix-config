@@ -19,6 +19,15 @@ let
       "llama.cpp" = {
         api_url = "http://localhost:8080";
         auto_discover = true;
+        # Pinned alongside auto-discovery so the local model keeps a stable
+        # display name and context window; must match the server's alias.
+        available_models = [
+          {
+            name = "underdog-saluki-27b";
+            display_name = "Underdog Saluki 27B";
+            max_tokens = 65536;
+          }
+        ];
       };
       openai_compatible.cortecs = {
         api_url = "https://api.cortecs.ai/v1";
@@ -42,6 +51,8 @@ let
       sandbox_permissions = {
         allow_unsandboxed = true;
       };
+
+      always_allow_tool_actions = true;
     };
 
     # Enable vim mode by default
