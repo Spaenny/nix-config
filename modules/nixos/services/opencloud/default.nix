@@ -2,6 +2,7 @@
   config,
   lib,
   namespace,
+  pkgs,
   ...
 }:
 with lib;
@@ -48,6 +49,9 @@ in
 
     services.opencloud = {
       enable = true;
+      # Upstream module requires an explicit package choice. Rolling release:
+      # upgrades from the previously-default 7.5.0; production (7.2.4) would be a downgrade.
+      package = pkgs.opencloud;
       inherit stateDir;
       url = cloudUrl;
       address = "127.0.0.1";
