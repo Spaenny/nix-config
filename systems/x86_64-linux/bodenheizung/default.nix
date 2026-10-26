@@ -108,15 +108,15 @@ with lib.${namespace};
       llama-server = {
         enable = true;
         host = "0.0.0.0";
-        hf = "unsloth/Qwen3.5-9B-GGUF:UD-Q5_K_XL";
-        alias = "qwen3.5-9b";
+        hf = "ConwayResearch/Underdog-Saluki-27B-1.0:IQ2-mix";
+        alias = "underdog-saluki-27b";
         contextLength = 65536;
-        # ~5.6 GiB weights (+ ~0.9 GiB mmproj for vision) + KV cache fit
-        # easily into the 16 GiB VRAM, so all layers run on the GPU.
-        gpuLayers = 999;
-        # f16 KV cache: still fits easily next to the weights.
-        cacheTypeK = "f16";
-        cacheTypeV = "f16";
+        # ~7.4 GiB weights (IQ2-mix) + mmproj leave room next to the desktop
+        # on the 16 GiB card: quantized KV cache is still required to hold the
+        # 64k context, and layer offloading stays automatic so llama-server
+        # fits as many layers into VRAM as possible instead of OOMing.
+        cacheTypeK = "q4_0";
+        cacheTypeV = "q4_0";
         extraSettings = {
           # Recommended sampling for Qwen thinking models.
           temp = 0.6;
