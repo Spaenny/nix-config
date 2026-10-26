@@ -105,6 +105,10 @@ with lib.${namespace};
       btrfs = enabled;
       ssh = enabled;
       printer = enabled;
+      netbird = {
+        enable = true;
+        setupKeySecret = "bodenheizung-netbird.key";
+      };
       llama-server = {
         enable = true;
         host = "0.0.0.0";
