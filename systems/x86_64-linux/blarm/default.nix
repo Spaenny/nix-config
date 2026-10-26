@@ -68,7 +68,7 @@ with lib.${namespace};
       kanidm = enabled;
       opencloud = enabled;
       samba = enabled;
-      zabbix = enabled;
+      zabbix = disabled;
       searxng = {
         enable = true;
         aiAnswers = {
