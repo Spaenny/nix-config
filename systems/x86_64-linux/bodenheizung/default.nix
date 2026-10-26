@@ -114,10 +114,10 @@ with lib.${namespace};
         host = "0.0.0.0";
         hf = "ConwayResearch/Underdog-Saluki-27B-1.0:IQ2-mix";
         alias = "underdog-saluki-27b";
-        contextLength = 65536;
+        contextLength = 98304;
         # ~7.4 GiB weights (IQ2-mix) + mmproj leave room next to the desktop
         # on the 16 GiB card: quantized KV cache is still required to hold the
-        # 64k context, and layer offloading stays automatic so llama-server
+        # 96k context, and layer offloading stays automatic so llama-server
         # fits as many layers into VRAM as possible instead of OOMing.
         cacheTypeK = "q4_0";
         cacheTypeV = "q4_0";

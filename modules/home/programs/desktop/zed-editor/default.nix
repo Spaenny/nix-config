@@ -25,7 +25,7 @@ let
           {
             name = "underdog-saluki-27b";
             display_name = "Underdog Saluki 27B";
-            max_tokens = 65536;
+            max_tokens = 98304;
           }
         ];
       };
