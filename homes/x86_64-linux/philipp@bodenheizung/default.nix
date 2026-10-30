@@ -30,6 +30,13 @@ with lib.${namespace};
       discord = enabled;
       signal-desktop = enabled;
       zed-editor = enabled;
+      hermes-agent = {
+        enable = true;
+        service = {
+          enable = true;
+          gateway = true;
+        };
+      };
       kitty = {
         enable = true;
         plasma = enabled;

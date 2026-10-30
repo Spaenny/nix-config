@@ -16,7 +16,9 @@ in
 
     managementUrl = mkOpt types.str "https://netbird.u0k.de" "URL of the NetBird management server.";
 
-    setupKeySecret = mkOpt types.str "" "Name of the sops secret (binary format) holding the NetBird setup key.";
+    setupKeySecret =
+      mkOpt types.str "bodenheizung-netbird.key"
+        "Name of the sops secret (binary format) holding the NetBird setup key.";
   };
 
   config = mkIf cfg.enable {
@@ -29,13 +31,13 @@ in
       }
     ];
 
-    sops.secrets = mkIf (cfg.setupKeySecret != "") {
+    sops.secrets = {
       ${cfg.setupKeySecret} = mkSopsSecret sopsCfg.secretsDir cfg.setupKeySecret {
         format = "binary";
       };
     };
 
-    services.netbird = mkIf (cfg.setupKeySecret != "") {
+    services.netbird = {
       enable = true;
 
       clients.default.login = {
@@ -52,7 +54,7 @@ in
     # the daemon is in `LoginFailed` it spins until the start timeout and never
     # retries. Handle that state explicitly and let systemd retry failed
     # logins, so a transient outage at boot self-heals.
-    systemd.services.netbird-login = mkIf (cfg.setupKeySecret != "") {
+    systemd.services.netbird-login = {
       environment.NB_MANAGEMENT_URL = cfg.managementUrl;
 
       serviceConfig = {

@@ -39,6 +39,11 @@
     };
 
     twitch-hls-client.url = "github:2bc4/twitch-hls-client";
+
+    # No `inputs.nixpkgs.follows` on purpose: hermes-agent builds with uv2nix
+    # against its own pinned nixpkgs, and nix/pythonLock.nix derives the Python
+    # family from that pin. Following our nixpkgs can break its evaluation.
+    hermes-agent.url = "github:NousResearch/hermes-agent";
   };
 
   outputs = inputs: inputs.flake-parts.lib.mkFlake { inherit inputs; } { imports = [ ./flake ]; };
