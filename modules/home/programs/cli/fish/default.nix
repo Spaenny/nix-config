@@ -28,8 +28,8 @@ in
           nix-blarm = "deploy ${flakeRoot}#blarm";
           nix-dns = "deploy --targets ${flakeRoot}#dns-1 ${flakeRoot}#dns-2";
           cd = "z";
-          ls = "exa --icons";
-          l = "exa";
+          ls = "eza --icons=auto";
+          l = "eza";
         };
         plugins = [
           {
