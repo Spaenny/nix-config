@@ -151,7 +151,14 @@ in
       searx-init.environment = aiAnswersEnvironment;
     };
 
-    sops.secrets.searxng = mkSopsDotenvSecret sopsCfg.secretsDir "blarm-searxng.env";
+    # searx-init renders the settings from this file and searx reads it as its
+    # environment. Both only pick up a new version when they are restarted.
+    sops.secrets.searxng = mkSopsDotenvSecret sopsCfg.secretsDir "blarm-searxng.env" // {
+      restartUnits = [
+        "searx-init.service"
+        "searx.service"
+      ];
+    };
 
   };
 
