@@ -68,7 +68,6 @@ with lib.${namespace};
       kanidm = enabled;
       opencloud = enabled;
       samba = enabled;
-      zabbix = disabled;
       searxng = {
         enable = true;
         aiAnswers = {
@@ -77,7 +76,6 @@ with lib.${namespace};
           model = "gemma3:4b";
         };
       };
-      #immich = enabled; # We wait for the proper version to be in nixpkgs
       paperless = enabled;
       syncthing = enabled;
     };
