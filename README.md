@@ -8,6 +8,8 @@ The repository is structured as follows:
 
 ```
 .
+├── docs                # Documentation (German)
+├── flake               # Flake outputs and host inventory
 ├── flake.nix           # Flakes configuration
 ├── flake.lock          # Lock file for flakes
 ├── homes               # Home-manager configurations
@@ -37,39 +39,32 @@ The repository is structured as follows:
 
 ### Deploying the Configuration
 
-This configuration uses `deploy-rs` for deployment. To deploy the configuration to a specific host, use the following command:
+The servers are deployed with `deploy-rs`. To deploy a node defined under `deployNodes` in `flake/inventory.nix`, run the following from the repository root:
 
 ```bash
-deploy <hostname>
+deploy '.#<node>'
 ```
 
-Replace `<hostname>` with the actual hostname of your machine defined in the `flake.nix`.
-
-For example, if you have a host defined as `aquarius` in your `flake.nix`, you would run:
+For example, to deploy `aquarius`, or both DNS servers at once:
 
 ```bash
-deploy aquarius
+deploy '.#aquarius'
+deploy --targets '.#dns-1' '.#dns-2'
+```
+
+`bodenheizung` is not a deploy node. It is switched locally:
+
+```bash
+nh os switch
 ```
 
 ### Building the Configuration
 
-To build the configuration without deploying it:
+To build a configuration defined under `nixosConfigurations` in `flake/inventory.nix` without deploying it:
 
 ```bash
-nix build '.#<hostname>' -L
+nix build '.#nixosConfigurations.<hostname>.config.system.build.toplevel' -L
 ```
-
-Replace `<hostname>` with the actual hostname of your machine defined in the `flake.nix`.
-
-### Entering the Configuration's Environment
-
-To enter the environment of the configuration:
-
-```bash
-nix develop '.#<hostname>'
-```
-
-Replace `<hostname>` with the actual hostname of your machine defined in the `flake.nix`.
 
 ### Checking the Configuration
 
@@ -78,6 +73,10 @@ To check the configuration for errors:
 ```bash
 nix flake check
 ```
+
+## Documentation
+
+The full documentation is in [docs/](docs/README.md).
 
 ## Contributing
 
