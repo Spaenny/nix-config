@@ -7,10 +7,10 @@
 }:
 with lib.${namespace};
 let
-  # PVE generates systemd-networkd files for the container's uplink interfaces
-  # (net1 on dns-1, net0 on dns-2) with IPv6AcceptRA=false, which blocks SLAAC
-  # of a global IPv6 address. Drop-ins override just that setting, leave the
-  # static addresses and gateways PVE manages untouched, and survive PVE
+  # PVE generates systemd-networkd files for the container's uplink interface
+  # (net0 on both dns-1 and dns-2) with IPv6AcceptRA=false, which blocks SLAAC
+  # of a global IPv6 address. A drop-in overrides just that setting, leaves the
+  # static addresses and gateways PVE manages untouched, and survives PVE
   # rewriting the base files on container config changes.
   acceptRaConf = pkgs.writeText "10-accept-ra.conf" ''
     [Network]
