@@ -61,6 +61,7 @@ in
     services.linkwarden = {
       enable = true;
       inherit (cfg)
+        package
         host
         port
         ;
