@@ -185,7 +185,7 @@ with lib.${namespace};
   environment.etc.crypttab = {
     mode = "0600";
     text = ''
-      ssd /dev/disk/by-uuid/44afe46a-4ca4-4ef2-a603-a47520eebff1 /root/.crypt-me
+      ssd /dev/disk/by-uuid/44afe46a-4ca4-4ef2-a603-a47520eebff1 /root/.crypt-me nofail,discard,x-systemd.device-timeout=10s
     '';
   };
 
