@@ -1,7 +1,6 @@
 {
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
-    stable.url = "github:nixos/nixpkgs/nixos-24.11";
     nixos-hardware.url = "github:nixos/nixos-hardware";
 
     flake-parts = {
@@ -18,7 +17,10 @@
       url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    sops-nix.url = "github:Mic92/sops-nix";
+    sops-nix = {
+      url = "github:Mic92/sops-nix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
 
     firefox-addons = {
       url = "gitlab:rycee/nur-expressions?dir=pkgs/firefox-addons";
@@ -30,7 +32,10 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    nvf.url = "github:notashelf/nvf";
+    nvf = {
+      url = "github:notashelf/nvf";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
 
     plasma-manager = {
       url = "github:nix-community/plasma-manager";
