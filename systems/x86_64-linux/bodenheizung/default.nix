@@ -83,6 +83,7 @@ with lib.${namespace};
     cli = {
       neovim = enabled;
       eza = enabled;
+      kubernetes = enabled;
       nh = enabled;
     };
 
