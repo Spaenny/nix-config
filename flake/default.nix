@@ -105,6 +105,7 @@ let
 
   commonNixosModules = builtins.attrValues nixosModules ++ [
     inputs.home-manager.nixosModules.home-manager
+    inputs.lanzaboote.nixosModules.lanzaboote
     inputs.nvf.nixosModules.default
     {
       nixpkgs.overlays = [ overlays.default ];

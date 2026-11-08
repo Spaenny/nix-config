@@ -74,10 +74,13 @@ Der Dienst läuft mit `DynamicUser`. Pfade unter `/home/` bindet das Modul desha
 | `gnupg` | B | GnuPG-Agent mit `pinentry-qt`, ohne SSH-Unterstützung | – |
 | `gstreamer` | B | GStreamer mit Plugins | – |
 | `nix-ld` | B | fremde, dynamisch gelinkte Programme ausführen | – |
+| `secureboot` | B | bootet über Lanzaboote und signiert Bootloader, Kernel und Initrd für Secure Boot; ersetzt systemd-boot | `pkiBundle` (`/var/lib/sbctl`) |
 | `sops` | B, L, A | sops-nix | `secretsDir` (`secrets/`), `ageKeyFile` (`~philipp/.config/sops/age/keys.txt`) |
 | `tmpfs` | B, L, D | `/tmp` als tmpfs mit 50 % des RAM | – |
 
 Das Modul `tmpfs` liegt im Verzeichnis `modules/nixos/system/tmp`.
+
+Die Schlüssel für `secureboot` müssen vor dem ersten Rebuild mit `sbctl create-keys` angelegt sein, sonst schlägt die Installation des Bootloaders fehl.
 
 ## NixOS: Kommandozeile (`cli.*`)
 
