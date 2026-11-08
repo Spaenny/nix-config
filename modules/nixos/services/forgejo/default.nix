@@ -69,13 +69,10 @@ in
           set -euo pipefail
 
           install -d -o ${cfg.user} -g ${cfg.user} \
-            /var/lib/forgejo/custom/public/assets/css \
-            /var/lib/forgejo/custom/public/assets/img
+            /var/lib/forgejo/custom/public/assets
 
-          cp -r ${codebergThemes}/var/lib/forgejo/custom/public/assets/css/* \
-            /var/lib/forgejo/custom/public/assets/css/
-          cp ${codebergThemes}/var/lib/forgejo/custom/public/assets/img/*logo.svg \
-            /var/lib/forgejo/custom/public/assets/img/logo.svg
+          cp -r ${codebergThemes}/var/lib/forgejo/custom/public/assets/. \
+            /var/lib/forgejo/custom/public/assets/
 
           chown -R ${cfg.user}:${cfg.user} /var/lib/forgejo/custom
         '';
