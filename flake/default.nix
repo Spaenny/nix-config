@@ -66,6 +66,7 @@ let
     cinny = import ../overlays/cinny { inherit namespace; };
     redlib-fixed = import ../overlays/redlib-fixed;
     technitium-dns-server = import ../overlays/technitium-dns-server { inherit namespace; };
+    teamviewer-patchelf = import ../overlays/teamviewer-patchelf;
     packages = packageOverlay;
     default =
       final: prev:
@@ -74,6 +75,7 @@ let
         cinny
         redlib-fixed
         technitium-dns-server
+        teamviewer-patchelf
       ] final prev;
   }
   // packageOverlays;
