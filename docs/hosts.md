@@ -11,16 +11,17 @@ Desktop mit KDE Plasma, Gaming, Virtualisierung und lokalem LLM. Datei: `systems
 | Bereich | Aktive Module |
 | --- | --- |
 | `services` | `btrfs`, `hermes-agent`, `lact`, `llama-server`, `netbird`, `printer`, `ssh` |
-| `system` | `fonts`, `fwupd`, `gnupg`, `gstreamer`, `nix-ld`, `sops`, `tmpfs` |
+| `system` | `fonts`, `fwupd`, `gnupg`, `gstreamer`, `nix-ld`, `secureboot`, `sops`, `tmpfs` |
 | `cli` | `eza`, `kubernetes`, `neovim`, `nh` |
 | `desktop` / `hardware` | `plasma` mit Remote Desktop / `apple`, `audio` |
 | `games` / `networking` | `steam` / `wireguard` |
 
 ### Hardware und Boot
 
-- AMD-CPU und AMD-GPU, Zen-Kernel, systemd-boot, zram-Swap mit zstd
-- Btrfs auf LUKS mit den Subvolumes `root`, `home`, `nix`, `log` und `persist`
-- zweite verschlüsselte SSD unter `/data/ssd`, per `/etc/crypttab` geöffnet und mit `nofail` eingehängt
+- AMD-CPU und AMD-GPU, Zen-Kernel, zram-Swap mit zstd
+- Secure Boot über Lanzaboote mit eigenen sbctl-Schlüsseln plus den Microsoft-Schlüsseln (nötig für das Option-ROM der GPU und für Windows auf `sdb`)
+- Btrfs auf LUKS mit den Subvolumes `root`, `home`, `nix`, `log` und `persist`. Root entsperrt sich mit einem der drei YubiKeys per FIDO2, ohne PIN und ohne Berühren; ohne Key kommt nach 5 s die Passwortabfrage.
+- zweite verschlüsselte SSD unter `/data/ssd`, per `/etc/crypttab` mit einer Schlüsseldatei auf Root geöffnet (`nofail`, `discard`, 10 s Timeout)
 - `binfmt`-Emulation für `aarch64-linux`, damit sich `aquarius` hier bauen lässt
 - libvirt mit swtpm, außerdem Flatpak und TeamViewer
 
