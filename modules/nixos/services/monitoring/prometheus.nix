@@ -20,6 +20,17 @@ in
       restartUnits = [ "nginx.service" ];
     };
 
+    # Whole pve.yml (PVE API token) for the Proxmox exporter: the file holds a
+    # credential, so it must not live in the store. Root-readable is enough —
+    # systemd hands it to the service through LoadCredential.
+    sops.secrets."monitoring/pve-exporter-config" =
+      mkSopsSecret sopsCfg.secretsDir "blarm-pve-exporter.yaml"
+        {
+          key = ""; # whole file: it is a complete pve.yml
+          mode = "0400";
+          restartUnits = [ "prometheus-pve-exporter.service" ];
+        };
+
     services.prometheus = {
       enable = true;
       listenAddress = "127.0.0.1";
@@ -32,6 +43,15 @@ in
         port = 9100;
         openFirewall = false;
         enabledCollectors = [ "systemd" ];
+      };
+
+      # Proxmox VE exporter: prometheus asks it for /pve?target=pve.monapona.de:443.
+      exporters.pve = {
+        enable = true;
+        listenAddress = "127.0.0.1";
+        port = 9221;
+        openFirewall = false;
+        configFile = config.sops.secrets."monitoring/pve-exporter-config".path;
       };
 
       scrapeConfigs = [
@@ -58,6 +78,54 @@ in
               labels.instance = "vyos";
             }
           ];
+        }
+
+        # cAdvisor on the cancer host (Docker container metrics)
+        {
+          job_name = "cancer-container";
+          metrics_path = "/metrics";
+          label_value_length_limit = 512;
+          label_limit = 64;
+          sample_limit = 10000;
+          static_configs = [
+            {
+              targets = [ "192.168.100.3:9180" ];
+              labels.instance = "cancer.boehm.sh";
+            }
+          ];
+          metric_relabel_configs = [
+            {
+              source_labels = [ "instance" ];
+              target_label = "node";
+            }
+            {
+              source_labels = [ "name" ];
+              target_label = "container";
+            }
+            # Container name is the fallback for the service label …
+            {
+              source_labels = [ "name" ];
+              target_label = "service";
+            }
+            # … overridden by the compose service name where it exists.
+            {
+              source_labels = [ "container_label_com_docker_compose_service" ];
+              regex = "(.+)";
+              target_label = "service";
+              replacement = "$1";
+            }
+          ];
+        }
+
+        # Proxmox VE exporter (prometheus-pve-exporter, /pve endpoint)
+        {
+          job_name = "proxmox";
+          metrics_path = "/pve";
+          params = {
+            module = [ "default" ];
+            target = [ "pve.monapona.de:443" ];
+          };
+          static_configs = [ { targets = [ "127.0.0.1:9221" ]; } ];
         }
       ];
     };
