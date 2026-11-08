@@ -36,28 +36,26 @@ let
   '';
 
   ## Blackbox probe job: rewrites each target into the exporter's /probe endpoint.
-  mkProbeJob =
-    job_name: module: targets:
-    {
-      inherit job_name;
-      metrics_path = "/probe";
-      params.module = [ module ];
-      static_configs = [ { inherit targets; } ];
-      relabel_configs = [
-        {
-          source_labels = [ "__address__" ];
-          target_label = "__param_target";
-        }
-        {
-          source_labels = [ "__param_target" ];
-          target_label = "instance";
-        }
-        {
-          target_label = "__address__";
-          replacement = blackboxExporter;
-        }
-      ];
-    };
+  mkProbeJob = job_name: module: targets: {
+    inherit job_name;
+    metrics_path = "/probe";
+    params.module = [ module ];
+    static_configs = [ { inherit targets; } ];
+    relabel_configs = [
+      {
+        source_labels = [ "__address__" ];
+        target_label = "__param_target";
+      }
+      {
+        source_labels = [ "__param_target" ];
+        target_label = "instance";
+      }
+      {
+        target_label = "__address__";
+        replacement = blackboxExporter;
+      }
+    ];
+  };
 in
 {
   config = mkIf cfg.enable {
@@ -86,7 +84,6 @@ in
       ])
       (mkProbeJob "https_2xx" "https_2xx" [
         "https://jelly.monapona.de"
-        "https://music.monapona.de"
         "https://im.monapona.de"
         "https://search.stahl.sh"
         "https://ente.stahl.sh"
