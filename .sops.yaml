@@ -1,6 +1,13 @@
 keys:
   - &primary age132m0pg4utk3cjve2lgcjffvz7cevl0fq5krufu9sgud7wu2wgurqk49kgl
+  # ssh-to-age < /etc/ssh/ssh_host_ed25519_key.pub on bodenheizung
+  - &bodenheizung age1jc2ewtyd2kx3wj6fe09vlll7258hmv9qen2nzhcq6068pvy364gshqygu6
 creation_rules:
+  - path_regex: secrets/bodenheizung-.*\.(env|yaml|key)$
+    key_groups:
+      - age:
+        - *primary
+        - *bodenheizung
   - path_regex: secrets/.*\.(env|yaml|key)$
     key_groups:
       - age:

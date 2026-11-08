@@ -147,6 +147,10 @@ with lib.${namespace};
       gstreamer = enabled;
       gnupg = enabled;
       nix-ld = enabled;
+      # The age key lives below /home, which is not mounted yet when the
+      # secrets are installed at boot. The bodenheizung-* secrets are also
+      # encrypted for the host key (see .sops.yaml).
+      sops.ageKeyFile = null;
     };
   };
 
