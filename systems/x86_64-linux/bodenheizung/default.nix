@@ -151,6 +151,7 @@ with lib.${namespace};
     system = {
       tmpfs = enabled;
       fwupd = enabled;
+      secureboot = enabled;
       fonts = {
         enable = true;
         emoji = true;
