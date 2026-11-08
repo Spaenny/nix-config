@@ -12,7 +12,17 @@ with lib.${namespace};
 
   boot = {
     binfmt.emulatedSystems = [ "aarch64-linux" ];
-    initrd.kernelModules = [ "amdgpu" ];
+    initrd = {
+      kernelModules = [ "amdgpu" ];
+      # The initrd is systemd-based (scripted initrd was removed from nixpkgs),
+      # so FIDO2 unlock works via crypttab options.
+      # Unlock with any enrolled YubiKey (no PIN, no touch); fall back to the
+      # passphrase prompt after 5s when no key is plugged in.
+      luks.devices."root".crypttabExtraOpts = [
+        "fido2-device=auto"
+        "token-timeout=5s"
+      ];
+    };
     kernelPackages = pkgs.linuxPackages_zen;
     kernelParams = [
       "amd_pstate=active"
