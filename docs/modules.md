@@ -72,6 +72,7 @@ The service runs with `DynamicUser`. The module therefore bind-mounts paths unde
 | `fwupd` | B | firmware updates | – |
 | `gnupg` | B | GnuPG agent with `pinentry-qt`, without SSH support | – |
 | `gstreamer` | B | GStreamer with plugins | – |
+| `nix-gc` | all (on by default) | weekly garbage collection; during builds collects once free space drops below `minFree` | `olderThan` (`14d`), `minFree` (`5` GiB), `maxFree` (`10` GiB) |
 | `nix-ld` | B | run foreign, dynamically linked programs | – |
 | `secureboot` | B | boots via Lanzaboote and signs bootloader, kernel and initrd for Secure Boot; replaces systemd-boot | `pkiBundle` (`/var/lib/sbctl`) |
 | `sops` | B, L | sops-nix | `secretsDir` (`secrets/`), `ageKeyFile` (`~philipp/.config/sops/age/keys.txt`) |
