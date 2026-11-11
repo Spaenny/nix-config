@@ -99,7 +99,6 @@ in
   config = mkIf cfg.enable {
     programs.librewolf = {
       enable = true;
-      #package = inputs.zen-browser.packages.${pkgs.stdenv.hostPlatform.system}.zen-browser-unwrapped;
       package = pkgs.librewolf;
 
       # 7TV has its own update URL; keep updates under Nix control to avoid

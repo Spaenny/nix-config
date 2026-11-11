@@ -41,9 +41,6 @@ let
     ente-server = pkgs.callPackage ../packages/ente-server { };
     ente-web-auth = pkgs.callPackage ../packages/ente-web-auth { };
     kwi = pkgs.callPackage ../packages/kwi { };
-    linkwarden = pkgs.callPackage ../packages/linkwarden { };
-    photocraft = pkgs.callPackage ../packages/photocraft { };
-    redlib = pkgs.callPackage ../packages/redlib { };
   };
   packageNames = builtins.attrNames (packageSet null);
 
@@ -64,7 +61,6 @@ let
   );
 
   overlays = rec {
-    cinny = import ../overlays/cinny { inherit namespace; };
     redlib-fixed = import ../overlays/redlib-fixed;
     technitium-dns-server = import ../overlays/technitium-dns-server { inherit namespace; };
     teamviewer-patchelf = import ../overlays/teamviewer-patchelf;
@@ -73,7 +69,6 @@ let
       final: prev:
       lib.composeManyExtensions [
         packageOverlay
-        cinny
         redlib-fixed
         technitium-dns-server
         teamviewer-patchelf

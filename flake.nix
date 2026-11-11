@@ -1,7 +1,6 @@
 {
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
-    nixos-hardware.url = "github:nixos/nixos-hardware";
 
     flake-parts = {
       url = "github:hercules-ci/flake-parts";
@@ -32,11 +31,6 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    zen-browser = {
-      url = "github:youwen5/zen-browser-flake";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-
     nvf = {
       url = "github:notashelf/nvf";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -47,8 +41,6 @@
       inputs.nixpkgs.follows = "nixpkgs";
       inputs.home-manager.follows = "home-manager";
     };
-
-    twitch-hls-client.url = "github:2bc4/twitch-hls-client";
 
     # No `inputs.nixpkgs.follows` on purpose: hermes-agent builds with uv2nix
     # against its own pinned nixpkgs, and nix/pythonLock.nix derives the Python

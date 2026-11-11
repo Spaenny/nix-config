@@ -24,7 +24,6 @@ with lib.${namespace};
       thunderbird = enabled;
       chatterino = enabled;
       mpv = enabled;
-      cinny = disabled; # Currently insecure because of libsoup
       spotify = enabled;
       obs = enabled;
       discord = enabled;
