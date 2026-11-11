@@ -63,7 +63,6 @@ let
   overlays = rec {
     redlib-fixed = import ../overlays/redlib-fixed;
     technitium-dns-server = import ../overlays/technitium-dns-server { inherit namespace; };
-    teamviewer-patchelf = import ../overlays/teamviewer-patchelf;
     packages = packageOverlay;
     default =
       final: prev:
@@ -71,7 +70,6 @@ let
         packageOverlay
         redlib-fixed
         technitium-dns-server
-        teamviewer-patchelf
       ] final prev;
   }
   // packageOverlays;

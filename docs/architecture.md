@@ -170,7 +170,6 @@ The `default` overlay is applied everywhere and is made up of these parts:
 | `packages` | provides the packages from `packages/` under `pkgs.awesome-flake` |
 | `redlib-fixed` | replaces `pkgs.redlib` with a fork at a fixed commit and skips two OAuth tests |
 | `technitium-dns-server` | mirrors the package into `pkgs.awesome-flake` |
-| `teamviewer-patchelf` | builds TeamViewer with patchelf 0.15.2, because with 0.19.2 the daemon crashes on load |
 
 In addition, the flake exports a single-package overlay `package/<name>` for every custom package.
 
