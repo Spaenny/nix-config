@@ -6,14 +6,14 @@
 
 stdenvNoCC.mkDerivation {
   pname = "codeberg-themes";
-  version = "17-unstable-2026-11-06";
+  version = "17-unstable-2026-11-11";
 
   src = fetchFromGitea {
     domain = "codeberg.org";
     owner = "Codeberg-Infrastructure";
     repo = "forgejo";
-    rev = "dc281500adb227682821b9ef8d0b85eb40c5e7cd";
-    sha256 = "sha256-WUwIvZZv6blj8ubjuB7/mT9sqEErNHZRy42/QFtVjwU=";
+    rev = "2254cb08246da2f78be062fc6c29a950933d217e";
+    sha256 = "sha256-WB6yccT3cyCr+oImRyAo8iIyms2HzJQhdGQQ1A/IMcs=";
   };
 
   dontUnpack = true;
