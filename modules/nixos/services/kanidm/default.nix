@@ -24,7 +24,7 @@ in
     package = mkOption {
       description = "The Kanidm package to use.";
       type = types.package;
-      default = pkgs.kanidm_1_11.withSecretProvisioning;
+      default = pkgs.kanidm_1_12.withSecretProvisioning;
     };
 
     domain = mkOption {
