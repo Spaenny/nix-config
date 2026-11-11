@@ -14,6 +14,7 @@ in
     ./blackbox.nix
     ./grafana.nix
     ./kanidm.nix
+    ./ns1.nix
     ./prometheus.nix
   ];
 
