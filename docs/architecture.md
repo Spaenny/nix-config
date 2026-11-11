@@ -170,6 +170,7 @@ The `default` overlay is applied everywhere and is made up of these parts:
 | `packages` | provides the packages from `packages/` under `pkgs.awesome-flake` |
 | `redlib-fixed` | replaces `pkgs.redlib` with a fork at a fixed commit and skips two OAuth tests |
 | `technitium-dns-server` | mirrors the package into `pkgs.awesome-flake` |
+| `spotify-pinned` | temporarily takes Spotify from an older nixpkgs, because its snap can no longer be downloaded |
 
 In addition, the flake exports a single-package overlay `package/<name>` for every custom package.
 

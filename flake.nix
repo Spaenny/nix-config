@@ -2,6 +2,10 @@
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
 
+    # Temporary: Spotify's snap can no longer be downloaded; this revision's
+    # build is still in the local store. Drop with overlays/spotify-pinned.
+    nixpkgs-spotify.url = "github:nixos/nixpkgs/1c89083e451e891152365b799595cf7790a43325";
+
     flake-parts = {
       url = "github:hercules-ci/flake-parts";
       inputs.nixpkgs-lib.follows = "nixpkgs";

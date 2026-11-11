@@ -63,6 +63,7 @@ let
   overlays = rec {
     redlib-fixed = import ../overlays/redlib-fixed;
     technitium-dns-server = import ../overlays/technitium-dns-server { inherit namespace; };
+    spotify-pinned = import ../overlays/spotify-pinned { inherit inputs; };
     packages = packageOverlay;
     default =
       final: prev:
@@ -70,6 +71,7 @@ let
         packageOverlay
         redlib-fixed
         technitium-dns-server
+        spotify-pinned
       ] final prev;
   }
   // packageOverlays;
