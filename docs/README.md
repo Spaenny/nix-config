@@ -1,37 +1,37 @@
-# Dokumentation der NixOS-Konfiguration
+# NixOS Configuration Documentation
 
-Dieses Repository beschreibt vier NixOS-Konfigurationen als Nix-Flake: einen Desktop, einen Self-Hosting-Server und die DNS-Server des Heimnetzes. Für den Desktop kommt eine Home-Manager-Konfiguration dazu.
+This repository describes four NixOS configurations as a Nix flake: a desktop, a self-hosting server and the DNS servers of the home network. The desktop also has a Home Manager configuration.
 
-Stand: 2026-11-06. Die Angaben zu aktiven Modulen, Ports und virtuellen Hosts sind per `nix eval` gegen den damaligen Arbeitsbaum geprüft, einschließlich der noch nicht committeten Änderungen.
+As of 2026-11-06. The details on active modules, ports and virtual hosts were checked with `nix eval` against the working tree at that time, including changes that had not been committed yet.
 
-## Inhalt
+## Contents
 
-| Dokument | Thema |
+| Document | Topic |
 | --- | --- |
-| [Architektur](architektur.md) | Aufbau des Flakes, Modulsystem, Hilfsfunktionen, Overlays und Pakete |
-| [Hosts](hosts.md) | Die Maschinen und was auf ihnen aktiv ist |
-| [Dienste auf blarm](dienste.md) | Domains, Ports, Daten, Single Sign-on, Monitoring und Backups |
-| [Modulreferenz](module.md) | Alle NixOS- und Home-Manager-Module mit ihren Optionen |
-| [Secrets](secrets.md) | Umgang mit sops-nix und age |
-| [Betrieb](betrieb.md) | Deployen, Aktualisieren, CI und typische Änderungen |
-| [Offene Punkte](offene-punkte.md) | Auffälligkeiten, die beim Dokumentieren aufgefallen sind |
+| [Architecture](architecture.md) | Flake layout, module system, helper functions, overlays and packages |
+| [Hosts](hosts.md) | The machines and what is active on them |
+| [Services on blarm](services.md) | Domains, ports, data, single sign-on, monitoring and backups |
+| [Module reference](modules.md) | All NixOS and Home Manager modules with their options |
+| [Secrets](secrets.md) | Working with sops-nix and age |
+| [Operations](operations.md) | Deploying, updating, CI and common changes |
+| [Open issues](open-issues.md) | Oddities noticed while writing the documentation |
 
-## Die Hosts auf einen Blick
+## Hosts at a glance
 
-| Host | Architektur | Rolle | Ausrollen |
+| Host | Architecture | Role | Deployment |
 | --- | --- | --- | --- |
-| `bodenheizung` | x86_64 | Desktop mit KDE Plasma, Gaming und lokalen LLMs | lokal mit `nh os switch` |
-| `blarm` | x86_64, Proxmox-LXC | Self-Hosting-Server | `deploy .#blarm` |
-| `dns` (`dns-1`, `dns-2`) | x86_64, Proxmox-LXC | Technitium-DNS-Server, eine Konfiguration für zwei Instanzen | `deploy --targets .#dns-1 .#dns-2` |
-| `aquarius` | aarch64, SD-Karten-Image | Technitium-DNS-Server | `deploy .#aquarius` |
+| `bodenheizung` | x86_64 | Desktop with KDE Plasma, gaming and local LLMs | locally with `nh os switch` |
+| `blarm` | x86_64, Proxmox LXC | Self-hosting server | `deploy .#blarm` |
+| `dns` (`dns-1`, `dns-2`) | x86_64, Proxmox LXC | Technitium DNS server, one configuration for two instances | `deploy --targets .#dns-1 .#dns-2` |
+| `aquarius` | aarch64, SD card image | Technitium DNS server | `deploy .#aquarius` |
 
-## Schnellstart
+## Quick start
 
 ```bash
-nix flake check                     # Konfiguration prüfen (läuft auch in der CI)
-nix fmt -- <datei>                  # Nix-Datei mit nixfmt formatieren
-nh os switch                        # bodenheizung lokal umschalten
-deploy .#blarm                      # Server ausrollen
+nix flake check                     # check the configuration (also runs in CI)
+nix fmt -- <file>                   # format a Nix file with nixfmt
+nh os switch                        # switch bodenheizung locally
+deploy .#blarm                      # deploy a server
 ```
 
-Neue Dateien müssen Git bekannt sein, bevor Nix sie sieht: Ein Flake in einem Git-Repository wertet nur erfasste Dateien aus. Details stehen unter [Betrieb](betrieb.md#neue-dateien-und-git).
+New files must be known to Git before Nix can see them: a flake in a Git repository only evaluates tracked files. Details are under [Operations](operations.md#new-files-and-git).

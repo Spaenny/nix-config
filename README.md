@@ -8,7 +8,7 @@ The repository is structured as follows:
 
 ```
 .
-├── docs                # Documentation (German)
+├── docs                # Documentation
 ├── flake               # Flake outputs and host inventory
 ├── flake.nix           # Flakes configuration
 ├── flake.lock          # Lock file for flakes

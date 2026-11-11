@@ -1,43 +1,43 @@
 # Secrets
 
-Secrets werden mit [sops](https://github.com/getsops/sops) und age verschlüsselt im Verzeichnis `secrets/` abgelegt. [sops-nix](https://github.com/Mic92/sops-nix) entschlüsselt sie beim Aktivieren eines Hosts nach `/run/secrets`. Der Nix-Store enthält damit nur die verschlüsselten Dateien.
+Secrets are stored encrypted with [sops](https://github.com/getsops/sops) and age in the `secrets/` directory. [sops-nix](https://github.com/Mic92/sops-nix) decrypts them to `/run/secrets` when a host is activated. The Nix store therefore only contains the encrypted files.
 
-Diese Dokumentation enthält bewusst keine Inhalte von Secrets. Beim Schreiben wurden nur die Dateinamen und die Schlüsselnamen aus dem Nix-Code gelesen.
+This documentation deliberately contains no secret contents. While writing it, only the file names and the key names from the Nix code were read.
 
-## Empfänger
+## Recipients
 
-`.sops.yaml` legt fest, wer eine Datei entschlüsseln kann. Es gilt die erste passende Regel:
+`.sops.yaml` defines who can decrypt a file. The first matching rule applies:
 
-| Dateien | Empfänger |
+| Files | Recipients |
 | --- | --- |
-| `secrets/bodenheizung-*.{env,yaml,key}` | `primary` und `bodenheizung` |
-| alle anderen `secrets/*.{env,yaml,key}` | `primary` |
+| `secrets/bodenheizung-*.{env,yaml,key}` | `primary` and `bodenheizung` |
+| all other `secrets/*.{env,yaml,key}` | `primary` |
 
-Andere Dateiendungen passen auf keine Regel.
+Other file extensions match no rule.
 
-## Entschlüsselung auf den Hosts
+## Decryption on the hosts
 
-Das Modul `system.sops` wählt die Identität über die Option `ageKeyFile`:
+The `system.sops` module picks the identity through the `ageKeyFile` option:
 
-| Wert | Identität | Verwendet von |
+| Value | Identity | Used by |
 | --- | --- | --- |
-| Standard | `~philipp/.config/sops/age/keys.txt` | `blarm`, `aquarius` |
-| `null` | SSH-Host-Key `/etc/ssh/ssh_host_ed25519_key` | `bodenheizung` |
+| default | `~philipp/.config/sops/age/keys.txt` | `blarm` |
+| `null` | SSH host key `/etc/ssh/ssh_host_ed25519_key` | `bodenheizung` |
 
-Ein Host kann nur Secrets lesen, für die seine Identität Empfänger ist. `blarm` braucht deshalb den privaten `primary`-Schlüssel an diesem Pfad.
+A host can only read secrets for which its identity is a recipient. `blarm` therefore needs the private `primary` key at that path.
 
-`bodenheizung` nutzt den Host-Key, weil sops-nix die Secrets früh in der Aktivierung installiert. Zu diesem Zeitpunkt ist die eigene `/home`-Partition beim Booten noch nicht eingehängt, ein Schlüssel darunter fehlt also, und alle Secrets des Hosts würden scheitern.
+`bodenheizung` uses the host key because sops-nix installs the secrets early during activation. At that point during boot, the separate `/home` partition is not mounted yet, so a key stored there would be missing and all of the host's secrets would fail.
 
-## Dateien
+## Files
 
-| Datei | Verwendet von |
+| File | Used by |
 | --- | --- |
 | `blarm-acme.env` | `services.acme` |
 | `blarm-ente-server.yaml` | `services.ente-server` |
-| `blarm-kanidm.yaml` | `services.kanidm` und die OAuth2-Clients von Forgejo und Grafana |
+| `blarm-kanidm.yaml` | `services.kanidm` and the OAuth2 clients of Forgejo and Grafana |
 | `blarm-linkwarden.env` | `services.linkwarden` |
 | `blarm-monitoring.yaml` | `services.monitoring` (Grafana, Prometheus) |
-| `blarm-pve-exporter.yaml` | `services.monitoring` (Proxmox-Exporter) |
+| `blarm-pve-exporter.yaml` | `services.monitoring` (Proxmox exporter) |
 | `blarm-restic.yaml` | `services.restic` |
 | `blarm-searxng.env` | `services.searxng` |
 | `bodenheizung-hermes.env` | `services.hermes-agent` |
@@ -45,20 +45,20 @@ Ein Host kann nur Secrets lesen, für die seine Identität Empfänger ist. `blar
 | `bodenheizung-netbird.key` | `services.netbird` |
 | `bodenheizung-talosconfig.yaml` | `cli.kubernetes` |
 
-## Secrets bearbeiten
+## Editing secrets
 
-Dafür braucht man einen passenden privaten Schlüssel:
+This requires a matching private key:
 
 ```bash
-sops secrets/blarm-restic.yaml          # bearbeiten
-sops updatekeys secrets/<datei>         # Empfänger nach Änderung an .sops.yaml aktualisieren
+sops secrets/blarm-restic.yaml          # edit
+sops updatekeys secrets/<file>          # update recipients after changing .sops.yaml
 ```
 
-Danach muss der betroffene Host neu ausgerollt werden. Einheiten mit `restartUnits` starten bei einer Änderung des Secrets automatisch neu.
+Afterwards the affected host has to be redeployed. Units with `restartUnits` restart automatically when the secret changes.
 
-## Secrets im Nix-Code verwenden
+## Using secrets in Nix code
 
-Der Pfad zum Secret-Verzeichnis kommt immer aus `system.sops.secretsDir`. Das Modul aktiviert sops selbst:
+The path to the secrets directory always comes from `system.sops.secretsDir`. The module enables sops itself:
 
 ```nix
 let
@@ -67,30 +67,30 @@ in
 {
   ${namespace}.system.sops = enabled;
 
-  # Einzelner Wert aus einer YAML-Datei
+  # Single value from a YAML file
   sops.secrets.restic_password = mkSopsSecret sopsCfg.secretsDir "blarm-restic.yaml" {
     format = "yaml";
     key = "restic/password";
   };
 
-  # Ganze Dotenv-Datei
+  # Whole dotenv file
   sops.secrets.linkwarden = mkSopsDotenvSecret sopsCfg.secretsDir "blarm-linkwarden.env";
 }
 ```
 
-Das Repository nutzt diese Muster:
+The repository uses these patterns:
 
-| Muster | Beispiel | Hinweis |
+| Pattern | Example | Note |
 | --- | --- | --- |
-| einzelner Wert | `services.restic` | `format = "yaml"` und `key` |
-| Dotenv | `services.linkwarden` | für `environmentFile` |
-| ganze Datei | `cli.kubernetes` | `key = ""` installiert die ganze entschlüsselte Datei |
-| Binärdatei | `services.netbird` | `format = "binary"` |
-| Template | `services.ente-server` | `sops.templates` setzt Secrets über `config.sops.placeholder` in eine Datei ein |
-| Datei-Referenz | `services.monitoring` | Grafana liest den Wert über `$__file{...}` |
+| single value | `services.restic` | `format = "yaml"` and `key` |
+| dotenv | `services.linkwarden` | for `environmentFile` |
+| whole file | `cli.kubernetes` | `key = ""` installs the whole decrypted file |
+| binary file | `services.netbird` | `format = "binary"` |
+| template | `services.ente-server` | `sops.templates` inserts secrets into a file via `config.sops.placeholder` |
+| file reference | `services.monitoring` | Grafana reads the value via `$__file{...}` |
 
-Grundsätze:
+Principles:
 
-- Secret-Werte nie direkt in Nix-Ausdrücke schreiben, denn sonst landen sie lesbar im Nix-Store. Immer den Pfad übergeben, also `config.sops.secrets.<name>.path`.
-- Mit `owner`, `group` und `mode` nur dem Dienst Zugriff geben, der das Secret braucht. Ohne diese Angaben gehört die Datei `root`.
-- Mit `restartUnits` dafür sorgen, dass der Dienst ein geändertes Secret übernimmt.
+- Never write secret values directly into Nix expressions, otherwise they end up readable in the Nix store. Always pass the path, i.e. `config.sops.secrets.<name>.path`.
+- Use `owner`, `group` and `mode` to give access only to the service that needs the secret. Without these, the file is owned by `root`.
+- Use `restartUnits` to make sure the service picks up a changed secret.

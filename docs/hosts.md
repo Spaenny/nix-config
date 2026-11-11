@@ -1,112 +1,111 @@
 # Hosts
 
-Alle Hosts verwenden `nixos-unstable`, die `stateVersion` `24.11` und den Benutzer `philipp` mit Fish als Shell. Die Zeitzone ist `Europe/Berlin`.
+All hosts use `nixos-unstable`, `stateVersion` `24.11` and the user `philipp` with Fish as the shell. The time zone is `Europe/Berlin`.
 
-Die Tabellen zeigen die wirksamen Module, also auch solche, die ein anderes Modul automatisch aktiviert.
+The tables show the effective modules, including those that another module enables automatically.
 
 ## bodenheizung
 
-Desktop mit KDE Plasma, Gaming, Virtualisierung und lokalem LLM. Datei: `systems/x86_64-linux/bodenheizung/`.
+Desktop with KDE Plasma, gaming, virtualization and a local LLM. Files: `systems/x86_64-linux/bodenheizung/`.
 
-| Bereich | Aktive Module |
+| Area | Active modules |
 | --- | --- |
 | `services` | `btrfs`, `hermes-agent`, `lact`, `llama-server`, `netbird`, `printer`, `ssh` |
 | `system` | `fonts`, `fwupd`, `gnupg`, `gstreamer`, `nix-ld`, `secureboot`, `sops`, `tmpfs` |
 | `cli` | `eza`, `kubernetes`, `neovim`, `nh` |
-| `desktop` / `hardware` | `plasma` mit Remote Desktop / `apple`, `audio` |
+| `desktop` / `hardware` | `plasma` with remote desktop / `apple`, `audio` |
 | `games` / `networking` | `steam` / `wireguard` |
 
-### Hardware und Boot
+### Hardware and boot
 
-- AMD-CPU und AMD-GPU, Zen-Kernel, zram-Swap mit zstd
-- Secure Boot über Lanzaboote mit eigenen sbctl-Schlüsseln plus den Microsoft-Schlüsseln (nötig für das Option-ROM der GPU und für Windows auf `sdb`)
-- Btrfs auf LUKS mit den Subvolumes `root`, `home`, `nix`, `log` und `persist`. Root entsperrt sich mit einem der drei YubiKeys per FIDO2, ohne PIN und ohne Berühren; ohne Key kommt nach 5 s die Passwortabfrage.
-- zweite verschlüsselte SSD unter `/data/ssd`, per `/etc/crypttab` mit einer Schlüsseldatei auf Root geöffnet (`nofail`, `discard`, 10 s Timeout)
-- `binfmt`-Emulation für `aarch64-linux`, damit sich `aquarius` hier bauen lässt
-- libvirt mit swtpm, außerdem Flatpak und TeamViewer
+- AMD CPU and AMD GPU, Zen kernel, zram swap with zstd
+- Secure Boot via Lanzaboote with custom sbctl keys plus the Microsoft keys (needed for the GPU's option ROM and for Windows on `sdb`)
+- Btrfs on LUKS with the subvolumes `root`, `home`, `nix`, `log` and `persist`. Root unlocks with any of the three YubiKeys via FIDO2, without PIN and without touch; without a key, the password prompt appears after 5 s.
+- second encrypted SSD at `/data/ssd`, opened via `/etc/crypttab` with a key file on root (`nofail`, `discard`, 10 s timeout)
+- `binfmt` emulation for `aarch64-linux`, so `aquarius` can be built here
+- libvirt with swtpm, plus Flatpak and TeamViewer
+- `gnumake` as a system package
 
-### GPU und lokales LLM
+### GPU and local LLM
 
-- `hardware.amdgpu.overdrive.enable` schaltet die Sysfs-Schnittstelle für LACT frei und wirkt erst nach einem Neustart.
-- LACT regelt die Lüfterkurve und senkt die Kernspannung um 100 mV.
-- `llama-server` läuft mit ROCm und dem Modell `underdog-saluki-27b`, Kontext 98.304 Token, KV-Cache `q4_0`, Layer-Offloading automatisch. Das Modell wird beim Start von Hugging Face geladen. Der Dienst ist bewusst über Port 8080 von außen erreichbar.
-- Zed spricht den Server unter `http://localhost:8080` an. Der Modellname in `apps.zed-editor` muss zum `alias` des Servers passen.
+- `hardware.amdgpu.overdrive.enable` unlocks the sysfs interface for LACT and only takes effect after a reboot.
+- LACT controls the fan curve and lowers the core voltage by 100 mV.
+- `llama-server` runs with ROCm and the model `underdog-saluki-27b`, context 98,304 tokens, KV cache `q4_0`, automatic layer offloading. The model is downloaded from Hugging Face at startup. The service is deliberately reachable from outside on port 8080.
+- Zed talks to the server at `http://localhost:8080`. The model name in `apps.zed-editor` must match the server's `alias`.
 
-### Netz
+### Network
 
-Offene Ports laut Auswertung:
+Open ports according to evaluation:
 
-| Protokoll | Ports | Zweck |
+| Protocol | Ports | Purpose |
 | --- | --- | --- |
 | TCP | 22 | SSH |
-| TCP | 3389 | KRdp (Remote Desktop) |
-| TCP | 8080 | llama-server, lauscht auf `0.0.0.0` |
+| TCP | 3389 | KRdp (remote desktop) |
+| TCP | 8080 | llama-server, listens on `0.0.0.0` |
 | TCP | 27036, 27037 | Steam Remote Play |
-| TCP und UDP | 1714–1764 | KDE Connect |
+| TCP and UDP | 1714–1764 | KDE Connect |
 | UDP | 5353 | mDNS (Avahi) |
 | UDP | 10400, 10401, 27031–27036 | Steam Remote Play |
 | UDP | 51820 | NetBird |
 
-NetBird verbindet sich über einen Setup-Key mit `https://netbird.u0k.de`.
+NetBird connects to `https://netbird.u0k.de` with a setup key.
 
 ### Secrets
 
-`sops.ageKeyFile = null`: Der Host entschlüsselt mit seinem SSH-Host-Key statt mit einem age-Schlüssel. `/home` ist beim Installieren der Secrets noch nicht eingehängt. Mehr dazu unter [Secrets](secrets.md#entschlüsselung-auf-den-hosts).
+`sops.ageKeyFile = null`: the host decrypts with its SSH host key instead of an age key. `/home` is not mounted yet when the secrets are installed. More on this under [Secrets](secrets.md#decryption-on-the-hosts).
 
-### Home-Manager
+### Home Manager
 
-`homes/x86_64-linux/philipp@bodenheizung/default.nix` aktiviert:
+`homes/x86_64-linux/philipp@bodenheizung/default.nix` enables:
 
-| Bereich | Module |
+| Area | Modules |
 | --- | --- |
 | `cli` | `fish`, `git`, `home-manager`, `lazygit` |
-| `apps` | `chatterino`, `discord`, `hermes-agent` (mit Dienst und Gateway), `kitty`, `libreoffice`, `librewolf`, `mpv`, `obs`, `signal-desktop`, `spotify`, `thunderbird`, `zed-editor` |
+| `apps` | `chatterino`, `discord`, `hermes-agent` (with service and gateway), `kwi`, `libreoffice`, `librewolf`, `mpv`, `obs`, `signal-desktop`, `spotify`, `thunderbird`, `zed-editor` |
 | `games` | `runelite` |
 | `desktop` | `cursor`, `hotkeys`, `panel`, `spectacle` |
 
-`apps.cinny` ist bewusst aus, weil es derzeit als unsicher gilt (libsoup). Außerdem setzt die Konfiguration bei jeder Aktivierung den Autostart von KRdp in `krdpserverrc` auf aus.
+The configuration turns off KRdp autostart in `krdpserverrc` on every activation.
 
 ## blarm
 
-Self-Hosting-Server als Proxmox-LXC-Container. Datei: `systems/x86_64-linux/blarm/default.nix`. Seine Dienste beschreibt [Dienste auf blarm](dienste.md).
+Self-hosting server as a Proxmox LXC container. File: `systems/x86_64-linux/blarm/default.nix`. Its services are described in [Services on blarm](services.md).
 
-| Bereich | Aktive Module |
+| Area | Active modules |
 | --- | --- |
 | `services` | `acme`, `cinny`, `ente-auth`, `ente-server`, `forgejo`, `kanidm`, `linkwarden`, `monitoring`, `nginx`, `opencloud`, `paperless`, `restic`, `samba`, `searxng`, `ssh`, `syncthing` |
 | `system` | `sops`, `tmpfs` |
 | `cli` | `neovim` |
 
-Offene Ports sind TCP 22, 80, 139, 443, 445 und 8384 sowie UDP 137 und 138. Als Nameserver sind `192.168.5.100`, `192.168.5.200` und ihre IPv6-Pendants eingetragen.
+Open ports are TCP 22, 80, 139, 443, 445 and 8384 as well as UDP 137 and 138. The configured nameservers are `192.168.5.100`, `192.168.5.200` and their IPv6 counterparts.
 
-Die Daten liegen größtenteils unter `/data`. Dieses Verzeichnis ist im Repository nicht als Dateisystem deklariert, kommt also von außen, vermutlich als Proxmox-Mountpoint.
+Most data lives under `/data`. This directory is not declared as a file system in the repository, so it comes from outside, presumably as a Proxmox mount point.
 
 ## dns
 
-Eine Konfiguration für die beiden Proxmox-LXC-Container `dns-1` und `dns-2`. Datei: `systems/x86_64-linux/dns/default.nix`.
+One configuration for the two Proxmox LXC containers `dns-1` and `dns-2`. File: `systems/x86_64-linux/dns/default.nix`.
 
-| Bereich | Aktive Module |
+| Area | Active modules |
 | --- | --- |
 | `services` | `ssh`, `technitium-dns-server` |
 | `system` | `tmpfs` |
 | `cli` | `eza`, `neovim`, `nh` |
 
-- Der Host verwendet keine Secrets und aktiviert sops nicht.
-- Geöffnet sind TCP 22, 53, 80, 443, 853, 5380 und 53443 sowie UDP 53.
-- Der Hostname wird nicht in Nix gesetzt, weil dieselbe Konfiguration für beide Instanzen gilt.
-- Proxmox erzeugt die systemd-networkd-Dateien mit `IPv6AcceptRA=false`, was SLAAC verhindert. Ein Drop-in unter `/etc/systemd/network/net0.network.d/` überschreibt nur diese Einstellung. Dabei bleiben die von Proxmox verwalteten Adressen unberührt.
+- The host uses no secrets and does not enable sops.
+- Open are TCP 22, 53, 80, 443, 853, 5380 and 53443 as well as UDP 53.
+- The hostname is not set in Nix, because the same configuration applies to both instances.
+- Proxmox generates the systemd-networkd files with `IPv6AcceptRA=false`, which prevents SLAAC. A drop-in under `/etc/systemd/network/net0.network.d/` overrides only this setting. The addresses managed by Proxmox stay untouched.
 
 ## aquarius
 
-Technitium-DNS-Server auf einem aarch64-Board, das von einem SD-Karten-Image startet. Dateien: `systems/aarch64-linux/aquarius/`.
+Technitium DNS server on an aarch64 board that boots from an SD card image. Files: `systems/aarch64-linux/aquarius/`.
 
-| Bereich | Aktive Module |
+| Area | Active modules |
 | --- | --- |
 | `services` | `ssh`, `technitium-dns-server` |
-| `system` | `sops` |
 | `cli` | `neovim` |
 
-- Boot über extlinux statt GRUB
-- Netz über systemd-networkd: `end0` per DHCP, `wg*`-Schnittstellen bleiben unverwaltet
-- SSH ohne Passwort-Login und ohne Root-Login
-- `sops` ist aktiv, deklariert aber derzeit keine Secrets
-- gleiche offene Ports wie `dns`
+- Boots via extlinux instead of GRUB
+- Network via systemd-networkd: `end0` via DHCP, `wg*` interfaces stay unmanaged
+- SSH without password login and without root login
+- same open ports as `dns`
