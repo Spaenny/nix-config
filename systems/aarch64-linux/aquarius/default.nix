@@ -66,7 +66,6 @@ with lib.${namespace};
       technitium-dns-server = enabled;
     };
 
-    system.sops = enabled;
     cli.neovim = enabled;
   };
 
