@@ -15,7 +15,7 @@
 
 buildNpmPackage (finalAttrs: {
   pname = "ente-web-auth";
-  version = "4.4.25";
+  version = "4.4.26";
 
   src = fetchFromGitHub {
     owner = "ente";
@@ -31,7 +31,7 @@ buildNpmPackage (finalAttrs: {
     fetchSubmodules = true;
 
     # Changes because the Rust directory is now included.
-    hash = "sha256-7tvpI1LvF1ue9JIxXkpT1bcA8USiZKgDQ/H0z4oWcjA=";
+    hash = "sha256-az3N4HukPOKwck3jMxdY50lcDyhHkNEVNnF9hcnImYY=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/web";
@@ -50,13 +50,13 @@ buildNpmPackage (finalAttrs: {
       cargoRoot
       ;
 
-    hash = "sha256-RWemVZmH/NAQ+yDv2jwLhpHZpcp8BK3lZ4GjHMVLGLA=";
+    hash = "sha256-4sJ8wJXwx5x7JxWR5WXA9Hws3SJJ66P4Igv07D1km+M=";
   };
 
   cargoRoot = "../rust";
 
   # Keep the npm hash you already calculated.
-  npmDepsHash = "sha256-l3blcSYnJVGDBMaFw/UUtgwbStsMs1o4WurqUvEoSlI=";
+  npmDepsHash = "sha256-2GNeM9P/oX6CmGWUx1vDzUloAVtN9qjqG6ztNLiKi6k=";
 
   # Keep this if your current successful npm dependency fetch used it.
   npmDepsFetcherVersion = 2;
@@ -81,8 +81,8 @@ buildNpmPackage (finalAttrs: {
     # npm's wasm-pack package is a downloader wrapper. Bypass it and call
     # the Nix-provided executable directly.
     for packageJSON in \
-      packages/wasm/package.json \
-      packages/wasm-core/package.json
+      packages/wasm/prelogin/package.json \
+      packages/wasm/auth/package.json
     do
       substituteInPlace "$packageJSON" \
         --replace-fail \

@@ -6,19 +6,19 @@
 
 buildGoModule (finalAttrs: {
   pname = "ente-server";
-  version = "4.4.25";
+  version = "4.4.26";
 
   src = fetchFromGitHub {
     owner = "ente-io";
     repo = "ente";
     tag = "auth-v${finalAttrs.version}";
-    hash = "sha256-LmgfqLibMnL9N+5bv2MoTeR0xojqSgtIf9Bv/arjenk=";
+    hash = "sha256-4jHe+nomwFwz1kVjzQlSi4inKQ2dg80K0x3/UyoOU7E=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/server";
 
   subPackages = [ "cmd/museum" ];
-  vendorHash = "sha256-Nbh9fs+43e1iE1ujr9T5vu7K1QscG+jdq5+iad4HkDc=";
+  vendorHash = "sha256-iiytPsRsu0iBqDwSr5NavRfWOd/7ZLd5KBpLDuTkbz0=";
 
   env.CGO_ENABLED = 0;
 
