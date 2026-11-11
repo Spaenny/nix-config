@@ -37,19 +37,22 @@ in
     security.sudo.extraRules = mkIf cfg.passwordlessDeploy [
       {
         users = [ "philipp" ];
-        commands = map (command: {
-          inherit command;
-          options = [ "NOPASSWD" ];
-        }) [
-          # deploy-rs invokes wrappers in the activatable system. Keep the
-          # canonical targets too, as sudo's symlink handling can vary.
-          "/nix/store/*-activatable-nixos-system-*/activate-rs"
-          "/nix/store/*-activatable-nixos-system-*/deploy-rs-activate"
-          "/nix/store/*-activate-rs/activate-rs"
-          "/nix/store/*-activate-path/deploy-rs-activate"
-          "/run/current-system/sw/bin/rm /tmp/deploy-rs-canary-*"
-          "/nix/store/*-coreutils-*/bin/rm /tmp/deploy-rs-canary-*"
-        ];
+        commands =
+          map
+            (command: {
+              inherit command;
+              options = [ "NOPASSWD" ];
+            })
+            [
+              # deploy-rs invokes wrappers in the activatable system. Keep the
+              # canonical targets too, as sudo's symlink handling can vary.
+              "/nix/store/*-activatable-nixos-system-*/activate-rs"
+              "/nix/store/*-activatable-nixos-system-*/deploy-rs-activate"
+              "/nix/store/*-activate-rs/activate-rs"
+              "/nix/store/*-activate-path/deploy-rs-activate"
+              "/run/current-system/sw/bin/rm /tmp/deploy-rs-canary-*"
+              "/nix/store/*-coreutils-*/bin/rm /tmp/deploy-rs-canary-*"
+            ];
       }
     ];
   };

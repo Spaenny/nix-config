@@ -1,7 +1,9 @@
 let
   homeRoot = ../homes/x86_64-linux;
   mkHost = system: modules: { inherit system modules; };
-  mkDeployNode = configuration: hostname: attrs: { inherit configuration hostname; } // attrs;
+  mkDeployNode =
+    configuration: hostname: attrs:
+    { inherit configuration hostname; } // attrs;
 in
 {
   flakeRoot = "/home/philipp/Projects/nix-config";

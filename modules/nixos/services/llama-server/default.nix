@@ -23,15 +23,13 @@ let
   # plus a non-traversable home directory). Bind them read-only into the unit
   # below the state directory; the manager mounts them as root, so neither the
   # unit's dynamic uid nor the home permissions matter.
-  homeMounts =
-    filter (p: hasPrefix "/home/" p) (
-      (optional (cfg.hf == null) cfg.model)
-      ++ (optional (cfg.mmproj != null) cfg.mmproj)
-      ++ (optional (cfg.modelDraft != null) cfg.modelDraft)
-    );
+  homeMounts = filter (p: hasPrefix "/home/" p) (
+    (optional (cfg.hf == null) cfg.model)
+    ++ (optional (cfg.mmproj != null) cfg.mmproj)
+    ++ (optional (cfg.modelDraft != null) cfg.modelDraft)
+  );
 
-  mapServicePath =
-    p: if hasPrefix "/home/" p then "${mountDir}/${baseNameOf p}" else p;
+  mapServicePath = p: if hasPrefix "/home/" p then "${mountDir}/${baseNameOf p}" else p;
 in
 {
   options.${namespace}.services.llama-server = with types; {

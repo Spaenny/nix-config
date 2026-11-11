@@ -64,9 +64,7 @@ let
     "    voltage_offset: ${toString cfg.voltageOffset}"
   ];
 
-  lactConfigYaml = pkgs.writeText "lact-config.yaml" (
-    concatStringsSep "\n" configLines + "\n"
-  );
+  lactConfigYaml = pkgs.writeText "lact-config.yaml" (concatStringsSep "\n" configLines + "\n");
 in
 {
   options.${namespace}.services.lact = with types; {

@@ -10,7 +10,8 @@ let
   inherit (lib.${namespace}) enabled;
 in
 {
-  options.${namespace}.services.nginx.enable = mkEnableOption "Nginx with a TLS fallback virtual host";
+  options.${namespace}.services.nginx.enable =
+    mkEnableOption "Nginx with a TLS fallback virtual host";
 
   config = mkIf cfg.enable {
     ${namespace}.services.acme = enabled;

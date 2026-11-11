@@ -88,7 +88,6 @@ with lib.${namespace};
     cli.neovim = enabled;
   };
 
-
   environment.systemPackages = with pkgs; [
     git
   ];

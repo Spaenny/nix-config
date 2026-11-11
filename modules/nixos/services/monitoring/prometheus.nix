@@ -12,13 +12,15 @@ let
 in
 {
   config = mkIf cfg.enable {
-    sops.secrets."monitoring/prometheus-htpasswd" = mkSopsSecret sopsCfg.secretsDir "blarm-monitoring.yaml" {
-      key = "prometheus_htpasswd";
-      owner = "nginx";
-      group = "nginx";
-      mode = "0400";
-      restartUnits = [ "nginx.service" ];
-    };
+    sops.secrets."monitoring/prometheus-htpasswd" =
+      mkSopsSecret sopsCfg.secretsDir "blarm-monitoring.yaml"
+        {
+          key = "prometheus_htpasswd";
+          owner = "nginx";
+          group = "nginx";
+          mode = "0400";
+          restartUnits = [ "nginx.service" ];
+        };
 
     # Whole pve.yml (PVE API token) for the Proxmox exporter: the file holds a
     # credential, so it must not live in the store. Root-readable is enough —

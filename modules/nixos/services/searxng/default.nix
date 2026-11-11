@@ -20,12 +20,11 @@ let
         "$out/${pkgs.python3.sitePackages}/searx/plugins/ai_answers.py"
     '';
   });
-  aiAnswersEnvironment =
-    {
-      LLM_PROVIDER = cfg.aiAnswers.provider;
-    }
-    // optionalAttrs (cfg.aiAnswers.model != null) { LLM_MODEL = cfg.aiAnswers.model; }
-    // optionalAttrs (cfg.aiAnswers.url != null) { LLM_URL = cfg.aiAnswers.url; };
+  aiAnswersEnvironment = {
+    LLM_PROVIDER = cfg.aiAnswers.provider;
+  }
+  // optionalAttrs (cfg.aiAnswers.model != null) { LLM_MODEL = cfg.aiAnswers.model; }
+  // optionalAttrs (cfg.aiAnswers.url != null) { LLM_URL = cfg.aiAnswers.url; };
 in
 {
   options.${namespace}.services.searxng = with types; {
