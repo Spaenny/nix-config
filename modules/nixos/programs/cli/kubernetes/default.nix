@@ -1,6 +1,7 @@
 {
   config,
   lib,
+  pkgs,
   namespace,
   ...
 }:
@@ -22,7 +23,7 @@ let
 in
 {
   options.${namespace}.cli.kubernetes = with types; {
-    enable = mkBoolOpt false "Whether to install the kubectl and talosctl client configs from sops.";
+    enable = mkBoolOpt false "Whether to install kubectl and talosctl with their client configs from sops.";
 
     user = mkOpt str "philipp" "User that may read the decrypted client configs.";
 
@@ -37,6 +38,11 @@ in
 
   config = mkIf cfg.enable {
     ${namespace}.system.sops = enabled;
+
+    environment.systemPackages = [
+      pkgs.kubectl
+      pkgs.talosctl
+    ];
 
     sops.secrets = {
       kubeconfig = mkConfigSecret cfg.kubeconfigFile;

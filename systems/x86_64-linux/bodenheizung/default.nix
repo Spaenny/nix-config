@@ -74,6 +74,8 @@ with lib.${namespace};
     ];
   };
 
+  environment.systemPackages = [ pkgs.gnumake ];
+
   services.teamviewer.enable = true;
   services.flatpak.enable = true;
 
