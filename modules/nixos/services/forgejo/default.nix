@@ -57,27 +57,16 @@ in
       443
     ];
 
-    systemd.services.codeberg-themes = {
-      description = "Codeberg Themes Setup";
-      wantedBy = [ "forgejo.service" ];
-      before = [ "forgejo.service" ];
-      path = [ pkgs.coreutils ];
-
-      serviceConfig = {
-        Type = "oneshot";
-        ExecStart = pkgs.writeShellScript "setup-codeberg-themes" ''
-          set -euo pipefail
-
-          install -d -o ${cfg.user} -g ${cfg.user} \
-            /var/lib/forgejo/custom/public/assets
-
-          cp -r ${codebergThemes}/var/lib/forgejo/custom/public/assets/. \
-            /var/lib/forgejo/custom/public/assets/
-
-          chown -R ${cfg.user}:${cfg.user} /var/lib/forgejo/custom
-        '';
-      };
-    };
+    # Copy the themes in Forgejo's own preStart rather than a separate oneshot:
+    # a finished oneshot is inactive, so switch-to-configuration never reran it
+    # and theme updates never reached the disk. Here a new theme package
+    # changes the Forgejo unit, which restarts it and copies the new files.
+    systemd.services.forgejo.preStart = mkAfter ''
+      assets=${config.services.forgejo.customDir}/public/assets
+      install -d "$assets"
+      cp -rT --no-preserve=mode,ownership --remove-destination \
+        ${codebergThemes}/var/lib/forgejo/custom/public/assets "$assets"
+    '';
 
     services.forgejo = {
       enable = true;
