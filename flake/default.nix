@@ -40,6 +40,7 @@ let
     codeberg-themes = pkgs.callPackage ../packages/codeberg-themes { };
     ente-server = pkgs.callPackage ../packages/ente-server { };
     ente-web-auth = pkgs.callPackage ../packages/ente-web-auth { };
+    kwi = pkgs.callPackage ../packages/kwi { };
     linkwarden = pkgs.callPackage ../packages/linkwarden { };
     photocraft = pkgs.callPackage ../packages/photocraft { };
     redlib = pkgs.callPackage ../packages/redlib { };
