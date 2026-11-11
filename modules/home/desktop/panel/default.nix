@@ -37,7 +37,7 @@ in
               iconTasks = {
                 launchers = [
                   "applications:org.kde.dolphin.desktop"
-                  "applications:kitty.desktop"
+                  "applications:org.kde.kwi.desktop"
                   "applications:librewolf.desktop"
                 ];
               };

@@ -37,7 +37,8 @@ with lib.${namespace};
           gateway = true;
         };
       };
-      kitty = {
+      kitty = disabled;
+      kwi = {
         enable = true;
         plasma = enabled;
       };
