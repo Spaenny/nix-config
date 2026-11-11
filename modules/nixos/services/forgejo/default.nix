@@ -105,8 +105,6 @@ in
       };
     };
 
-    virtualisation.docker.enable = true;
-
     ${namespace}.services.acme.enable = mkIf cfg.nginx.enable true;
 
     services.nginx = mkIf cfg.nginx.enable {
