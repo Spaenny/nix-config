@@ -64,6 +64,8 @@ in
     systemd.services.forgejo.preStart = mkAfter ''
       assets=${config.services.forgejo.customDir}/public/assets
       install -d "$assets"
+      # Earlier root copies left read-only directories from the Nix store.
+      chmod -R u+w "$assets"
       cp -rT --no-preserve=mode,ownership --remove-destination \
         ${codebergThemes}/var/lib/forgejo/custom/public/assets "$assets"
     '';
