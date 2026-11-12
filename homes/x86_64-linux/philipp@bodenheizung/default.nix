@@ -10,6 +10,14 @@ with lib.${namespace};
     ${pkgs.kdePackages.kconfig}/bin/kwriteconfig6 --file krdpserverrc --group General --key Autostart false
   '';
 
+  # Talk to the YubiKey through pcscd (enabled system-wide). Don't add
+  # `pcsc-shared`: in shared mode scdaemon reconnects to the card before every
+  # operation, which resets the PIN verification and asks for the PIN on each
+  # signature. Run `gpgconf --kill scdaemon` before using ykman on the card.
+  home.file.".gnupg/scdaemon.conf".text = ''
+    disable-ccid
+  '';
+
   programs.fish.interactiveShellInit = ''
     set --global fish_color_autosuggestion brblack
     set --global fish_color_cancel -r
