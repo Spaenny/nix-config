@@ -91,7 +91,15 @@ in
         };
         ui = {
           DEFAULT_THEME = "codeberg-dark";
-          THEMES = "codeberg-dark";
+          THEMES = concatStringsSep "," [
+            "codeberg-dark"
+            "codeberg-dark-deuteranopia-protanopia"
+            "codeberg-dark-tritanopia"
+            "codeberg-light-deuteranopia-protanopia"
+            "codeberg-light-tritanopia"
+            "codeberg-auto-deuteranopia-protanopia"
+            "codeberg-auto-tritanopia"
+          ];
         };
       };
     };
