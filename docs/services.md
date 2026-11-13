@@ -66,7 +66,7 @@ Prometheus (15-day retention) and Grafana run locally. Prometheus is provisioned
 | Job | Target |
 | --- | --- |
 | `prometheus` | itself |
-| `node` | Node Exporter on `blarm`, including the systemd collector |
+| `node` | Node Exporter on `blarm`, including the systemd collector and the textfile collector (`/var/lib/prometheus-node-exporter-textfiles`) |
 | `vyos-node` | Node Exporter of the VyOS router, `192.168.10.1:9100` |
 | `cancer-container` | cAdvisor on `192.168.100.3:9180`, with `sample_limit` 10,000 |
 | `proxmox` | Proxmox exporter for `pve.monapona.de:443` |
@@ -74,7 +74,23 @@ Prometheus (15-day retention) and Grafana run locally. Prometheus is provisioned
 | `vyos-icmp4`, `vyos-icmp6` | ICMP probes against the `.100` and `.200` addresses |
 | `https_2xx` | HTTP probes against the web services, the list is in `monitoring/blackbox.nix` |
 
-Dashboards and alerting rules are not declared in the repository.
+Dashboards are not declared in the repository.
+
+### Authoritative DNS
+
+The timer `dns-zone-check` runs every 15 minutes and queries `ns1`–`ns3` directly for each zone of the PowerDNS hidden primary on `cancer`. It writes `dns_zone_*` metrics (SOA serial, RRSIG expiry, DS present, validated by `dns.google`) for the textfile collector. Zones and nameserver addresses are in `monitoring/dns.nix`.
+
+The same module provisions the Grafana alert rules in the folder `DNS`:
+
+| Rule | Fires when |
+| --- | --- |
+| `dns-rrsig-expiry` | an RRSIG on a nameserver expires in less than 4 days (normally at least 7, PowerDNS re-signs weekly) |
+| `dns-serial-mismatch` | the nameservers of a zone serve different serials for 12 hours |
+| `dns-query-failed` | a nameserver does not answer SOA for a zone for 30 minutes |
+| `dns-validation-failed` | a zone with a DS record does not validate for 30 minutes |
+| `dns-check-stale` | the check has not completed for over an hour |
+
+The rules notify the contact point `all` (Discord and ntfy, configured in the Grafana UI) directly, bypassing the notification policies. Other alerting rules are not declared in the repository.
 
 ## Backups
 

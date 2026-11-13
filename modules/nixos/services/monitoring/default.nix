@@ -12,6 +12,7 @@ in
 {
   imports = [
     ./blackbox.nix
+    ./dns.nix
     ./grafana.nix
     ./kanidm.nix
     ./ns1.nix
