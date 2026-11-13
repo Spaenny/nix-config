@@ -26,6 +26,26 @@ let
         timeout: 5s
         icmp:
           preferred_ip_protocol: ip6
+      # Authoritative answer from the local zone, independent of the internet uplink.
+      dns_local:
+        prober: dns
+        timeout: 5s
+        dns:
+          query_name: monapona.de
+          query_type: SOA
+          valid_rcodes: [NOERROR]
+          validate_answer_rrs:
+            fail_if_not_matches_regexp: [".*\\sSOA\\s.*"]
+      # Recursive resolution through the upstream resolvers.
+      dns_recursive:
+        prober: dns
+        timeout: 5s
+        dns:
+          query_name: example.com
+          query_type: A
+          valid_rcodes: [NOERROR]
+          validate_answer_rrs:
+            fail_if_not_matches_regexp: [".*\\sA\\s.*"]
       https_2xx:
         prober: http
         timeout: 10s
@@ -34,6 +54,14 @@ let
           ip_protocol_fallback: true
           follow_redirects: true
   '';
+
+  # Technitium resolvers dns-1 and dns-2.
+  dnsResolvers = [
+    "192.168.5.100"
+    "192.168.5.200"
+    "[fdf3:567b:734c:5::100]:53"
+    "[fdf3:567b:734c:5::200]:53"
+  ];
 
   ## Blackbox probe job: rewrites each target into the exporter's /probe endpoint.
   mkProbeJob = job_name: module: targets: {
@@ -66,6 +94,12 @@ in
       configFile = blackboxConfig;
     };
 
+    # The module grants CAP_NET_RAW as ambient capability but empties the bounding set,
+    # so ICMP probes fail with "socket: operation not permitted".
+    systemd.services.prometheus-blackbox-exporter.serviceConfig.CapabilityBoundingSet = lib.mkForce [
+      "CAP_NET_RAW"
+    ];
+
     services.prometheus.scrapeConfigs = [
       # Blackbox exporter (local)
       {
@@ -73,15 +107,11 @@ in
         static_configs = [ { targets = [ blackboxExporter ]; } ];
       }
 
-      # Blackbox probes
-      (mkProbeJob "vyos-icmp4" "icmp4" [
-        "192.168.5.100"
-        "192.168.5.200"
-      ])
-      (mkProbeJob "vyos-icmp6" "icmp6" [
-        "fdf3:567b:734c:5::100"
-        "fdf3:567b:734c:5::200"
-      ])
+      # Blackbox probes: the VyOS router as blarm's gateway
+      (mkProbeJob "vyos-icmp4" "icmp4" [ "192.168.10.1" ])
+      (mkProbeJob "vyos-icmp6" "icmp6" [ "fdf3:567b:734c:10::1" ])
+      (mkProbeJob "dns-local" "dns_local" dnsResolvers)
+      (mkProbeJob "dns-recursive" "dns_recursive" dnsResolvers)
       (mkProbeJob "https_2xx" "https_2xx" [
         "https://jelly.monapona.de"
         "https://im.monapona.de"

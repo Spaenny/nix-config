@@ -11,6 +11,7 @@ let
 in
 {
   imports = [
+    ./alerts.nix
     ./blackbox.nix
     ./dns.nix
     ./grafana.nix

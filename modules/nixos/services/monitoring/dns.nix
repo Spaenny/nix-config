@@ -106,69 +106,8 @@ let
     '';
   };
 
-  # Grafana-managed alert rule: Prometheus instant query A, threshold C on it.
-  mkRule =
-    {
-      uid,
-      title,
-      expr,
-      op,
-      threshold,
-      for,
-      summary,
-      description,
-      noDataState ? "OK",
-    }:
-    {
-      inherit
-        uid
-        title
-        for
-        noDataState
-        ;
-      condition = "C";
-      execErrState = "Error";
-      labels.severity = "critical";
-      annotations = { inherit summary description; };
-      # Route straight to the contact point (Discord + ntfy) instead of the policy tree.
-      notification_settings.receiver = "all";
-      data = [
-        {
-          refId = "A";
-          datasourceUid = "prometheus";
-          relativeTimeRange = {
-            from = 600;
-            to = 0;
-          };
-          model = {
-            refId = "A";
-            inherit expr;
-            instant = true;
-          };
-        }
-        {
-          refId = "C";
-          datasourceUid = "__expr__";
-          relativeTimeRange = {
-            from = 0;
-            to = 0;
-          };
-          model = {
-            refId = "C";
-            type = "threshold";
-            expression = "A";
-            conditions = [
-              {
-                evaluator = {
-                  type = op;
-                  params = [ threshold ];
-                };
-              }
-            ];
-          };
-        }
-      ];
-    };
+  mkRule = import ./alert-rule.nix { inherit lib; };
+  zone = "{{ $labels.zone }}";
 in
 {
   config = mkIf cfg.enable {
@@ -213,55 +152,57 @@ in
             # Signatures normally have at least 7 days left: PowerDNS re-signs weekly.
             (mkRule {
               uid = "dns-rrsig-expiry";
-              title = "DNS: RRSIG expires soon";
+              title = "DNSSEC signature expiring";
               expr = "min by (zone, nameserver) (dns_zone_rrsig_expiry_timestamp_seconds) - time()";
               op = "lt";
               threshold = 4 * 86400;
               for = "15m";
-              summary = "RRSIG of {{ $labels.zone }} on {{ $labels.nameserver }} expires in {{ humanizeDuration $values.A.Value }}.";
-              description = "The secondary did not pick up the weekly re-signing. On cancer: check the SOA-EDIT metadata of the zone, then run pdns_control notify {{ $labels.zone }}.";
+              severity = "critical";
+              summary = "DNSSEC signature of ${zone} on {{ $labels.nameserver }} expires in {{ humanizeDuration $values.A.Value }}";
+              description = "The secondary did not pick up the weekly re-signing. On cancer, check the SOA-EDIT metadata of the zone (pdnsutil get-meta ${zone}), then run pdns_control notify ${zone}.";
             })
             # Secondaries pick up new serials after the SOA refresh (up to 8 h for some zones).
             (mkRule {
               uid = "dns-serial-mismatch";
-              title = "DNS: nameservers serve different serials";
+              title = "DNS serials differ";
               expr = "max by (zone) (dns_zone_soa_serial) - min by (zone) (dns_zone_soa_serial)";
               op = "gt";
               threshold = 0;
               for = "12h";
-              summary = "The nameservers of {{ $labels.zone }} have served different SOA serials for 12 hours.";
-              description = "Zone transfers from cancer fail for at least one secondary. Check the AXFR-out entries in the pdns journal on cancer.";
+              summary = "The nameservers of ${zone} have served different serials for 12 hours";
+              description = "At least one secondary no longer transfers the zone from cancer. Check the AXFR-out entries in the pdns journal on cancer.";
             })
             (mkRule {
               uid = "dns-query-failed";
-              title = "DNS: nameserver does not answer";
+              title = "Nameserver not answering";
               expr = "dns_zone_query_success";
               op = "lt";
               threshold = 1;
               for = "30m";
-              summary = "{{ $labels.nameserver }} does not answer SOA queries for {{ $labels.zone }}.";
+              summary = "{{ $labels.nameserver }} does not answer queries for ${zone}";
               description = "The nameserver is down, unreachable from blarm, or no longer serves the zone.";
             })
             (mkRule {
               uid = "dns-validation-failed";
-              title = "DNS: DNSSEC validation fails";
+              title = "DNSSEC validation failing";
               expr = "(dns_zone_ds_present == 1) * on (zone) (1 - dns_zone_dnssec_validated)";
               op = "gt";
               threshold = 0;
               for = "30m";
-              summary = "{{ $labels.zone }} has a DS record, but a validating resolver does not validate it.";
-              description = "Resolvers return SERVFAIL for the zone: mail (DMARC) and websites fail. Check https://dnsviz.net/d/{{ $labels.zone }}/dnssec/";
+              severity = "critical";
+              summary = "${zone} no longer validates with DNSSEC";
+              description = "Validating resolvers return SERVFAIL: mail (DMARC) and websites of the domain fail. Details: https://dnsviz.net/d/${zone}/dnssec/";
             })
             (mkRule {
               uid = "dns-check-stale";
-              title = "DNS: zone check is not running";
+              title = "DNS check not running";
               expr = "time() - max(dns_zone_check_last_run_timestamp_seconds)";
               op = "gt";
               threshold = 3600;
               for = "15m";
               noDataState = "Alerting";
-              summary = "dns-zone-check on blarm has not completed for over an hour.";
-              description = "The DNS alerts above are blind until it runs again. Check journalctl -u dns-zone-check on blarm.";
+              summary = "dns-zone-check on blarm has not run for over an hour";
+              description = "The DNS alerts are blind until it runs again. Check journalctl -u dns-zone-check on blarm.";
             })
           ];
         }

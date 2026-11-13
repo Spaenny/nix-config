@@ -71,16 +71,36 @@ Prometheus (15-day retention) and Grafana run locally. Prometheus is provisioned
 | `cancer-container` | cAdvisor on `192.168.100.3:9180`, with `sample_limit` 10,000 |
 | `proxmox` | Proxmox exporter for `pve.monapona.de:443` |
 | `blackbox-exporter` | the Blackbox Exporter itself |
-| `vyos-icmp4`, `vyos-icmp6` | ICMP probes against the `.100` and `.200` addresses |
+| `vyos-icmp4`, `vyos-icmp6` | ICMP probes against the VyOS router, blarm's gateway (`192.168.10.1`, `fdf3:567b:734c:10::1`) |
+| `dns-local`, `dns-recursive` | DNS probes against dns-1 and dns-2 (`.100`, `.200`, IPv4 and IPv6): SOA of the local zone `monapona.de`, and `example.com` resolved recursively |
 | `https_2xx` | HTTP probes against the web services, the list is in `monitoring/blackbox.nix` |
 
 Dashboards are not declared in the repository.
+
+### Alerting
+
+All Grafana alert rules are provisioned from `monitoring/alerts.nix` and `monitoring/dns.nix` and cannot be edited in the UI. `monitoring/alert-rule.nix` builds each rule as a Prometheus instant query with a threshold. Every rule notifies the contact point `all` (Discord and ntfy, configured in the Grafana UI) directly, bypassing the notification policies.
+
+| Folder | Group | Rules |
+| --- | --- | --- |
+| `Hosts` | `targets` | any scrape target down for 2 minutes (covers all node exporters, PowerDNS, cAdvisor, Proxmox) |
+| `Hosts` | `hosts-critical` | root/data filesystem read-only, disk above 95 % |
+| `Hosts` | `hosts-warning` | disk or inodes above 90 %, CPU or RAM above 90 %, load15 above 1.5 per core, IO wait above 20 %, network errors above 0.1/s, failed systemd unit, host rebooted, OOM kill, clock not synchronised, backup timer (restic, PostgreSQL dump) not fired for 36 hours |
+| `Network` | `network` | router not answering ping, DNS resolver dns-1/dns-2 failing |
+| `Proxmox` | `proxmox` | node down, guest with "start at boot" stopped, storage above 90 % |
+| `Websites` | `websites` | `https_2xx` probe failing, slower than 2 s, certificate expiring within 14 days |
+| `DNS` | `powerdns` | no queries on ns1, packet errors, PowerDNS restarted |
+| `DNS` | `dns` | see below |
+
+`deleteRules` in `alerts.nix` lists the UIDs of rules that were created in the UI before. On blarm, an LXC container, `/proc/vmstat` and the clock are those of the Proxmox node, so the OOM and time alerts for blarm describe all of n5.
+
+The Blackbox Exporter needs `CAP_NET_RAW` in its bounding set for ICMP; `blackbox.nix` overrides the empty `CapabilityBoundingSet` of the NixOS module.
 
 ### Authoritative DNS
 
 The timer `dns-zone-check` runs every 15 minutes and queries `ns1`–`ns3` directly for each zone of the PowerDNS hidden primary on `cancer`. It writes `dns_zone_*` metrics (SOA serial, RRSIG expiry, DS present, validated by `dns.google`) for the textfile collector. Zones and nameserver addresses are in `monitoring/dns.nix`.
 
-The same module provisions the Grafana alert rules in the folder `DNS`:
+The same module provisions the alert rules of the group `dns` in the folder `DNS`:
 
 | Rule | Fires when |
 | --- | --- |
@@ -89,9 +109,6 @@ The same module provisions the Grafana alert rules in the folder `DNS`:
 | `dns-query-failed` | a nameserver does not answer SOA for a zone for 30 minutes |
 | `dns-validation-failed` | a zone with a DS record does not validate for 30 minutes |
 | `dns-check-stale` | the check has not completed for over an hour |
-
-The rules notify the contact point `all` (Discord and ntfy, configured in the Grafana UI) directly, bypassing the notification policies. Other alerting rules are not declared in the repository.
-
 ## Backups
 
 All jobs run at night:
